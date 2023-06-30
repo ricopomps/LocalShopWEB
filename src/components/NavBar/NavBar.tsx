@@ -20,7 +20,7 @@ const NavBar = ({
     <Navbar bg="primary" variant="dark" expand="sm" sticky="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          Notas
+          Produtos
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">

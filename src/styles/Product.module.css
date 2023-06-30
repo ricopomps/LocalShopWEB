@@ -1,0 +1,12 @@
+.productCard {
+  background-color: cornsilk;
+}
+
+.productCard {
+  white-space: pre-line;
+}
+
+.cardBody {
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
+}

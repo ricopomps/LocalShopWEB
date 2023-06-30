@@ -1,12 +1,7 @@
-import { Note } from "../models/note";
+import { Product } from "../models/product";
 import { User } from "../models/user";
-import axios from "axios";
+import { API } from "./notes_api";
 const { REACT_APP_API_BASE_URL: baseUrl } = process.env;
-
-export const API = axios.create({
-  baseURL: baseUrl,
-  withCredentials: true,
-});
 
 //USER ROUTES
 
@@ -41,29 +36,29 @@ export async function logout() {
 }
 
 //NOTES ROUTES
-export async function fetchNotes(): Promise<Note[]> {
-  const response = await API.get("/api/notes", { withCredentials: true });
+export async function fetchProducts(): Promise<Product[]> {
+  const response = await API.get("/api/products", { withCredentials: true });
   return response.data;
 }
 
-export interface NoteInput {
-  title: string;
-  text?: string;
+export interface ProductInput {
+  name: string;
+  description?: string;
 }
 
-export async function createNote(note: NoteInput): Promise<Note> {
-  const response = await API.post("/api/notes", note);
+export async function createProduct(product: ProductInput): Promise<Product> {
+  const response = await API.post("/api/products", product);
   return response.data;
 }
 
-export async function updateNote(
-  noteId: string,
-  note: NoteInput
-): Promise<Note> {
-  const response = await API.patch(`/api/notes/${noteId}`, note);
+export async function updateProduct(
+  productId: string,
+  product: ProductInput
+): Promise<Product> {
+  const response = await API.patch(`/api/products/${productId}`, product);
   return response.data;
 }
 
-export async function deleteNote(noteId: string) {
-  await API.delete(`/api/notes/${noteId}`);
+export async function deleteProduct(productId: string) {
+  await API.delete(`/api/products/${productId}`);
 }
