@@ -24,6 +24,7 @@ const AddEditProductDialog = ({
     defaultValues: {
       name: productToEdit?.name || "",
       description: productToEdit?.description || "",
+      image: productToEdit?.image || "",
     },
   });
 
@@ -62,14 +63,21 @@ const AddEditProductDialog = ({
             placeholder="Título"
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
-            // error={errors.name}
+            error={errors.name}
           />
           <TextInputField
             name="description"
-            label="Description"
+            label="Descrição"
             as="textarea"
             rows={5}
-            placeholder="Description"
+            placeholder="Descrição do produto"
+            register={register}
+          />
+          <TextInputField
+            name="image"
+            label="Link da imagem"
+            type="text"
+            placeholder="Imagem"
             register={register}
           />
         </Form>

@@ -44,6 +44,7 @@ export async function fetchProducts(): Promise<Product[]> {
 export interface ProductInput {
   name: string;
   description?: string;
+  image?: string;
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {

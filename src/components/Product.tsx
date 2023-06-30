@@ -31,6 +31,14 @@ const Product = ({
       onClick={() => onProductClicked(product)}
       className={`${styles.productCard} ${className}`}
     >
+      {product.image && (
+        <Card.Img
+          variant="top"
+          src={product.image}
+          alt=""
+          className={styles.productImage}
+        />
+      )}
       <Card.Body className={styles.cardBody}>
         <Card.Title className={stylesUtils.flexCenter}>
           {name}
