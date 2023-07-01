@@ -58,9 +58,9 @@ const AddEditProductDialog = ({
         <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="name"
-            label="Titulo"
+            label="Nome"
             type="text"
-            placeholder="Título"
+            placeholder="Nome do produto"
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
             error={errors.name}
