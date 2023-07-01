@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { User } from "../models/user";
+import { User, UserType } from "../models/user";
 import { SignUpCredentials } from "../network/notes_api";
 import * as NotesApi from "../network/notes_api";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Container,
+  Form,
+  Modal,
+  Nav,
+  Navbar,
+} from "react-bootstrap";
 import TextInputField from "./form/TextInputField";
 import stylesUtils from "../styles/utils.module.css";
 import { ConflictError } from "../errors/http_errors";
@@ -14,15 +22,46 @@ interface SignUpModalProps {
 }
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);
+  const [userType, setUserType] = useState<UserType>(UserType.shopper);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignUpCredentials>();
 
+  const BaseNavBar = () => {
+    return (
+      <Navbar className="bg-body-tertiary" expand="sm" sticky="top">
+        <Nav style={{ width: "100%" }}>
+          <Container
+            style={{
+              justifyContent: "space-around",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Nav.Link
+              active={userType === UserType.shopper}
+              onClick={() => setUserType(UserType.shopper)}
+            >
+              Shopper
+            </Nav.Link>
+            <Nav.Link
+              active={userType === UserType.store}
+              onClick={() => setUserType(UserType.store)}
+            >
+              Lojista
+            </Nav.Link>
+          </Container>
+        </Nav>
+      </Navbar>
+    );
+  };
+
   async function onSubmit(credentials: SignUpCredentials) {
     try {
-      const newUser = await NotesApi.signUp(credentials);
+      const newUser = await NotesApi.signUp({ ...credentials, userType });
       onSignUpSuccessful(newUser);
     } catch (error) {
       if (error instanceof ConflictError) setErrorText(error.message);
@@ -30,12 +69,14 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
       console.error(error);
     }
   }
+
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
         <Modal.Title>Cadastro</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <BaseNavBar />
         {errorText && <Alert variant="danger">{errorText}</Alert>}
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
