@@ -7,8 +7,14 @@ import styles from "../styles/ProductsPage.module.css";
 import stylesUtils from "../styles/utils.module.css";
 import AddProductDialog from "./AddEditProductDialog";
 import Product from "./Product";
+import { Store } from "../models/store";
+import { setSessionStoreId } from "../network/storeApi";
 
-const ProductsPageLoggedInView = () => {
+interface ProductsPageLoggedInViewProps {
+  store: Store;
+}
+
+const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [showAddProductDialog, setShowAddProductDialog] = useState(false);
   const [productToEdit, setProductToEdit] = useState<ProductModel | null>(null);
@@ -21,6 +27,7 @@ const ProductsPageLoggedInView = () => {
       try {
         setshowProductsLoadingError(false);
         setProductsLoading(true);
+        await setSessionStoreId(store._id);
         const products = await ProductsApi.fetchProducts();
         setProducts(products);
       } catch (error) {
@@ -82,6 +89,7 @@ const ProductsPageLoggedInView = () => {
 
       {showAddProductDialog && (
         <AddProductDialog
+          storeId={store._id}
           onDismiss={() => setShowAddProductDialog(false)}
           onProductSaved={(newProduct) => {
             setProducts([...products, newProduct]);
@@ -91,6 +99,7 @@ const ProductsPageLoggedInView = () => {
       )}
       {productToEdit && (
         <AddProductDialog
+          storeId={store._id}
           onDismiss={() => setProductToEdit(null)}
           productToEdit={productToEdit}
           onProductSaved={(updatedProduct) => {

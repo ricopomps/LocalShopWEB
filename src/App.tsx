@@ -10,6 +10,7 @@ import NotesPage from "./pages/NotesPages";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
+import { Store } from "./models/store";
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
@@ -40,7 +41,15 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<NotesPage loggedInUser={loggedInUser} />}
+              element={
+                <NotesPage
+                  onCreateStoreSuccessful={
+                    (store: Store) =>
+                      setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
+                  }
+                  loggedInUser={loggedInUser}
+                />
+              }
             />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/*" element={<NotFoundPage />} />

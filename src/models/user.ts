@@ -1,8 +1,10 @@
+import { Store } from "./store";
+
 export interface User {
   username: string;
   email: string;
   userType: UserType;
-  storeId?: string;
+  store?: Store;
 }
 
 export enum UserType {

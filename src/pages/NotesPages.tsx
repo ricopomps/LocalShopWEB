@@ -3,20 +3,32 @@ import ProductsPageLoggedInView from "../components/ProductsPageLoggedInView";
 import NotesPageLoggedOutView from "../components/NotesPageLoggedOutView";
 import styles from "../styles/NotesPage.module.css";
 import { User, UserType } from "../models/user";
+import StorePage from "./StorePage";
+import { Store } from "../models/store";
 
 interface NotesPageProps {
   loggedInUser: User | null;
+  onCreateStoreSuccessful: (store: Store) => void;
 }
 
-const NotesPage = ({ loggedInUser }: NotesPageProps) => {
+const NotesPage = ({
+  loggedInUser,
+  onCreateStoreSuccessful,
+}: NotesPageProps) => {
   const Page = () => {
     if (!loggedInUser) return <NotesPageLoggedOutView />;
 
     if (!loggedInUser.userType) return <>CREATE A FAIL PAGE!</>;
 
     if (loggedInUser.userType === UserType.store) {
-      if (!loggedInUser.storeId) return <>CREATE A STORE CRUD PAGE!</>;
-      return <ProductsPageLoggedInView />;
+      if (!loggedInUser?.store)
+        return (
+          <StorePage
+            onCreateStoreSuccessful={onCreateStoreSuccessful}
+            store={loggedInUser.store}
+          />
+        );
+      return <ProductsPageLoggedInView store={loggedInUser.store} />;
     }
 
     if (loggedInUser.userType === UserType.shopper)

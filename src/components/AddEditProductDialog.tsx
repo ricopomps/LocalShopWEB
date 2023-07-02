@@ -9,12 +9,14 @@ interface AddEditProductDialogProps {
   productToEdit?: Product;
   onDismiss: () => void;
   onProductSaved: (product: Product) => void;
+  storeId: string;
 }
 
 const AddEditProductDialog = ({
   productToEdit,
   onDismiss,
   onProductSaved,
+  storeId,
 }: AddEditProductDialogProps) => {
   const {
     register,
@@ -32,12 +34,15 @@ const AddEditProductDialog = ({
     try {
       let productResponse: Product;
       if (productToEdit) {
-        productResponse = await ProductsApi.updateProduct(
-          productToEdit._id,
-          input
-        );
+        productResponse = await ProductsApi.updateProduct(productToEdit._id, {
+          ...input,
+          storeId,
+        });
       } else {
-        productResponse = await ProductsApi.createProduct(input);
+        productResponse = await ProductsApi.createProduct({
+          ...input,
+          storeId,
+        });
       }
       onProductSaved(productResponse);
     } catch (error) {
