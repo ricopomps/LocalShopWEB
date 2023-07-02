@@ -33,14 +33,8 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   const BaseNavBar = () => {
     return (
       <Navbar className="bg-body-tertiary" expand="sm" sticky="top">
-        <Nav style={{ width: "100%" }}>
-          <Container
-            style={{
-              justifyContent: "space-around",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
+        <Nav className={stylesUtils.width100}>
+          <Container className={stylesUtils.flexCenter}>
             <Nav.Link
               active={userType === UserType.shopper}
               onClick={() => setUserType(UserType.shopper)}
