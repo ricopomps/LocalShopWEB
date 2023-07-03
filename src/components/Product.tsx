@@ -4,6 +4,7 @@ import stylesUtils from "../styles/utils.module.css";
 import { Product as ProductModel } from "../models/product";
 import { formatDate } from "../utils/formatDate";
 import { MdDelete } from "react-icons/md";
+
 interface ProductProps {
   product: ProductModel;
   onProductClicked: (product: ProductModel) => void;

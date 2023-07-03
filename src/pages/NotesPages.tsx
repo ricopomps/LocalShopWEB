@@ -5,6 +5,7 @@ import styles from "../styles/NotesPage.module.css";
 import { User, UserType } from "../models/user";
 import StorePage from "./StorePage";
 import { Store } from "../models/store";
+import ShopperPage from "./ShopperPage";
 
 interface NotesPageProps {
   loggedInUser: User | null;
@@ -31,8 +32,7 @@ const NotesPage = ({
       return <ProductsPageLoggedInView store={loggedInUser.store} />;
     }
 
-    if (loggedInUser.userType === UserType.shopper)
-      return <>CREATE A {UserType.shopper} PAGE!</>;
+    if (loggedInUser.userType === UserType.shopper) return <ShopperPage />;
 
     return <>CREATE A FAIL PAGE!</>;
   };
