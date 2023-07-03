@@ -23,8 +23,11 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
   async function onSubmit(credentials: StoreInput) {
     try {
       setErrorText(null);
-      const store = await StoreApi.createStore(credentials);
-      onCreateStoreSuccessful(store);
+      if (store)
+        onCreateStoreSuccessful(
+          await StoreApi.updateStore(store._id, credentials)
+        );
+      onCreateStoreSuccessful(await StoreApi.createStore(credentials));
     } catch (error) {
       if (error instanceof UnathorizedError) setErrorText(error.message);
       else if (error instanceof Error) setErrorText(error.message);

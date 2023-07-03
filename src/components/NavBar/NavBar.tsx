@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { User } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -16,6 +16,7 @@ const NavBar = ({
   onLogoutSuccessful,
   onSignUpClicked,
 }: NavBarProps) => {
+  let navigate = useNavigate();
   return (
     <Navbar bg="primary" variant="dark" expand="sm" sticky="top">
       <Container>
@@ -29,11 +30,21 @@ const NavBar = ({
               Privacidade
             </Nav.Link>
           </Nav>
+          {loggedInUser?.store && (
+            <Nav>
+              <Nav.Link as={Link} to="/store">
+                Visualizar loja
+              </Nav.Link>
+            </Nav>
+          )}
           <Nav className="ms-auto">
             {loggedInUser ? (
               <NavBarLoggedInView
                 user={loggedInUser}
-                onLogoutSuccessful={onLogoutSuccessful}
+                onLogoutSuccessful={() => {
+                  onLogoutSuccessful();
+                  navigate("/");
+                }}
               />
             ) : (
               <NavBarLoggedOutView

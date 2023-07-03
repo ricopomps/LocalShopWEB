@@ -11,6 +11,8 @@ import PrivacyPage from "./pages/PrivacyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
+import { redirect } from "react-router-dom";
+
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
@@ -35,7 +37,10 @@ function App() {
           loggedInUser={loggedInUser}
           onLoginClicked={() => setShowLoginModal(true)}
           onSignUpClicked={() => setShowSignUpModal(true)}
-          onLogoutSuccessful={() => setLoggedInUser(null)}
+          onLogoutSuccessful={() => {
+            setLoggedInUser(null);
+            return redirect("");
+          }}
         />
         <Container className={styles.pageContainer}>
           <Routes>
@@ -52,6 +57,19 @@ function App() {
               }
             />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route
+              path="/store"
+              element={
+                <NotesPage
+                  onCreateStoreSuccessful={
+                    (store: Store) =>
+                      setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
+                  }
+                  loggedInUser={loggedInUser}
+                  goToStorePage
+                />
+              }
+            />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </Container>

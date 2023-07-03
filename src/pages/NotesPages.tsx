@@ -10,11 +10,13 @@ import ShopperPage from "./ShopperPage";
 interface NotesPageProps {
   loggedInUser: User | null;
   onCreateStoreSuccessful: (store: Store) => void;
+  goToStorePage?: boolean;
 }
 
 const NotesPage = ({
   loggedInUser,
   onCreateStoreSuccessful,
+  goToStorePage,
 }: NotesPageProps) => {
   const Page = () => {
     if (!loggedInUser) return <NotesPageLoggedOutView />;
@@ -22,7 +24,7 @@ const NotesPage = ({
     if (!loggedInUser.userType) return <>CREATE A FAIL PAGE!</>;
 
     if (loggedInUser.userType === UserType.store) {
-      if (!loggedInUser?.store)
+      if (!loggedInUser?.store || goToStorePage)
         return (
           <StorePage
             onCreateStoreSuccessful={onCreateStoreSuccessful}
