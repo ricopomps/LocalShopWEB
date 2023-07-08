@@ -1,8 +1,10 @@
 import { Product } from "../models/product";
-import { API } from "./api";
+import { getApi } from "./api";
 
 export async function fetchProducts(): Promise<Product[]> {
-  const response = await API.get("/api/products", { withCredentials: true });
+  const response = await getApi().get("/api/products", {
+    withCredentials: true,
+  });
   return response.data;
 }
 
@@ -14,7 +16,7 @@ export interface ProductInput {
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {
-  const response = await API.post("/api/products", product);
+  const response = await getApi().post("/api/products", product);
   return response.data;
 }
 
@@ -22,10 +24,10 @@ export async function updateProduct(
   productId: string,
   product: ProductInput
 ): Promise<Product> {
-  const response = await API.patch(`/api/products/${productId}`, product);
+  const response = await getApi().patch(`/api/products/${productId}`, product);
   return response.data;
 }
 
 export async function deleteProduct(productId: string) {
-  await API.delete(`/api/products/${productId}`);
+  await getApi().delete(`/api/products/${productId}`);
 }
