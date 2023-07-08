@@ -1,17 +1,6 @@
 import { Note } from "../models/note";
 import { User, UserType } from "../models/user";
-import axios from "axios";
-const { REACT_APP_API_BASE_URL: baseUrl } = process.env;
-
-export const API = axios.create({
-  withCredentials: true,
-  baseURL: baseUrl,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/json",
-  },
-});
-
+import { API } from "./api";
 //USER ROUTES
 
 export async function getLoggedInUser(): Promise<User> {
@@ -27,8 +16,9 @@ export interface SignUpCredentials {
 }
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
-  const response = await API.post("/api/users/signup", credentials);
-  return response.data;
+  const { data } = await API.post("/api/users/signup", credentials);
+  sessionStorage.setItem("token", data);
+  return data;
 }
 
 export interface LoginCredentials {
@@ -37,12 +27,18 @@ export interface LoginCredentials {
 }
 
 export async function login(credentials: LoginCredentials): Promise<User> {
-  const response = await API.post("/api/users/login", credentials);
-  return response.data;
+  const {
+    data: { user, accessToken },
+  } = await API.post("/api/auth", credentials);
+  console.log(accessToken);
+  sessionStorage.removeItem("token");
+  sessionStorage.setItem("token", accessToken);
+  return user;
 }
 
 export async function logout() {
-  await API.post("/api/users/logout");
+  await API.post("/api/auth/logout");
+  sessionStorage.removeItem("token");
 }
 
 //NOTES ROUTES

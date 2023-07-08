@@ -1,5 +1,5 @@
 import { Product } from "../models/product";
-import { API } from "./notes_api";
+import { API } from "./api";
 
 export async function fetchProducts(): Promise<Product[]> {
   const response = await API.get("/api/products", { withCredentials: true });
