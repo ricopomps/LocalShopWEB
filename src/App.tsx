@@ -12,6 +12,9 @@ import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
 import { redirect } from "react-router-dom";
+import CadastroLojistaPage from "./pages/CadastroLojistaPage";
+import CadastroShopperPage from "./pages/CadastroShopperPage";
+import LoginDesktopPage from "./pages/LoginDesktopPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -57,6 +60,9 @@ function App() {
               }
             />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/cadlojista" element={<CadastroLojistaPage />} />
+            <Route path="/cadshopper" element={<CadastroShopperPage />} />
+            <Route path="/logindesktop" element={<LoginDesktopPage />} />
             <Route
               path="/store"
               element={
