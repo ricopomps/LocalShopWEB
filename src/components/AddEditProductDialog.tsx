@@ -4,7 +4,6 @@ import { ProductInput } from "../network/products_api";
 import * as ProductsApi from "../network/products_api";
 import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
-import "../styles/AddEditProductDialog.css";
 
 interface AddEditProductDialogProps {
   productToEdit?: Product;
@@ -54,13 +53,13 @@ const AddEditProductDialog = ({
 
   return (
     <Modal show onHide={onDismiss}>
-      <Modal.Header className="modal-header modal-header-product" closeButton>
+      <Modal.Header closeButton>
         <Modal.Title>
           {productToEdit ? "Editar " : "Adicionar "}produto
         </Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="modal-body modal-body-product">
+      <Modal.Body>
         <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="name"
@@ -70,7 +69,6 @@ const AddEditProductDialog = ({
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
             error={errors.name}
-            className="form-control form-control-product"
           />
           <TextInputField
             name="description"
@@ -79,7 +77,6 @@ const AddEditProductDialog = ({
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className="form-control form-control-product"
           />
           <TextInputField
             name="image"
@@ -87,12 +84,11 @@ const AddEditProductDialog = ({
             type="text"
             placeholder="Imagem"
             register={register}
-            className="form-control form-control-product"
           />
         </Form>
       </Modal.Body>
-      <Modal.Footer className="modal-footer modal-footer-product">
-        <Button className="bnt-product" type="submit" form="addEditProductForm" disabled={isSubmitting}>
+      <Modal.Footer>
+        <Button type="submit" form="addEditProductForm" disabled={isSubmitting}>
           Salvar
         </Button>
       </Modal.Footer>
