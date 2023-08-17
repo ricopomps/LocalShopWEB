@@ -29,6 +29,9 @@ const NavBar = ({
             <Nav.Link as={Link} to="/privacy">
               Privacidade
             </Nav.Link>
+            <Nav.Link as={Link} to="/home">
+              HomePage
+            </Nav.Link>
             <Nav.Link as={Link} to="/cadlojista">
               Cadastro Lojista
             </Nav.Link>
