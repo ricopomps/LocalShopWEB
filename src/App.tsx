@@ -12,6 +12,13 @@ import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
 import { redirect } from "react-router-dom";
+import CadastroLojistaPage from "./pages/CadastroLojistaPage";
+import CadastroShopperPage from "./pages/CadastroShopperPage";
+import LoginDesktopPage from "./pages/LoginDesktopPage";
+import HomePage from "./pages/HomePage";
+import ShopperPage from "./pages/ShopperPage";
+import StorePage from "./pages/StorePage";
+import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -33,15 +40,17 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <NavBar
-          loggedInUser={loggedInUser}
-          onLoginClicked={() => setShowLoginModal(true)}
-          onSignUpClicked={() => setShowSignUpModal(true)}
-          onLogoutSuccessful={() => {
-            setLoggedInUser(null);
-            return redirect("");
-          }}
-        />
+        {loggedInUser && (
+          <NavBar
+            loggedInUser={loggedInUser}
+            onLoginClicked={() => setShowLoginModal(true)}
+            onSignUpClicked={() => setShowSignUpModal(true)}
+            onLogoutSuccessful={() => {
+              setLoggedInUser(null);
+              return redirect("");
+            }}
+          />
+        )}
         <Container className={styles.pageContainer}>
           <Routes>
             <Route
@@ -56,9 +65,43 @@ function App() {
                 />
               }
             />
+            {loggedInUser?.store && (
+              <Route
+                path="/products"
+                element={
+                  <ProductsPageLoggedInView store={loggedInUser.store} />
+                }
+              />
+            )}
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/cadlojista" element={<CadastroLojistaPage />} />
+            <Route path="/cadshopper" element={<CadastroShopperPage />} />
+            <Route path="/shopper" element={<ShopperPage />} />
             <Route
               path="/store"
+              element={
+                <StorePage
+                  onCreateStoreSuccessful={(store: Store) =>
+                    setLoggedInUser({ ...loggedInUser!, store: store })
+                  }
+                  store={loggedInUser?.store}
+                />
+              }
+            />
+
+            <Route
+              path="/logindesktop"
+              element={
+                <LoginDesktopPage
+                  onLoginSuccessful={(user) => {
+                    setLoggedInUser(user);
+                  }}
+                />
+              }
+            />
+            <Route
+              path="/store2"
               element={
                 <NotesPage
                   onCreateStoreSuccessful={
