@@ -1,0 +1,55 @@
+label {
+    display: none;
+}
+
+.modalBodyProduct {
+    background-color: #3a3a3a;
+    font-family: 'Gotham', sans-serif;
+}
+
+.modalHeaderProduct {
+    background-color: #EAC856;
+    font-family: 'Gotham', sans-serif;
+}
+
+.modalFooterProduct {
+    background-color: #3a3a3a;
+    font-family: 'Gotham', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formControlProduct {
+    background-color: #5c5c5c;
+    border: none;
+}
+
+.formControlProduct::placeholder {
+    color: #d9d9d9b3;
+}
+
+.formControlProduct:focus {
+    background-color: #5c5c5c;
+    color: #d9d9d9;
+    outline: none;
+}
+
+.bntProduct {
+    background-color: #F8CE41;
+    color: #3A3A3A;
+    border-color: #3A3A3A;
+    font-family: 'Gotham', sans-serif;
+    width: 224px;
+}
+
+.bntProduct:hover {
+    background-color: #d3ae3e;
+    color: #5c5c5c;
+    border-color: #5c5c5c;
+}
+
+.bntProduct:active {
+    background-color: #d3ae3e;
+    color: #5c5c5c;
+}
