@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
 import { LoginCredentials } from "../network/notes_api";
@@ -61,6 +61,9 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
+        <Link to="/forgotpassword" className={styles.cadastreLink}>
+          Esqueceu a senha?
+        </Link>
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           LOGIN
         </Button>
