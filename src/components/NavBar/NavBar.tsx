@@ -3,6 +3,7 @@ import { User } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link, useNavigate } from "react-router-dom";
+import styles from "../../styles/navbar.module.css";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -18,8 +19,14 @@ const NavBar = ({
 }: NavBarProps) => {
   let navigate = useNavigate();
   return (
-    <Navbar bg="primary" variant="dark" expand="sm" sticky="top">
-      <Container>
+    <Navbar
+      className={styles.navbar}
+      bg="dark"
+      variant="dark"
+      expand="sm"
+      sticky="top"
+    >
+      <Container className={styles.navbar}>
         <Navbar.Brand as={Link} to="/">
           Produtos
         </Navbar.Brand>
