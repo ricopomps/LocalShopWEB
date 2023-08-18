@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import styles from "../styles/CadastroShopper.module.css";
 
 const CadastroLojistaPage = () => {
   const placeholderLogin = "Insira seu login...";
@@ -9,25 +10,29 @@ const CadastroLojistaPage = () => {
   const navigate = useNavigate();
   return (
     <div className="main">
-      <img src={logo} alt="logo" className="imageLogin" />
+      <img src={logo} alt="logo" className={styles.imageLogin} />
       <input
         type="text"
         placeholder={placeholderLogin}
-        className="inputLogin"
+        className={styles.inputLogin}
       />
       <input
         type="text"
         placeholder={placeholderEmail}
-        className="inputLogin"
+        className={styles.inputLogin}
       />
-      <input type="text" placeholder={placeholderCNPJ} className="inputLogin" />
+      <input
+        type="text"
+        placeholder={placeholderCNPJ}
+        className={styles.inputLogin}
+      />
       <input
         type="password"
         placeholder={placeholderSenha}
-        className="inputSenha"
+        className={styles.inputLogin}
       />
-      <button className="btn btn_cadastro">CADASTRAR</button>
-      <button onClick={() => navigate(-1)} className="btn btn_login">
+      <button className={styles.btn}>CADASTRAR</button>
+      <button onClick={() => navigate(-1)} className={styles.btn}>
         VOLTAR
       </button>
     </div>
