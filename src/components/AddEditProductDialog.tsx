@@ -4,7 +4,7 @@ import { ProductInput } from "../network/products_api";
 import * as ProductsApi from "../network/products_api";
 import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
-import "../styles/AddEditProductDialog.css";
+import styles from "../styles/AddEditProductDialog.module.css";
 
 interface AddEditProductDialogProps {
   productToEdit?: Product;
@@ -54,45 +54,50 @@ const AddEditProductDialog = ({
 
   return (
     <Modal show onHide={onDismiss}>
-      <Modal.Header className="modal-header modal-header-product" closeButton>
+      <Modal.Header className={styles.modalHeaderProduct} closeButton>
         <Modal.Title>
           {productToEdit ? "Editar " : "Adicionar "}produto
         </Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="modal-body modal-body-product">
+      <Modal.Body className={styles.modalBodyProduct}>
         <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="name"
-            label="Nome"
+            label=""
             type="text"
             placeholder="Nome do produto"
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
             error={errors.name}
-            className="form-control form-control-product"
+            className={styles.formControlProduct}
           />
           <TextInputField
             name="description"
-            label="Descrição"
+            label=""
             as="textarea"
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className="form-control form-control-product"
+            className={styles.formControlProduct}
           />
           <TextInputField
             name="image"
-            label="Link da imagem"
+            label=""
             type="text"
             placeholder="Imagem"
             register={register}
-            className="form-control form-control-product"
+            className={styles.formControlProduct}
           />
         </Form>
       </Modal.Body>
-      <Modal.Footer className="modal-footer modal-footer-product">
-        <Button className="bnt-product" type="submit" form="addEditProductForm" disabled={isSubmitting}>
+      <Modal.Footer className={styles.modalFooterProduct}>
+        <Button
+          className={styles.bntProduct}
+          type="submit"
+          form="addEditProductForm"
+          disabled={isSubmitting}
+        >
           Salvar
         </Button>
       </Modal.Footer>
