@@ -76,7 +76,14 @@ function App() {
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/cadlojista" element={<CadastroLojistaPage />} />
-            <Route path="/cadshopper" element={<CadastroShopperPage />} />
+            <Route
+              path="/cadshopper"
+              element={
+                <CadastroShopperPage
+                  onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                />
+              }
+            />
             <Route path="/shopper" element={<ShopperPage />} />
             <Route
               path="/store"
