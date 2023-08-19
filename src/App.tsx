@@ -19,6 +19,8 @@ import HomePage from "./pages/HomePage";
 import ShopperPage from "./pages/ShopperPage";
 import StorePage from "./pages/StorePage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
+import ProfilePage from "./pages/ProfilePage";
+
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -67,6 +69,7 @@ function App() {
             <Route path="/cadlojista" element={<CadastroLojistaPage />} />
             <Route path="/cadshopper" element={<CadastroShopperPage />} />
             <Route path="/shopper" element={<ShopperPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route
               path="/store"
               element={
