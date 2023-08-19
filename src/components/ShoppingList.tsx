@@ -6,6 +6,8 @@ import { Product } from "../models/product";
 interface ShoppingListProps {
   products: Product[];
   onDelete: (id: string) => void;
+  cartOpen: boolean;
+  toggleCart: () => void;
 }
 
 interface ShoppingListItemProps {
@@ -18,19 +20,15 @@ interface ShoppingListItemProps {
   onDelete: (id: string) => void;
 }
 
-const ShoppingList = ({ products, onDelete }: ShoppingListProps) => {
-  const [cartOpen, setCartOpen] = useState(false);
-
-  const toggleCart = () => {
-    setCartOpen(!cartOpen);
-  };
-
+const ShoppingList = ({
+  products,
+  onDelete,
+  cartOpen,
+  toggleCart,
+}: ShoppingListProps) => {
   useEffect(() => {
-    console.log("EFFECT");
-    // Iterate through the products to identify new products
     for (const product of products) {
       if (!itemCounts[product._id]) {
-        // If the product is new, increase its count to 1
         handleItemCountIncrease(product._id);
       }
     }

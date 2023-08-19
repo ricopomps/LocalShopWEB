@@ -15,6 +15,11 @@ const ShopperPage = ({}: ShopperPageProps) => {
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
   const [showStoresLoadingError, setshowStoresLoadingError] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const toggleCart = () => {
+    setCartOpen(!cartOpen);
+  };
 
   useEffect(() => {
     async function loadStores() {
@@ -44,8 +49,12 @@ const ShopperPage = ({}: ShopperPageProps) => {
     }
   }
   const addStore = (store: Store) => {
-    if (!storesSelected.includes(store))
+    if (!storesSelected.includes(store)) {
       setStoresSelected([...storesSelected, store]);
+      setCartOpen(true);
+    } else {
+      removeStore(store._id);
+    }
   };
 
   const removeStore = (id: string) => {
@@ -78,7 +87,12 @@ const ShopperPage = ({}: ShopperPageProps) => {
         <>{stores.length > 0 ? storesGrid : <p>Não existem notas</p>}</>
       )}
 
-      <ShoppingList products={storesSelected} onDelete={removeStore} />
+      <ShoppingList
+        products={storesSelected}
+        onDelete={removeStore}
+        cartOpen={cartOpen}
+        toggleCart={toggleCart}
+      />
 
       {storeToEdit && (
         <AddEditProductDialog
