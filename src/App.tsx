@@ -18,6 +18,7 @@ import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
 import ShopperPage from "./pages/ShopperPage";
 import StorePage from "./pages/StorePage";
+import AddEditProductPage from "./pages/AddEditProductPage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
 
 function App() {
@@ -63,6 +64,12 @@ function App() {
               />
             )}
             <Route path="/privacy" element={<PrivacyPage />} />
+            {loggedInUser?.store && (
+              <Route
+                path="/addeditproduct"
+                element={<AddEditProductPage storeId={loggedInUser.store._id} />}
+              />
+            )}
             <Route path="/home" element={<HomePage />} />
             <Route path="/cadlojista" element={<CadastroLojistaPage />} />
             <Route path="/cadshopper" element={<CadastroShopperPage />} />

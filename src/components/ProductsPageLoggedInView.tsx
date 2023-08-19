@@ -10,6 +10,7 @@ import Product from "./Product";
 import { Store } from "../models/store";
 import { setSessionStoreId } from "../network/storeApi";
 import InfiniteScroll from "./InfiniteScroll";
+import { useNavigate } from "react-router-dom";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -20,6 +21,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   const [showAddProductDialog, setShowAddProductDialog] = useState(false);
   const [productToEdit, setProductToEdit] = useState<ProductModel | null>(null);
   const [productsLoading, setProductsLoading] = useState(true);
+  const navigate = useNavigate();
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
   const [page, setPage] = useState(0);
@@ -76,7 +78,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
     <>
       <Button
         className={`mb-4 ${stylesUtils.blockCenter} ${stylesUtils.flexCenter}`}
-        onClick={() => setShowAddProductDialog(true)}
+        onClick={() => navigate("/addeditproduct")}
       >
         <FaPlus />
         Adicionar novo produto

@@ -28,6 +28,8 @@ const AddEditProductDialog = ({
       name: productToEdit?.name || "",
       description: productToEdit?.description || "",
       image: productToEdit?.image || "",
+      price: productToEdit?.price || 0,
+      category: productToEdit?.category || "",
     },
   });
 
@@ -70,7 +72,7 @@ const AddEditProductDialog = ({
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
             error={errors.name}
-            className={styles.formControlProduct}
+            className={styles.inputProduct}
           />
           <TextInputField
             name="description"
@@ -79,7 +81,7 @@ const AddEditProductDialog = ({
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className={styles.formControlProduct}
+            className={styles.inputTextareaProduct}
           />
           <TextInputField
             name="image"
@@ -87,7 +89,23 @@ const AddEditProductDialog = ({
             type="text"
             placeholder="Imagem"
             register={register}
-            className={styles.formControlProduct}
+            className={styles.inputProduct}
+          />
+          <TextInputField
+            name="price"
+            label=""
+            type="text"
+            placeholder="Preço"
+            register={register}
+            className={styles.inputProduct}
+          />
+          <TextInputField
+            name="category"
+            label=""
+            type="text"
+            placeholder="Categoria"
+            register={register}
+            className={styles.inputProduct}
           />
         </Form>
       </Modal.Body>
@@ -98,7 +116,7 @@ const AddEditProductDialog = ({
           form="addEditProductForm"
           disabled={isSubmitting}
         >
-          Salvar
+          SALVAR
         </Button>
       </Modal.Footer>
     </Modal>

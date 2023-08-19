@@ -18,6 +18,8 @@ export interface ProductInput {
   name: string;
   description?: string;
   image?: string;
+  price: number;
+  category: string;
   storeId: string;
 }
 
@@ -36,4 +38,11 @@ export async function updateProduct(
 
 export async function deleteProduct(productId: string) {
   await getApi().delete(`/api/products/${productId}`);
+}
+
+export async function getCategories() {
+  const response = await getApi().get(
+    "/api/products/categories"
+  );
+  return response.data;
 }
