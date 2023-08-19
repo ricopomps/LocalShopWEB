@@ -21,24 +21,43 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   const [productsLoading, setProductsLoading] = useState(true);
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
+  const [page, setPage] = useState(0);
+  async function loadProducts(initial?: boolean) {
+    try {
+      setshowProductsLoadingError(false);
+      setProductsLoading(true);
+      await setSessionStoreId(store._id);
+      const products = await ProductsApi.fetchProducts(page);
+      if (initial) setProducts(products);
+      else setProducts((prevItems) => [...prevItems, ...products]);
+      setPage(page + 1);
+    } catch (error) {
+      console.error(error);
+      setshowProductsLoadingError(true);
+    } finally {
+      setProductsLoading(false);
+    }
+  }
+  useEffect(() => {
+    loadProducts(true);
+  }, []);
 
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        setshowProductsLoadingError(false);
-        setProductsLoading(true);
-        await setSessionStoreId(store._id);
-        const products = await ProductsApi.fetchProducts();
-        setProducts(products);
-      } catch (error) {
-        console.error(error);
-        setshowProductsLoadingError(true);
-      } finally {
-        setProductsLoading(false);
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        productsLoading
+      ) {
+        return;
       }
-    }
-    loadProducts();
-  }, []);
+      loadProducts();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [productsLoading]);
+
   async function deleteProduct(product: ProductModel) {
     try {
       await ProductsApi.deleteProduct(product._id);
@@ -78,13 +97,13 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
         Adicionar novo produto
       </Button>
 
+      {!showProductsLoadingError && (
+        <>{products.length > 0 ? productsGrid : <p>Não existem notas</p>}</>
+      )}
+
       {productsLoading && <Spinner animation="border" variant="primary" />}
       {showProductsLoadingError && (
         <p>Erro inesperado. Favor recarregar a página</p>
-      )}
-
-      {!productsLoading && !showProductsLoadingError && (
-        <>{products.length > 0 ? productsGrid : <p>Não existem notas</p>}</>
       )}
 
       {showAddProductDialog && (

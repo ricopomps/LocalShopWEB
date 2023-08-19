@@ -27,7 +27,7 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/products">
           Produtos
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar" />
