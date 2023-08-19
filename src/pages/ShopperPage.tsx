@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
 import styles from "../styles/StoresPage.module.css";
 import Product from "../components/Product";
 import AddEditProductDialog from "../components/AddEditProductDialog";
+import HorizontalScroll from "../components/HorizontalScroll";
 
 interface ShopperPageProps {}
 
@@ -42,19 +43,36 @@ const ShopperPage = ({}: ShopperPageProps) => {
     }
   }
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const handleWheelScroll = (e: any) => {
+    const container = containerRef.current;
+    if (container) {
+      container.scrollLeft += e.deltaY;
+    }
+  };
+
   const storesGrid = (
-    <Row xs={1} md={2} xl={3} className={`g-4 ${styles.storesGrid}`}>
-      {stores.map((store) => (
-        <Col key={store._id}>
-          <Product
-            product={store}
-            onProductClicked={setStoreToEdit}
-            onDeleteProductClicked={deleteStore}
-            className={styles.store}
-          ></Product>
-        </Col>
-      ))}
-    </Row>
+    <HorizontalScroll>
+      <Row
+        xs={1}
+        md={2}
+        xl={3}
+        ref={containerRef}
+        onWheel={handleWheelScroll}
+        className={`g-4 ${styles.container}`}
+      >
+        {stores.map((store) => (
+          <Col key={store._id}>
+            <Product
+              product={store}
+              onProductClicked={setStoreToEdit}
+              onDeleteProductClicked={deleteStore}
+              className={styles.product}
+            ></Product>
+          </Col>
+        ))}
+      </Row>
+    </HorizontalScroll>
   );
 
   return (
@@ -63,7 +81,6 @@ const ShopperPage = ({}: ShopperPageProps) => {
       {showStoresLoadingError && (
         <p>Erro inesperado. Favor recarregar a página</p>
       )}
-
       {!storesLoading && !showStoresLoadingError && (
         <>{stores.length > 0 ? storesGrid : <p>Não existem notas</p>}</>
       )}
