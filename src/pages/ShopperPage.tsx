@@ -5,6 +5,7 @@ import * as StoresApi from "../network/storeApi";
 import styles from "../styles/StoresPage.module.css";
 import Product from "../components/Product";
 import AddEditProductDialog from "../components/AddEditProductDialog";
+import ShoppingList from "../components/ShoppingList";
 
 interface ShopperPageProps {}
 
@@ -67,6 +68,8 @@ const ShopperPage = ({}: ShopperPageProps) => {
       {!storesLoading && !showStoresLoadingError && (
         <>{stores.length > 0 ? storesGrid : <p>Não existem notas</p>}</>
       )}
+
+      <ShoppingList products={stores} />
 
       {storeToEdit && (
         <AddEditProductDialog
