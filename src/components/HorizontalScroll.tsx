@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import styles from "../styles/HorizontalScroll.module.css";
+import { Row } from "react-bootstrap";
 interface HorizontalScrollProps {
   children: React.ReactNode;
   className?: string;
@@ -19,13 +20,16 @@ const HorizontalScroll: React.FC<HorizontalScrollProps> = ({
   };
 
   return (
-    <div
-      className={`${styles.container} ${className && styles[className]}`}
+    <Row
+      xs={1}
+      md={2}
+      xl={3}
       ref={containerRef}
       onWheel={handleWheelScroll}
+      className={`g-4 ${styles.container} ${className}`}
     >
       {children}
-    </div>
+    </Row>
   );
 };
 

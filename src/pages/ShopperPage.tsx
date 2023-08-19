@@ -53,25 +53,16 @@ const ShopperPage = ({}: ShopperPageProps) => {
 
   const storesGrid = (
     <HorizontalScroll>
-      <Row
-        xs={1}
-        md={2}
-        xl={3}
-        ref={containerRef}
-        onWheel={handleWheelScroll}
-        className={`g-4 ${styles.container}`}
-      >
-        {stores.map((store) => (
-          <Col key={store._id}>
-            <Product
-              product={store}
-              onProductClicked={setStoreToEdit}
-              onDeleteProductClicked={deleteStore}
-              className={styles.product}
-            ></Product>
-          </Col>
-        ))}
-      </Row>
+      {stores.map((store) => (
+        <Col key={store._id}>
+          <Product
+            product={store}
+            onProductClicked={setStoreToEdit}
+            onDeleteProductClicked={deleteStore}
+            className={styles.product}
+          ></Product>
+        </Col>
+      ))}
     </HorizontalScroll>
   );
 
