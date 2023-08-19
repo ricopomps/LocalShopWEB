@@ -12,8 +12,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
 import { redirect } from "react-router-dom";
-import CadastroLojistaPage from "./pages/CadastroLojistaPage";
-import CadastroShopperPage from "./pages/CadastroShopperPage";
+import SignUpPage from "./pages/SignUpPage";
 import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
 import ShopperPage from "./pages/ShopperPage";
@@ -67,7 +66,7 @@ function App() {
             <Route
               path="/cadlojista"
               element={
-                <CadastroShopperPage
+                <SignUpPage
                   onSignUpSuccessful={(user) => setLoggedInUser(user)}
                   userType={UserType.store}
                 />
@@ -76,7 +75,7 @@ function App() {
             <Route
               path="/cadshopper"
               element={
-                <CadastroShopperPage
+                <SignUpPage
                   onSignUpSuccessful={(user) => setLoggedInUser(user)}
                   userType={UserType.shopper}
                 />

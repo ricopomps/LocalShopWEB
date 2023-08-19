@@ -8,14 +8,14 @@ import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
 
-interface CadastroShopperPageProps {
+interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
   userType: UserType;
 }
 
-const CadastroShopperPage = ({
+const SignUpPage = ({
   onSignUpSuccessful, userType,
-}: CadastroShopperPageProps) => {
+}: SignUpPageProps) => {
   const placeholderLogin = "Insira seu login...";
   const placeholderEmail = "Insira seu email...";
   const placeholderSenha = "Insira sua senha...";
@@ -99,4 +99,4 @@ const CadastroShopperPage = ({
     </div>
   );
 }
-export default CadastroShopperPage;
+export default SignUpPage;
