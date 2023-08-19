@@ -53,18 +53,7 @@ function App() {
         )}
         <Container className={styles.pageContainer}>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <NotesPage
-                  onCreateStoreSuccessful={
-                    (store: Store) =>
-                      setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
-                  }
-                  loggedInUser={loggedInUser}
-                />
-              }
-            />
+            <Route path="/" element={<HomePage />} />
             {loggedInUser?.store && (
               <Route
                 path="/products"
