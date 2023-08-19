@@ -9,6 +9,7 @@ import AddProductDialog from "./AddEditProductDialog";
 import Product from "./Product";
 import { Store } from "../models/store";
 import { setSessionStoreId } from "../network/storeApi";
+import InfiniteScroll from "./InfiniteScroll";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -41,22 +42,6 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   useEffect(() => {
     loadProducts(true);
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        productsLoading
-      ) {
-        return;
-      }
-      loadProducts();
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [productsLoading]);
 
   async function deleteProduct(product: ProductModel) {
     try {
@@ -105,7 +90,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       {showProductsLoadingError && (
         <p>Erro inesperado. Favor recarregar a página</p>
       )}
-
+      <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       {showAddProductDialog && (
         <AddProductDialog
           storeId={store._id}
