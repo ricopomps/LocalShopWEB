@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
-import { Store as StoreModel } from "../models/store";
+import { Store, Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
 import styles from "../styles/StoresPage.module.css";
 import Product from "../components/Product";
@@ -11,6 +11,7 @@ interface ShopperPageProps {}
 
 const ShopperPage = ({}: ShopperPageProps) => {
   const [stores, setStores] = useState<StoreModel[]>([]);
+  const [storesSelected, setStoresSelected] = useState<StoreModel[]>([]);
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
   const [showStoresLoadingError, setshowStoresLoadingError] = useState(false);
@@ -42,6 +43,14 @@ const ShopperPage = ({}: ShopperPageProps) => {
       alert(error);
     }
   }
+  const addStore = (store: Store) => {
+    if (!storesSelected.includes(store))
+      setStoresSelected([...storesSelected, store]);
+  };
+
+  const removeStore = (id: string) => {
+    setStoresSelected(storesSelected.filter((store) => store._id !== id));
+  };
 
   const storesGrid = (
     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.storesGrid}`}>
@@ -49,7 +58,7 @@ const ShopperPage = ({}: ShopperPageProps) => {
         <Col key={store._id}>
           <Product
             product={store}
-            onProductClicked={setStoreToEdit}
+            onProductClicked={addStore}
             onDeleteProductClicked={deleteStore}
             className={styles.store}
           ></Product>
@@ -69,7 +78,7 @@ const ShopperPage = ({}: ShopperPageProps) => {
         <>{stores.length > 0 ? storesGrid : <p>Não existem notas</p>}</>
       )}
 
-      <ShoppingList products={stores} />
+      <ShoppingList products={storesSelected} onDelete={removeStore} />
 
       {storeToEdit && (
         <AddEditProductDialog

@@ -40,3 +40,38 @@
   margin: 0;
   color: #666;
 }
+.itemControls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.itemControlButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.itemCount {
+  margin: 0 5px;
+  font-size: 18px;
+}
+
+.itemDeleteButton {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.totalPrice {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-weight: bold;
+}

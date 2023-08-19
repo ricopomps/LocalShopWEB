@@ -1,31 +1,106 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
 import { Product } from "../models/product";
 
 interface ShoppingListProps {
   products: Product[];
+  onDelete: (id: string) => void;
 }
 
 interface ShoppingListItemProps {
   product: Product;
   isSelected: boolean;
+  itemCount: number;
   onSelect: (id: string) => void;
+  onIncrease: (id: string) => void;
+  onDecrease: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-const ShoppingList = ({ products }: ShoppingListProps) => {
+const ShoppingList = ({ products, onDelete }: ShoppingListProps) => {
   const [cartOpen, setCartOpen] = useState(false);
 
   const toggleCart = () => {
     setCartOpen(!cartOpen);
   };
 
+  useEffect(() => {
+    console.log("EFFECT");
+    // Iterate through the products to identify new products
+    for (const product of products) {
+      if (!itemCounts[product._id]) {
+        // If the product is new, increase its count to 1
+        handleItemCountIncrease(product._id);
+      }
+    }
+  }, [cartOpen, products]);
+
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+  const [itemCounts, setItemCounts] = useState<{ [key: string]: number }>({});
+
+  const handleItemSelect = (itemId: string) => {
+    setSelectedItemIds((prevSelectedItems) => {
+      if (prevSelectedItems.includes(itemId)) {
+        return prevSelectedItems.filter((id) => id !== itemId);
+      } else {
+        return [...prevSelectedItems, itemId];
+      }
+    });
+  };
+
+  const handleItemCountIncrease = (itemId: string) => {
+    setItemCounts((prevCounts) => ({
+      ...prevCounts,
+      [itemId]: (prevCounts[itemId] || 0) + 1,
+    }));
+  };
+
+  const handleItemCountDecrease = (itemId: string) => {
+    setItemCounts((prevCounts) => {
+      const newCount = Math.max((prevCounts[itemId] || 0) - 1, 0);
+      if (newCount <= 0) {
+        handleItemDelete(itemId);
+        return prevCounts;
+      }
+      return {
+        ...prevCounts,
+        [itemId]: newCount,
+      };
+    });
+  };
+
+  const handleItemDelete = (itemId: string) => {
+    setSelectedItemIds((prevSelectedItems) =>
+      prevSelectedItems.filter((id) => id !== itemId)
+    );
+    setItemCounts((prevCounts) => {
+      const newCounts = { ...prevCounts };
+      delete newCounts[itemId];
+      return newCounts;
+    });
+    onDelete(itemId);
+  };
+
+  const calculateTotalPrice = () => {
+    let total = 0;
+    for (const itemId in itemCounts) {
+      const item = products.find((product) => product._id === itemId);
+      if (item) {
+        total += item.price || 10 * (itemCounts[itemId] || 1);
+      }
+    }
+    return total;
+  };
 
   const ShoppingItem = ({
     product: { _id, name, price },
     isSelected,
+    itemCount,
     onSelect,
+    onIncrease,
+    onDecrease,
+    onDelete,
   }: ShoppingListItemProps) => {
     const handleCheckboxChange = () => {
       onSelect(_id);
@@ -43,18 +118,31 @@ const ShoppingList = ({ products }: ShoppingListProps) => {
           <p className={styles.itemText}>{name}</p>
           <p className={styles.itemPrice}>${price}</p>
         </div>
+        <div className={styles.itemControls}>
+          <button
+            onClick={() => onIncrease(_id)}
+            className={styles.itemControlButton}
+          >
+            +
+          </button>
+          <span className={styles.itemCount}>{itemCount}</span>
+          <button
+            onClick={() => onDecrease(_id)}
+            className={styles.itemControlButton}
+          >
+            -
+          </button>
+          <button
+            onClick={() => onDelete(_id)}
+            className={styles.itemDeleteButton}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     );
   };
-  const handleItemSelect = (itemId: string) => {
-    setSelectedItemIds((prevSelectedItems) => {
-      if (prevSelectedItems.includes(itemId)) {
-        return prevSelectedItems.filter((id) => id !== itemId);
-      } else {
-        return [...prevSelectedItems, itemId];
-      }
-    });
-  };
+
   return (
     <>
       <Button
@@ -72,9 +160,16 @@ const ShoppingList = ({ products }: ShoppingListProps) => {
             key={item._id}
             product={item}
             isSelected={selectedItemIds.includes(item._id)}
+            itemCount={itemCounts[item._id] || 0}
             onSelect={handleItemSelect}
+            onIncrease={handleItemCountIncrease}
+            onDecrease={handleItemCountDecrease}
+            onDelete={handleItemDelete}
           />
         ))}
+        <div className={styles.totalPrice}>
+          Total Price: ${calculateTotalPrice().toFixed(2)}
+        </div>
       </Container>
     </>
   );
