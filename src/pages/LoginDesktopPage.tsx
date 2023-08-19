@@ -7,6 +7,7 @@ import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import * as StoresApi from "../network/storeApi";
 import { User, UserType } from "../models/user";
+import styles from "../styles/LoginDesktop.module.css";
 
 interface LoginDesktopPageProps {
   onLoginSuccessful: (user: User) => void;
@@ -37,12 +38,13 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
     console.log(data);
   };
   return (
-    <div className="main">
-      <img src={logo} alt="logo" className="imageLogin" />
+    <div className={styles.main}>
+      <img src={logo} alt="logo" className={styles.imageLogin} />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
+          className={styles.inputLogin}
           name="username"
-          label="Usuário"
+          label=""
           type="text"
           placeholder="Usuário"
           register={register}
@@ -50,19 +52,20 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
           error={errors.username}
         />
         <TextInputField
+          className={styles.inputSenha}
           name="password"
-          label="Senha"
+          label=""
           type="password"
           placeholder="Senha"
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
-        <Button type="submit" disabled={isSubmitting}>
-          Login
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
+          LOGIN
         </Button>
       </Form>
-      <button onClick={() => navigate(-1)} className="btn btn_login ">
+      <button onClick={() => navigate(-1)} className={styles.btn}>
         VOLTAR
       </button>
     </div>

@@ -1,10 +1,16 @@
 import { Product } from "../models/product";
 import { getApi } from "./api";
 
-export async function fetchProducts(): Promise<Product[]> {
-  const response = await getApi().get("/api/products", {
-    withCredentials: true,
-  });
+export async function fetchProducts(
+  page: number,
+  take?: number
+): Promise<Product[]> {
+  const response = await getApi().get(
+    `/api/products?page=${page}&take=${take ?? 10}`,
+    {
+      withCredentials: true,
+    }
+  );
   return response.data;
 }
 

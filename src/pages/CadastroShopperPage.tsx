@@ -10,10 +10,11 @@ import { User, UserType } from "../models/user";
 
 interface CadastroShopperPageProps {
   onSignUpSuccessful: (user: User) => void;
+  userType: UserType;
 }
 
 const CadastroShopperPage = ({
-  onSignUpSuccessful,
+  onSignUpSuccessful, userType,
 }: CadastroShopperPageProps) => {
   const placeholderLogin = "Insira seu login...";
   const placeholderEmail = "Insira seu email...";
@@ -29,7 +30,6 @@ const CadastroShopperPage = ({
   const onSubmit = async (data: SignUpCredentials) => {
     console.log(data);
     try {
-      const userType = UserType.shopper;
       data.userType = userType;
       const user = await NotesApi.signUp(data);
       onSignUpSuccessful(user);
@@ -98,6 +98,5 @@ const CadastroShopperPage = ({
       </button>
     </div>
   );
-};
-
+}
 export default CadastroShopperPage;

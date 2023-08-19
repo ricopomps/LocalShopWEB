@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar/NavBar";
 import SignUpModal from "./components/SignUpModal";
 import LoginModal from "./components/LoginModal";
-import { User } from "./models/user";
+import { User, UserType } from "./models/user";
 import * as NotesApi from "./network/notes_api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
@@ -53,18 +53,7 @@ function App() {
         )}
         <Container className={styles.pageContainer}>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <NotesPage
-                  onCreateStoreSuccessful={
-                    (store: Store) =>
-                      setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
-                  }
-                  loggedInUser={loggedInUser}
-                />
-              }
-            />
+            <Route path="/" element={<HomePage />} />
             {loggedInUser?.store && (
               <Route
                 path="/products"
@@ -75,12 +64,21 @@ function App() {
             )}
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/cadlojista" element={<CadastroLojistaPage />} />
+            <Route
+              path="/cadlojista"
+              element={
+                <CadastroShopperPage
+                  onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                  userType={UserType.store}
+                />
+              }
+            />
             <Route
               path="/cadshopper"
               element={
                 <CadastroShopperPage
                   onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                  userType={UserType.shopper}
                 />
               }
             />
