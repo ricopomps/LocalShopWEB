@@ -108,6 +108,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       <ShoppingList
         storeId={storeId}
         productsItems={productsSelected}
+        setProductsItems={setProductsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}
         toggleCart={toggleCart}

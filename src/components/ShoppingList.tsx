@@ -4,10 +4,10 @@ import styles from "../styles/ShoppingList.module.css";
 import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
-
 interface ShoppingListProps {
   storeId: string | null;
   productsItems: ProductItem[];
+  setProductsItems: (productItem: ProductItem[]) => void;
   onDelete: (id: string) => void;
   cartOpen: boolean;
   toggleCart: () => void;
@@ -19,9 +19,8 @@ export interface ProductItem {
 }
 
 interface ShoppingListItemProps {
-  product: Product;
+  productItem: ProductItem;
   isSelected: boolean;
-  itemCount: number;
   onSelect: (id: string) => void;
   onIncrease: (id: string) => void;
   onDecrease: (id: string) => void;
@@ -31,20 +30,20 @@ interface ShoppingListItemProps {
 const ShoppingList = ({
   storeId,
   productsItems,
+  setProductsItems,
   onDelete,
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
   useEffect(() => {
     for (const item of productsItems) {
-      if (!itemCounts[item.product._id]) {
+      if (!item.quantity) {
         handleItemCountIncrease(item.product._id);
       }
     }
   }, [cartOpen, productsItems]);
 
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
-  const [itemCounts, setItemCounts] = useState<{ [key: string]: number }>({});
 
   const handleItemSelect = (itemId: string) => {
     setSelectedItemIds((prevSelectedItems) => {
@@ -57,62 +56,67 @@ const ShoppingList = ({
   };
 
   const handleItemCountIncrease = (itemId: string) => {
-    setItemCounts((prevCounts) => ({
-      ...prevCounts,
-      [itemId]: (prevCounts[itemId] || 0) + 1,
-    }));
+    const productItem = productsItems.find(
+      (item) => item.product._id === itemId
+    );
+
+    if (productItem) {
+      productItem.quantity++;
+      const updatedProductsItems = productsItems.map((item) =>
+        item.product._id === itemId ? productItem : item
+      );
+      setProductsItems(updatedProductsItems);
+    }
   };
 
   const handleItemCountDecrease = (itemId: string) => {
-    setItemCounts((prevCounts) => {
-      const newCount = Math.max((prevCounts[itemId] || 0) - 1, 0);
-      if (newCount <= 0) {
+    const productItem = productsItems.find(
+      (item) => item.product._id === itemId
+    );
+
+    if (productItem) {
+      productItem.quantity--;
+
+      if (productItem.quantity <= 0) {
         handleItemDelete(itemId);
-        return prevCounts;
+      } else {
+        const updatedProductsItems = productsItems.map((item) =>
+          item.product._id === itemId ? productItem : item
+        );
+        setProductsItems(updatedProductsItems);
       }
-      return {
-        ...prevCounts,
-        [itemId]: newCount,
-      };
-    });
+    }
   };
 
   const handleItemDelete = (itemId: string) => {
     setSelectedItemIds((prevSelectedItems) =>
       prevSelectedItems.filter((id) => id !== itemId)
     );
-    setItemCounts((prevCounts) => {
-      const newCounts = { ...prevCounts };
-      delete newCounts[itemId];
-      return newCounts;
-    });
+    const updatedProductsItems = productsItems.filter(
+      (item) => item.product._id !== itemId
+    );
+    setProductsItems(updatedProductsItems);
     onDelete(itemId);
   };
 
   const calculateTotalPrice = () => {
     let total = 0;
-    for (const itemId in itemCounts) {
-      const item = productsItems.find(
-        (product) => product.product._id === itemId
-      );
-      if (item) {
-        total += item.product.price || 10 * (itemCounts[itemId] || 1);
-      }
+    for (const productItem of productsItems) {
+      total += (productItem.product.price || 10) * productItem.quantity;
     }
     return total;
   };
 
   const ShoppingItem = ({
-    product: { _id, name, price },
+    productItem,
     isSelected,
-    itemCount,
     onSelect,
     onIncrease,
     onDecrease,
     onDelete,
   }: ShoppingListItemProps) => {
     const handleCheckboxChange = () => {
-      onSelect(_id);
+      onSelect(productItem.product._id);
     };
 
     return (
@@ -124,25 +128,25 @@ const ShoppingList = ({
           onChange={handleCheckboxChange}
         />
         <div className={styles.itemInfo}>
-          <p className={styles.itemText}>{name}</p>
-          <p className={styles.itemPrice}>R${price}</p>
+          <p className={styles.itemText}>{productItem.product.name}</p>
+          <p className={styles.itemPrice}>R${productItem.product.price}</p>
         </div>
         <div className={styles.itemControls}>
           <button
-            onClick={() => onIncrease(_id)}
+            onClick={() => onIncrease(productItem.product._id)}
             className={styles.itemControlButton}
           >
             +
           </button>
-          <span className={styles.itemCount}>{itemCount}</span>
+          <span className={styles.itemCount}>{productItem.quantity}</span>
           <button
-            onClick={() => onDecrease(_id)}
+            onClick={() => onDecrease(productItem.product._id)}
             className={styles.itemControlButton}
           >
             -
           </button>
           <button
-            onClick={() => onDelete(_id)}
+            onClick={() => onDelete(productItem.product._id)}
             className={styles.itemDeleteButton}
           >
             Delete
@@ -157,10 +161,10 @@ const ShoppingList = ({
       const productsMapped = productsItems.map((item) => {
         return {
           product: item.product._id,
-          quantity: itemCounts[item.product._id],
+          quantity: item.quantity,
         };
       });
-      console.log(productsMapped);
+
       if (!storeId) throw Error("Loja inválida");
       const shoppingList = { storeId, products: productsMapped };
       await ShoppingListApi.createShoppingList(shoppingList);
@@ -185,9 +189,8 @@ const ShoppingList = ({
         {productsItems.map((item) => (
           <ShoppingItem
             key={item.product._id}
-            product={item.product}
+            productItem={item}
             isSelected={selectedItemIds.includes(item.product._id)}
-            itemCount={itemCounts[item.product._id] || 0}
             onSelect={handleItemSelect}
             onIncrease={handleItemCountIncrease}
             onDecrease={handleItemCountDecrease}
@@ -195,7 +198,7 @@ const ShoppingList = ({
           />
         ))}
         <div className={styles.totalPrice}>
-          Total Price: ${calculateTotalPrice().toFixed(2)}
+          Total Price: R${calculateTotalPrice().toFixed(2)}
         </div>
         <Button onClick={onSave}>Salvar</Button>
       </Container>
