@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ProductInput } from "../network/products_api";
@@ -14,11 +15,23 @@ interface AddEditProductPageProps {
   storeId: string;
 }
 
+
 const AddEditProductPage = ({
   onProductSaved,
   storeId,
 }: AddEditProductPageProps) => {
   const navigate = useNavigate();
+
+  const [categories, setCategories] = useState<string[]>([""]);
+
+  async function loadCategories() {
+    const a: string[] = (await ProductsApi.getCategories()).categories;
+    setCategories(a);
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   const {
     register,
@@ -83,18 +96,23 @@ const AddEditProductPage = ({
           className={styles.inputProduct}
         />
         <TextInputField
+          name="category"
+          label=""
+          type="text"
+          as="select"
+          options={categories.map((c) => {
+            return { value: c, key: c };
+          })}
+          hasDefaultValue={true}
+          placeholder="Categoria"
+          register={register}
+          className={styles.selectProduct}
+        />
+        <TextInputField
           name="price"
           label=""
           type="text"
           placeholder="Preço"
-          register={register}
-          className={styles.inputProduct}
-        />
-        <TextInputField
-          name="category"
-          label=""
-          type="text"
-          placeholder="Categoria"
           register={register}
           className={styles.inputProduct}
         />

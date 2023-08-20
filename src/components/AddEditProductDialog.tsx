@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ProductInput } from "../network/products_api";
@@ -19,6 +20,18 @@ const AddEditProductDialog = ({
   onProductSaved,
   storeId,
 }: AddEditProductDialogProps) => {
+
+  const [categories, setCategories] = useState<string[]>([""]);
+
+  async function loadCategories() {
+    const a: string[] = (await ProductsApi.getCategories()).categories;
+    setCategories(a);
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -58,7 +71,7 @@ const AddEditProductDialog = ({
     <Modal show onHide={onDismiss}>
       <Modal.Header className={styles.modalHeaderProduct} closeButton>
         <Modal.Title>
-          {productToEdit ? "Editar " : "Adicionar "}produto
+          {productToEdit ? "Editar " : "Adicionar "}PRODUTO
         </Modal.Title>
       </Modal.Header>
 
@@ -92,18 +105,23 @@ const AddEditProductDialog = ({
             className={styles.inputProduct}
           />
           <TextInputField
+            name="category"
+            label=""
+            type="text"
+            as="select"
+            options={categories.map((c) => {
+              return { value: c, key: c };
+            })}
+            hasDefaultValue={true}
+            placeholder="Categoria"
+            register={register}
+            className={styles.selectProduct}
+          />
+          <TextInputField
             name="price"
             label=""
             type="text"
             placeholder="Preço"
-            register={register}
-            className={styles.inputProduct}
-          />
-          <TextInputField
-            name="category"
-            label=""
-            type="text"
-            placeholder="Categoria"
             register={register}
             className={styles.inputProduct}
           />
