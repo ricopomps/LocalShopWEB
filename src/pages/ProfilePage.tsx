@@ -5,23 +5,38 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProfilePage.module.css";
 import logo from "../assets/logo.svg";
+import { User } from "../models/user";
+import * as UserApi from "../network/notes_api";
+interface ProfilePageProps{
+  user: User;
+}
 
-
-interface ProfileForm{
+export interface ProfileForm{
     name:string;
     email:string;
-    password:string;
 }
-const ProfilePage = () => {
+const ProfilePage = ({user}:ProfilePageProps) => {
 
 const navigate = useNavigate();
 const {
   register,
   handleSubmit,
   formState: { errors, isSubmitting },
-} = useForm<ProfileForm>();
- const onSubmit = (data : ProfileForm) =>{
-    console.log(data);
+} = useForm<ProfileForm>({
+  defaultValues: {
+    name: user?.username || "",
+    email: user?.email || ""
+  },
+});
+
+
+ const onSubmit = async( data : ProfileForm) =>{
+   try {
+    const response = await UserApi.updateUser(data);
+    console.log(response);
+   } catch (error) {
+    alert(error);
+   }
  }
   return (
     <div id={styles.principal}>
@@ -47,18 +62,8 @@ const {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
         />
-        <TextInputField
-          className={styles.input}
-          name="password"
-          label="Senha:"
-          type="password"
-          placeholder=""
-          register={register}
-          registerOptions={{ required: "Campo Obrigatório" }}
-          error={errors.password}
-        />
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
-          Login
+          Alterar
         </Button>
       </Form>
       <Button className={styles.btn} onClick={() => navigate(-1)}>

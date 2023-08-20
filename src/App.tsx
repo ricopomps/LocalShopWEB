@@ -69,7 +69,10 @@ function App() {
             <Route path="/cadlojista" element={<CadastroLojistaPage />} />
             <Route path="/cadshopper" element={<CadastroShopperPage />} />
             <Route path="/shopper" element={<ShopperPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            {loggedInUser && <Route 
+              path="/profile"
+              element={<ProfilePage user={loggedInUser} />}
+            />}
             <Route
               path="/store"
               element={

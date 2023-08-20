@@ -11,7 +11,7 @@
   font-size: 26px;
   font-weight: 300;
   background-color: #5c5c5c;
-  color: #5C5C5C;
+  color: #dddddd;
   padding: 0.5em 0.5em;
   border: none;
   border-radius: 5px;
@@ -20,6 +20,10 @@
   justify-content: center;
   text-align:left;
   height: 2em;
+}
+.input:focus {
+  background-color: #5c5c5c;
+  color: #dddddd;
 }
 .btn {
   font-family: "Gotham", sans-serif;

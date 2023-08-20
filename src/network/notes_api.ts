@@ -1,5 +1,6 @@
 import { Note } from "../models/note";
 import { User, UserType } from "../models/user";
+import { ProfileForm } from "../pages/ProfilePage";
 import { getApi } from "./api";
 //USER ROUTES
 
@@ -39,6 +40,11 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 export async function logout() {
   await getApi().post("/api/auth/logout");
   sessionStorage.removeItem("token");
+} 
+
+export async function updateUser(user: ProfileForm){
+   const response = await getApi().patch("/api/users",user);
+   return response.data;
 }
 
 //NOTES ROUTES
