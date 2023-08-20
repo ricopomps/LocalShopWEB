@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
 import * as ProductsApi from "../network/products_api";
+import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
 import ShoppingList from "../components/ShoppingList";
 import Product from "../components/Product";
+import { toast } from "react-toastify";
 
 interface ProductListPageProps {}
 
@@ -39,6 +41,13 @@ const ProductListPage = ({}: ProductListPageProps) => {
   const [cartOpen, setCartOpen] = useState(false);
   const [productsSelected, setProductsSelected] = useState<ProductModel[]>([]);
   useEffect(() => {
+    const getPreviousShoppingList = async () => {
+      try {
+        if (!storeId) throw Error("Loja não encontrada");
+        const shoppingList = await ShoppingListApi.getShoppingList(storeId);
+      } catch (error) {}
+    };
+    getPreviousShoppingList();
     loadProducts(true);
   }, []);
 
@@ -92,6 +101,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       )}
       <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       <ShoppingList
+        storeId={storeId}
         products={productsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}

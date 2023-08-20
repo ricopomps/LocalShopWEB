@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
 import { Product } from "../models/product";
+import * as ShoppingListApi from "../network/shoppingListApi";
+import { toast } from "react-toastify";
 
 interface ShoppingListProps {
+  storeId: string | null;
   products: Product[];
   onDelete: (id: string) => void;
   cartOpen: boolean;
@@ -21,6 +24,7 @@ interface ShoppingListItemProps {
 }
 
 const ShoppingList = ({
+  storeId,
   products,
   onDelete,
   cartOpen,
@@ -141,6 +145,21 @@ const ShoppingList = ({
     );
   };
 
+  const onSave = async () => {
+    try {
+      const productsMapped = products.map((product) => {
+        return { product: product._id, quantity: itemCounts[product._id] };
+      });
+      console.log(productsMapped);
+      if (!storeId) throw Error("Loja inválida");
+      const shoppingList = { storeId, products: productsMapped };
+      await ShoppingListApi.createShoppingList(shoppingList);
+      toast.success("Lista de compras salva com sucesso!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
   return (
     <>
       <Button
@@ -168,6 +187,7 @@ const ShoppingList = ({
         <div className={styles.totalPrice}>
           Total Price: ${calculateTotalPrice().toFixed(2)}
         </div>
+        <Button onClick={onSave}>Salvar</Button>
       </Container>
     </>
   );
