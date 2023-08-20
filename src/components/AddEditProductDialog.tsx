@@ -71,7 +71,7 @@ const AddEditProductDialog = ({
     <Modal show onHide={onDismiss}>
       <Modal.Header className={styles.modalHeaderProduct} closeButton>
         <Modal.Title>
-          {productToEdit ? "Editar " : "Adicionar "}PRODUTO
+          {productToEdit ? "EDITAR " : "Adicionar "}PRODUTO
         </Modal.Title>
       </Modal.Header>
 
