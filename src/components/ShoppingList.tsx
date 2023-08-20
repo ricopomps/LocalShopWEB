@@ -7,10 +7,15 @@ import { toast } from "react-toastify";
 
 interface ShoppingListProps {
   storeId: string | null;
-  products: Product[];
+  productsItems: ProductItem[];
   onDelete: (id: string) => void;
   cartOpen: boolean;
   toggleCart: () => void;
+}
+
+export interface ProductItem {
+  product: Product;
+  quantity: number;
 }
 
 interface ShoppingListItemProps {
@@ -25,18 +30,18 @@ interface ShoppingListItemProps {
 
 const ShoppingList = ({
   storeId,
-  products,
+  productsItems,
   onDelete,
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
   useEffect(() => {
-    for (const product of products) {
-      if (!itemCounts[product._id]) {
-        handleItemCountIncrease(product._id);
+    for (const item of productsItems) {
+      if (!itemCounts[item.product._id]) {
+        handleItemCountIncrease(item.product._id);
       }
     }
-  }, [cartOpen, products]);
+  }, [cartOpen, productsItems]);
 
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [itemCounts, setItemCounts] = useState<{ [key: string]: number }>({});
@@ -87,9 +92,11 @@ const ShoppingList = ({
   const calculateTotalPrice = () => {
     let total = 0;
     for (const itemId in itemCounts) {
-      const item = products.find((product) => product._id === itemId);
+      const item = productsItems.find(
+        (product) => product.product._id === itemId
+      );
       if (item) {
-        total += item.price || 10 * (itemCounts[itemId] || 1);
+        total += item.product.price || 10 * (itemCounts[itemId] || 1);
       }
     }
     return total;
@@ -147,8 +154,11 @@ const ShoppingList = ({
 
   const onSave = async () => {
     try {
-      const productsMapped = products.map((product) => {
-        return { product: product._id, quantity: itemCounts[product._id] };
+      const productsMapped = productsItems.map((item) => {
+        return {
+          product: item.product._id,
+          quantity: itemCounts[item.product._id],
+        };
       });
       console.log(productsMapped);
       if (!storeId) throw Error("Loja inválida");
@@ -172,12 +182,12 @@ const ShoppingList = ({
       <Container
         className={`${styles.cartSidebar} ${cartOpen ? styles.open : ""}`}
       >
-        {products.map((item) => (
+        {productsItems.map((item) => (
           <ShoppingItem
-            key={item._id}
-            product={item}
-            isSelected={selectedItemIds.includes(item._id)}
-            itemCount={itemCounts[item._id] || 0}
+            key={item.product._id}
+            product={item.product}
+            isSelected={selectedItemIds.includes(item.product._id)}
+            itemCount={itemCounts[item.product._id] || 0}
             onSelect={handleItemSelect}
             onIncrease={handleItemCountIncrease}
             onDecrease={handleItemCountDecrease}

@@ -6,7 +6,7 @@ import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
-import ShoppingList from "../components/ShoppingList";
+import ShoppingList, { ProductItem } from "../components/ShoppingList";
 import Product from "../components/Product";
 import { toast } from "react-toastify";
 
@@ -39,7 +39,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
     }
   }
   const [cartOpen, setCartOpen] = useState(false);
-  const [productsSelected, setProductsSelected] = useState<ProductModel[]>([]);
+  const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
   useEffect(() => {
     const getPreviousShoppingList = async () => {
       try {
@@ -52,20 +52,25 @@ const ProductListPage = ({}: ProductListPageProps) => {
   }, []);
 
   const addProductToShoppingCart = (product: ProductModel) => {
-    if (!productsSelected.includes(product)) {
-      setProductsSelected([...productsSelected, product]);
+    const existingProduct = productsSelected.find(
+      (item) => item.product._id === product._id
+    );
+
+    if (!existingProduct) {
+      setProductsSelected([...productsSelected, { product, quantity: 1 }]);
       setCartOpen(true);
     } else {
       removeProductFromShoppingCart(product._id);
     }
   };
+
   const toggleCart = () => {
     setCartOpen(!cartOpen);
   };
 
   const removeProductFromShoppingCart = (id: string) => {
     setProductsSelected(
-      productsSelected.filter((product) => product._id !== id)
+      productsSelected.filter((item) => item.product._id !== id)
     );
   };
 
@@ -102,7 +107,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       <ShoppingList
         storeId={storeId}
-        products={productsSelected}
+        productsItems={productsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}
         toggleCart={toggleCart}
