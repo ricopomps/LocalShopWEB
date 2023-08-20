@@ -45,6 +45,11 @@ const ProductListPage = ({}: ProductListPageProps) => {
       try {
         if (!storeId) throw Error("Loja não encontrada");
         const shoppingList = await ShoppingListApi.getShoppingList(storeId);
+
+        if (shoppingList?.products) {
+          setProductsSelected(shoppingList.products);
+          setCartOpen(true);
+        }
       } catch (error) {}
     };
     getPreviousShoppingList();

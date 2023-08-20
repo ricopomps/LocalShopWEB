@@ -35,14 +35,6 @@ const ShoppingList = ({
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
-  useEffect(() => {
-    for (const item of productsItems) {
-      if (!item.quantity) {
-        handleItemCountIncrease(item.product._id);
-      }
-    }
-  }, [cartOpen, productsItems]);
-
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
 
   const handleItemSelect = (itemId: string) => {
