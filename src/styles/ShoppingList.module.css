@@ -1,0 +1,77 @@
+.cartSidebar {
+  width: 300px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: -300px;
+  background-color: #f4f4f4;
+  transition: right 0.3s ease-in-out;
+  box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1025;
+}
+
+.open {
+  right: 0;
+}
+
+.toggleButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+.shoppingItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.itemText {
+  margin: 0;
+}
+
+.itemPrice {
+  margin: 0;
+  color: #666;
+}
+.itemControls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.itemControlButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.itemCount {
+  margin: 0 5px;
+  font-size: 18px;
+}
+
+.itemDeleteButton {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.totalPrice {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-weight: bold;
+}

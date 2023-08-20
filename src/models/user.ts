@@ -5,6 +5,7 @@ export interface User {
   email: string;
   userType: UserType;
   store?: Store;
+  cpf: string;
 }
 
 export enum UserType {

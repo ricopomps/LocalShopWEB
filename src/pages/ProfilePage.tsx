@@ -7,6 +7,7 @@ import styles from "../styles/ProfilePage.module.css";
 import logo from "../assets/logo.svg";
 import { User } from "../models/user";
 import * as UserApi from "../network/notes_api";
+import { toast } from "react-toastify";
 interface ProfilePageProps{
   user: User;
 }
@@ -14,6 +15,7 @@ interface ProfilePageProps{
 export interface ProfileForm{
     name:string;
     email:string;
+    cpf:string;
 }
 const ProfilePage = ({user}:ProfilePageProps) => {
 
@@ -25,7 +27,8 @@ const {
 } = useForm<ProfileForm>({
   defaultValues: {
     name: user?.username || "",
-    email: user?.email || ""
+    email: user?.email || "",
+    cpf: user?.cpf || "",
   },
 });
 
@@ -33,9 +36,9 @@ const {
  const onSubmit = async( data : ProfileForm) =>{
    try {
     const response = await UserApi.updateUser(data);
-    console.log(response);
-   } catch (error) {
-    alert(error);
+    toast.success("Atualização realizada com sucesso!");
+   } catch (error:any) {
+     toast.error(error.response.data.error);
    }
  }
   return (
@@ -61,6 +64,15 @@ const {
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
+        />
+        <TextInputField
+          className={styles.input}
+          name="cpf"
+          label="cpf:"
+          type="text"
+          register={register}
+          registerOptions={{ required: "Campo Obrigatório" }}
+          error={errors.cpf}
         />
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           Alterar
