@@ -4,6 +4,7 @@ import { LoginCredentials } from "../network/notes_api";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProfilePage.module.css";
+import logo from "../assets/logo.svg";
 
 
 interface ProfileForm{
@@ -23,46 +24,44 @@ const {
     console.log(data);
  }
   return (
-    <div>
+    <div id={styles.principal}>
+      <img src={logo} alt="logo" className={styles.imageLogin} />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
-          //className={styles.inputLogin}
+          className={styles.input}
           name="name"
-          label=""
+          label="Nome:"
           type="text"
-          placeholder="Name"
+          placeholder=""
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.name}
         />
         <TextInputField
-          //className={styles.inputSenha}
+          className={styles.input}
           name="email"
-          label=""
+          label="Email:"
           type="text"
-          placeholder="Email"
+          placeholder=""
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
         />
         <TextInputField
-          //className={styles.inputSenha}
+          className={styles.input}
           name="password"
-          label=""
+          label="Senha:"
           type="password"
-          placeholder="Senha"
+          placeholder=""
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
-        <Button
-          /*className={styles.btn} */ type="submit"
-          disabled={isSubmitting}
-        >
-          LOGIN
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
+          Login
         </Button>
       </Form>
-      <Button /*className={styles.btn} */ onClick={() => navigate(-1)}>
+      <Button className={styles.btn} onClick={() => navigate(-1)}>
         Voltar
       </Button>
     </div>
