@@ -31,14 +31,3 @@
   text-decoration: none;
   font-size: 20px;
 }
-
-.main {
-  font-family: "Gotham", sans-serif;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-}
