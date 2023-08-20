@@ -13,9 +13,7 @@ interface SignUpPageProps {
   userType: UserType;
 }
 
-const SignUpPage = ({
-  onSignUpSuccessful, userType,
-}: SignUpPageProps) => {
+const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   const placeholderLogin = "Insira seu login...";
   const placeholderEmail = "Insira seu email...";
   const placeholderSenha = "Insira sua senha...";
@@ -33,7 +31,7 @@ const SignUpPage = ({
       data.userType = userType;
       const user = await NotesApi.signUp(data);
       onSignUpSuccessful(user);
-      navigate("/shopper");
+      navigate(userType === UserType.shopper ? "/shopper" : "/store");
       console.log("user", user);
     } catch (error) {
       console.log("error", error);
@@ -98,5 +96,5 @@ const SignUpPage = ({
       </button>
     </div>
   );
-}
+};
 export default SignUpPage;

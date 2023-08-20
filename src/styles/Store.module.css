@@ -1,0 +1,17 @@
+.storeCard {
+  background-color: cornsilk;
+}
+
+.storeCard {
+  white-space: pre-line;
+}
+
+.storeImage {
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.cardBody {
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
+}

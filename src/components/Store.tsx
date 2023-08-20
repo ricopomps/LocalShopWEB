@@ -1,24 +1,24 @@
 import { Card } from "react-bootstrap";
-import styles from "../styles/Product.module.css";
+import styles from "../styles/Store.module.css";
 import stylesUtils from "../styles/utils.module.css";
-import { Product as ProductModel } from "../models/product";
+import { Store as StoreModel } from "../models/store";
 import { formatDate } from "../utils/formatDate";
 import { MdDelete } from "react-icons/md";
 
-interface ProductProps {
-  product: ProductModel;
-  onProductClicked: (product: ProductModel) => void;
-  onDeleteProductClicked?: (product: ProductModel) => void;
+interface StoreProps {
+  store: StoreModel;
+  onStoreClicked: (store: StoreModel) => void;
+  onDeleteStoreClicked?: (store: StoreModel) => void;
   className?: string;
 }
 
-const Product = ({
-  product,
-  onProductClicked,
-  onDeleteProductClicked,
+const Store = ({
+  store,
+  onStoreClicked,
+  onDeleteStoreClicked,
   className,
-}: ProductProps) => {
-  const { name, description, createdAt, updatedAt } = product;
+}: StoreProps) => {
+  const { name, description, createdAt, updatedAt } = store;
 
   let createdUpdatedText: string;
   if (updatedAt > createdAt) {
@@ -29,35 +29,35 @@ const Product = ({
 
   return (
     <Card
-      onClick={() => onProductClicked(product)}
-      className={`${styles.productCard} ${className}`}
+      onClick={() => onStoreClicked(store)}
+      className={`${styles.storeCard} ${className}`}
     >
-      {product.image && (
+      {store.image && (
         <Card.Img
           variant="top"
-          src={product.image}
+          src={store.image}
           alt=""
-          className={styles.productImage}
+          className={styles.storeImage}
         />
       )}
       <Card.Body className={styles.cardBody}>
         <Card.Title className={stylesUtils.flexCenter}>
           {name}
-          {onDeleteProductClicked && (
+          {onDeleteStoreClicked && (
             <MdDelete
               className="text-muted ms-auto"
               onClick={(e) => {
-                onDeleteProductClicked(product);
+                onDeleteStoreClicked(store);
                 e.stopPropagation();
               }}
             />
           )}
         </Card.Title>
-        <Card.Text className={styles.productText}>{description}</Card.Text>
+        <Card.Text className={styles.storeText}>{description}</Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
     </Card>
   );
 };
 
-export default Product;
+export default Store;
