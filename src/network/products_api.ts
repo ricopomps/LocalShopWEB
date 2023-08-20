@@ -2,11 +2,12 @@ import { Product } from "../models/product";
 import { getApi } from "./api";
 
 export async function fetchProducts(
+  storeId: string,
   page: number,
   take?: number
 ): Promise<Product[]> {
   const response = await getApi().get(
-    `/api/products?page=${page}&take=${take ?? 10}`,
+    `/api/products?storeId=${storeId}&page=${page}&take=${take ?? 10}`,
     {
       withCredentials: true,
     }

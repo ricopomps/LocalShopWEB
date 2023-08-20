@@ -114,7 +114,7 @@ const ShoppingList = ({
         />
         <div className={styles.itemInfo}>
           <p className={styles.itemText}>{name}</p>
-          <p className={styles.itemPrice}>${price}</p>
+          <p className={styles.itemPrice}>R${price}</p>
         </div>
         <div className={styles.itemControls}>
           <button
