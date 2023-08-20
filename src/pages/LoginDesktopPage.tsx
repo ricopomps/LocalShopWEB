@@ -52,7 +52,7 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
           error={errors.username}
         />
         <TextInputField
-          className={styles.inputSenha}
+          className={styles.inputLogin}
           name="password"
           label=""
           type="password"
