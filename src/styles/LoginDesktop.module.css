@@ -39,6 +39,17 @@
   height: 2em;
 }
 
+.inputLogin:focus,
+.inputSenha:focus {
+  background-color: #5c5c5c;
+  color: #dddddd;
+}
+
+.inputLogin::placeholder,
+.inputSenha::placeholder {
+  color: #b6b5b5;
+}
+
 .imageLogin {
   width: 25%;
 }
@@ -63,13 +74,16 @@
   cursor: pointer;
 }
 
+.cadastreLink {
+  color: #e7bf46;
+  text-decoration: none;
+  font-size: 20px;
+  text-align: center;
+  margin-left: 3.5em;
+}
+
 .btn:hover {
   background-color: #ffffff;
   border-color: black;
   transition: 0.5s;
-}
-
-::placeholder {
-  color: #8f8f8f;
-  opacity: 1;
 }
