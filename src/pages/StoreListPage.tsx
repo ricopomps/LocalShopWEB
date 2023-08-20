@@ -5,10 +5,13 @@ import * as StoresApi from "../network/storeApi";
 import styles from "../styles/StoresPage.module.css";
 import Product from "../components/Product";
 import AddEditProductDialog from "../components/AddEditProductDialog";
+import { useNavigate } from "react-router-dom";
+import Store from "../components/Store";
 
-interface ShopperPageProps {}
+interface StoreListPageProps {}
 
-const ShopperPage = ({}: ShopperPageProps) => {
+const StoreListPage = ({}: StoreListPageProps) => {
+  const navigate = useNavigate();
   const [stores, setStores] = useState<StoreModel[]>([]);
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
@@ -30,28 +33,20 @@ const ShopperPage = ({}: ShopperPageProps) => {
     }
     loadStores();
   }, []);
-  async function deleteStore(store: StoreModel) {
-    try {
-      await StoresApi.deleteStore(store._id);
-      setStores(
-        stores.filter((existingStore) => existingStore._id !== store._id)
-      );
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  }
+
+  const goToStore = (store: StoreModel) => {
+    navigate("/store/product?store=" + store._id);
+  };
 
   const storesGrid = (
     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.storesGrid}`}>
       {stores.map((store) => (
         <Col key={store._id}>
-          <Product
-            product={store}
-            onProductClicked={setStoreToEdit}
-            onDeleteProductClicked={deleteStore}
+          <Store
+            store={store}
+            onStoreClicked={goToStore}
             className={styles.store}
-          ></Product>
+          ></Store>
         </Col>
       ))}
     </Row>
@@ -80,4 +75,4 @@ const ShopperPage = ({}: ShopperPageProps) => {
   );
 };
 
-export default ShopperPage;
+export default StoreListPage;

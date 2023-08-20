@@ -30,7 +30,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       setshowProductsLoadingError(false);
       setProductsLoading(true);
       await setSessionStoreId(store._id);
-      const products = await ProductsApi.fetchProducts(page);
+      const products = await ProductsApi.fetchProducts(store._id, page);
       if (initial) setProducts(products);
       else setProducts((prevItems) => [...prevItems, ...products]);
       setPage(page + 1);
