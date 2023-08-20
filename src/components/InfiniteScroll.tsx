@@ -10,7 +10,6 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   isLoading,
 }) => {
   useEffect(() => {
-    console.log("useEffect infiniteScroll");
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop !==

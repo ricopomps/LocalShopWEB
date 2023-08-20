@@ -18,11 +18,12 @@ import CadastroLojistaPage from "./pages/CadastroLojistaPage";
 import CadastroShopperPage from "./pages/CadastroShopperPage";
 import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
-import ShopperPage from "./pages/ShopperPage";
+import StoreListPage from "./pages/StoreListPage";
 import StorePage from "./pages/StorePage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
 import RecoverPasswordPage from "./pages/RecoverPasswordPage";
 import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
+import ProductListPage from "./pages/ProductListPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -72,7 +73,8 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/cadlojista" element={<CadastroLojistaPage />} />
               <Route path="/cadshopper" element={<CadastroShopperPage />} />
-              <Route path="/shopper" element={<ShopperPage />} />
+              <Route path="/store/product" element={<ProductListPage />} />
+              <Route path="/shopper" element={<StoreListPage />} />
               <Route
                 path="/forgotpassword"
                 element={<SendRecoverPasswordEmailPage />}
