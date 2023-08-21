@@ -1,5 +1,6 @@
 import { Form } from "react-bootstrap";
 import { RegisterOptions, UseFormRegister, FieldError } from "react-hook-form";
+
 interface option {
   value: string | number;
   key: string | number;
@@ -28,6 +29,7 @@ const TextInputField = ({
   margin = true,
   ...props
 }: TextInputFieldProps) => {
+  console.log("wjads", label)
   return (
     <Form.Group
       className={margin ? "mb-3" : undefined}
@@ -42,7 +44,11 @@ const TextInputField = ({
       >
         {options ? (
           <>
-            {hasDefaultValue && <option value={""}>{placeholder}</option>}
+            {hasDefaultValue && (
+              <option value={""} disabled selected>
+                {placeholder}
+              </option>
+            )}
             {options.map((option) => (
               <option key={option.key} value={option.value}>
                 {option.key}

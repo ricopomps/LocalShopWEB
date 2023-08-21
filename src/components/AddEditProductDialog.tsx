@@ -5,12 +5,14 @@ import * as ProductsApi from "../network/products_api";
 import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
 import styles from "../styles/AddEditProductDialog.module.css";
+import { toast } from "react-toastify";
 
 interface AddEditProductDialogProps {
   productToEdit?: Product;
   onDismiss: () => void;
   onProductSaved: (product: Product) => void;
   storeId: string;
+  categoryList: string[];
 }
 
 const AddEditProductDialog = ({
@@ -18,7 +20,9 @@ const AddEditProductDialog = ({
   onDismiss,
   onProductSaved,
   storeId,
+  categoryList,
 }: AddEditProductDialogProps) => {
+
   const {
     register,
     handleSubmit,
@@ -28,6 +32,8 @@ const AddEditProductDialog = ({
       name: productToEdit?.name || "",
       description: productToEdit?.description || "",
       image: productToEdit?.image || "",
+      price: productToEdit?.price || 0,
+      category: productToEdit?.category || "",
     },
   });
 
@@ -45,10 +51,10 @@ const AddEditProductDialog = ({
           storeId,
         });
       }
+      toast.success("Produto editado com sucesso!");
       onProductSaved(productResponse);
-    } catch (error) {
-      console.error(error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   }
 
@@ -56,7 +62,7 @@ const AddEditProductDialog = ({
     <Modal show onHide={onDismiss}>
       <Modal.Header className={styles.modalHeaderProduct} closeButton>
         <Modal.Title>
-          {productToEdit ? "Editar " : "Adicionar "}produto
+          {productToEdit ? "EDITAR " : "Adicionar "}PRODUTO
         </Modal.Title>
       </Modal.Header>
 
@@ -70,7 +76,7 @@ const AddEditProductDialog = ({
             register={register}
             registerOptions={{ required: "Campo obrigatório" }}
             error={errors.name}
-            className={styles.formControlProduct}
+            className={styles.inputProduct}
           />
           <TextInputField
             name="description"
@@ -79,7 +85,7 @@ const AddEditProductDialog = ({
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className={styles.formControlProduct}
+            className={styles.inputTextareaProduct}
           />
           <TextInputField
             name="image"
@@ -87,7 +93,28 @@ const AddEditProductDialog = ({
             type="text"
             placeholder="Imagem"
             register={register}
-            className={styles.formControlProduct}
+            className={styles.inputProduct}
+          />
+          <TextInputField
+            name="category"
+            label=""
+            type="text"
+            as="select"
+            options={categoryList.map((c) => {
+              return { value: c, key: c };
+            })}
+            hasDefaultValue={true}
+            placeholder="Categoria"
+            register={register}
+            className={styles.selectProduct}
+          />
+          <TextInputField
+            name="price"
+            label=""
+            type="text"
+            placeholder="Preço"
+            register={register}
+            className={styles.inputProduct}
           />
         </Form>
       </Modal.Body>
@@ -98,7 +125,7 @@ const AddEditProductDialog = ({
           form="addEditProductForm"
           disabled={isSubmitting}
         >
-          Salvar
+          SALVAR
         </Button>
       </Modal.Footer>
     </Modal>

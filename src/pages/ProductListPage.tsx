@@ -84,8 +84,9 @@ const ProductListPage = ({}: ProductListPageProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
+          addProduct={addProductToShoppingCart}
             product={product}
-            onProductClicked={addProductToShoppingCart}
+            onProductClicked={() => {}}
             className={styles.product}
           ></Product>
         </Col>
