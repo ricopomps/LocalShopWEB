@@ -7,6 +7,7 @@ import { UnathorizedError } from "../errors/http_errors";
 import { useState } from "react";
 import * as StoreApi from "../network/storeApi";
 import { Store } from "../models/store";
+import { toast } from "react-toastify";
 
 interface StorePageProps {
   store?: Store;
@@ -23,11 +24,15 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
   async function onSubmit(credentials: StoreInput) {
     try {
       setErrorText(null);
-      if (store)
+      if (store){
         onCreateStoreSuccessful(
           await StoreApi.updateStore(store._id, credentials)
         );
-      onCreateStoreSuccessful(await StoreApi.createStore(credentials));
+        toast.success("Loja editada com sucesso!")
+      } else {
+        onCreateStoreSuccessful(await StoreApi.createStore(credentials));
+        toast.success("Loja criada com sucesso!")
+      }
     } catch (error) {
       if (error instanceof UnathorizedError) setErrorText(error.message);
       else if (error instanceof Error) setErrorText(error.message);
@@ -73,6 +78,22 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
             placeholder="Link da imagem da loja"
             register={register}
             error={errors.image}
+          />
+          <TextInputField
+            name="category"
+            label="Categoria"
+            type="text"
+            placeholder="Categoria"
+            register={register}
+            error={errors.description}
+          />
+          <TextInputField
+            name="cnpj"
+            label="Cnpj"
+            type="text"
+            placeholder="cnpj"
+            register={register}
+            error={errors.description}
           />
           <br />
           <Button

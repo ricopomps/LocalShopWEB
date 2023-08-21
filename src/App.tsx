@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
 import SignUpModal from "./components/SignUpModal";
 import LoginModal from "./components/LoginModal";
-import { User } from "./models/user";
+import { User, UserType } from "./models/user";
 import * as NotesApi from "./network/notes_api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotesPage from "./pages/NotesPages";
@@ -14,15 +14,17 @@ import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
 import { redirect } from "react-router-dom";
-import CadastroLojistaPage from "./pages/CadastroLojistaPage";
-import CadastroShopperPage from "./pages/CadastroShopperPage";
+import SignUpPage from "./pages/SignUpPage";
 import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
-import ShopperPage from "./pages/ShopperPage";
+import StoreListPage from "./pages/StoreListPage";
 import StorePage from "./pages/StorePage";
+import AddEditProductPage from "./pages/AddEditProductPage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
+import ProfilePage from "./pages/ProfilePage";
 import RecoverPasswordPage from "./pages/RecoverPasswordPage";
 import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
+import ProductListPage from "./pages/ProductListPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -70,13 +72,38 @@ function App() {
               )}
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/cadlojista" element={<CadastroLojistaPage />} />
-              <Route path="/cadshopper" element={<CadastroShopperPage />} />
-              <Route path="/shopper" element={<ShopperPage />} />
+              <Route
+                path="/cadlojista"
+                element={
+                  <SignUpPage
+                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                    userType={UserType.store}
+                  />
+                }
+              />
+              <Route
+                path="/cadshopper"
+                element={
+                  <SignUpPage
+                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                    userType={UserType.shopper}
+                  />
+                }
+              />
+              <Route path="/store/product" element={<ProductListPage />} />
+              <Route path="/shopper" element={<StoreListPage />} />
               <Route
                 path="/forgotpassword"
                 element={<SendRecoverPasswordEmailPage />}
               />
+              {loggedInUser?.store && (
+                <Route
+                  path="/addeditproduct"
+                  element={
+                    <AddEditProductPage storeId={loggedInUser.store._id} />
+                  }
+                />
+              )}
               <Route path="/recover" element={<RecoverPasswordPage />} />
               <Route
                 path="/store"
@@ -88,6 +115,24 @@ function App() {
                     store={loggedInUser?.store}
                   />
                 }
+              />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/shopper" element={<StoreListPage />} />
+            {loggedInUser && <Route 
+              path="/profile"
+              element={<ProfilePage user={loggedInUser} />}
+            />}
+            <Route
+              path="/store"
+              element={
+                <StorePage
+                  onCreateStoreSuccessful={(store: Store) =>
+                    setLoggedInUser({ ...loggedInUser!, store: store })
+                  }
+                  store={loggedInUser?.store}
+                />
+              }
               />
               <Route
                 path="/logindesktop"

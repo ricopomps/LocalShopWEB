@@ -1,8 +1,10 @@
 import { Store } from "../models/store";
 import { getApi } from "./api";
 
+const baseUrl = "/api/stores";
+
 export async function fetchStores(): Promise<Store[]> {
-  const response = await getApi().get("/api/stores", { withCredentials: true });
+  const response = await getApi().get(baseUrl, { withCredentials: true });
   return response.data;
 }
 
@@ -11,10 +13,11 @@ export interface StoreInput {
   name: string;
   description?: string;
   image?: string;
+  cnpj: string
 }
 
 export async function createStore(store: StoreInput): Promise<Store> {
-  const response = await getApi().post("/api/stores", store);
+  const response = await getApi().post(baseUrl, store);
   return response.data;
 }
 
@@ -22,19 +25,19 @@ export async function updateStore(
   storeId: string,
   store: StoreInput
 ): Promise<Store> {
-  const response = await getApi().patch(`/api/stores/${storeId}`, store);
+  const response = await getApi().patch(`${baseUrl}/${storeId}`, store);
   return response.data;
 }
 
 export async function deleteStore(storeId: string) {
-  await getApi().delete(`/api/stores/${storeId}`);
+  await getApi().delete(`${baseUrl}/${storeId}`);
 }
 
 export async function setSessionStoreId(storeId: string) {
-  await getApi().patch(`/api/stores/session/${storeId}`);
+  await getApi().patch(`${baseUrl}/session/${storeId}`);
 }
 
 export async function getStoreByLoggedUser(): Promise<Store> {
-  const response = await getApi().get("/api/stores/session/");
+  const response = await getApi().get(`${baseUrl}/session`);
   return response.data;
 }

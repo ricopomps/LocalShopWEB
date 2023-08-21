@@ -10,6 +10,7 @@ import Product from "./Product";
 import { Store } from "../models/store";
 import { setSessionStoreId } from "../network/storeApi";
 import InfiniteScroll from "./InfiniteScroll";
+import { useNavigate } from "react-router-dom";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -20,6 +21,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   const [showAddProductDialog, setShowAddProductDialog] = useState(false);
   const [productToEdit, setProductToEdit] = useState<ProductModel | null>(null);
   const [productsLoading, setProductsLoading] = useState(true);
+  const navigate = useNavigate();
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
   const [page, setPage] = useState(0);
@@ -28,7 +30,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       setshowProductsLoadingError(false);
       setProductsLoading(true);
       await setSessionStoreId(store._id);
-      const products = await ProductsApi.fetchProducts(page);
+      const products = await ProductsApi.fetchProducts(store._id, page);
       if (initial) setProducts(products);
       else setProducts((prevItems) => [...prevItems, ...products]);
       setPage(page + 1);
@@ -41,6 +43,17 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   }
   useEffect(() => {
     loadProducts(true);
+  }, []);
+
+  const [categories, setCategories] = useState<string[]>([""]);
+
+  async function loadCategories() {
+    const a: string[] = (await ProductsApi.getCategories()).categories;
+    setCategories(a);
+  }
+
+  useEffect(() => {
+    loadCategories();
   }, []);
 
   async function deleteProduct(product: ProductModel) {
@@ -62,6 +75,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
+            addProduct={() => {}}
             product={product}
             onProductClicked={setProductToEdit}
             onDeleteProductClicked={deleteProduct}
@@ -76,14 +90,14 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
     <>
       <Button
         className={`mb-4 ${stylesUtils.blockCenter} ${stylesUtils.flexCenter}`}
-        onClick={() => setShowAddProductDialog(true)}
+        onClick={() => navigate("/addeditproduct")}
       >
         <FaPlus />
         Adicionar novo produto
       </Button>
 
       {!showProductsLoadingError && (
-        <>{products.length > 0 ? productsGrid : <p>Não existem notas</p>}</>
+        <>{products.length > 0 ? productsGrid : <p>Não existem produtos cadastrados</p>}</>
       )}
 
       {productsLoading && <Spinner animation="border" variant="primary" />}
@@ -95,6 +109,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
         <AddProductDialog
           storeId={store._id}
           onDismiss={() => setShowAddProductDialog(false)}
+          categoryList={categories}
           onProductSaved={(newProduct) => {
             setProducts([...products, newProduct]);
             setShowAddProductDialog(false);
@@ -106,6 +121,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
           storeId={store._id}
           onDismiss={() => setProductToEdit(null)}
           productToEdit={productToEdit}
+          categoryList={categories}
           onProductSaved={(updatedProduct) => {
             setProducts(
               products.map((existingProduct) =>
