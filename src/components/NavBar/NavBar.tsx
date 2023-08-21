@@ -27,19 +27,20 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        {loggedInUser?.userType === UserType.shopper ? <Navbar.Brand as={Link} to="/shopper">
-          Lojas
-        </Navbar.Brand>:<Navbar.Brand as={Link} to="/products">
-          Produtos
-        </Navbar.Brand>}
+        {loggedInUser?.userType === UserType.shopper ? (
+          <Navbar.Brand as={Link} to="/shopper">
+            Lojas
+          </Navbar.Brand>
+        ) : (
+          <Navbar.Brand as={Link} to="/products">
+            Produtos
+          </Navbar.Brand>
+        )}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            {/* <Nav.Link as={Link} to="/privacy">
-              Privacidade
-            </Nav.Link> */}
             <Nav.Link as={Link} to="/profile">
-              Perfil 
+              Perfil
             </Nav.Link>
           </Nav>
           {loggedInUser?.store && (
