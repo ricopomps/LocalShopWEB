@@ -109,8 +109,6 @@ function App() {
               />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/cadlojista" element={<CadastroLojistaPage />} />
-            <Route path="/cadshopper" element={<CadastroShopperPage />} />
             <Route path="/shopper" element={<StoreListPage />} />
             {loggedInUser && <Route 
               path="/profile"
