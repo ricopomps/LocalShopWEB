@@ -34,7 +34,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
       console.log("error", error);
       alert(error);
     }
-    console.log(data);
   };
   return (
     <div className={styles.main}>
