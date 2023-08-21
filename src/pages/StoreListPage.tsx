@@ -74,6 +74,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
       {storeToEdit && (
         <AddEditProductDialog
           storeId=""
+          categoryList={[""]}
           onDismiss={() => setStoreToEdit(null)}
           productToEdit={storeToEdit}
           onProductSaved={() => {}}

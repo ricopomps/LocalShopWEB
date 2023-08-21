@@ -19,6 +19,7 @@ import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
 import StoreListPage from "./pages/StoreListPage";
 import StorePage from "./pages/StorePage";
+import AddEditProductPage from "./pages/AddEditProductPage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
 import ProfilePage from "./pages/ProfilePage";
 import RecoverPasswordPage from "./pages/RecoverPasswordPage";
@@ -95,6 +96,14 @@ function App() {
                 path="/forgotpassword"
                 element={<SendRecoverPasswordEmailPage />}
               />
+              {loggedInUser?.store && (
+                <Route
+                  path="/addeditproduct"
+                  element={
+                    <AddEditProductPage storeId={loggedInUser.store._id} />
+                  }
+                />
+              )}
               <Route path="/recover" element={<RecoverPasswordPage />} />
               <Route
                 path="/store"
