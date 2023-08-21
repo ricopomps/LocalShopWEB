@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TextInputField from "../components/form/TextInputField";
 import * as AuthApi from "../network/authApi";
 import { SendRecoverPasswordEmailForm } from "../network/authApi";
+import styles from "../styles/LoginDesktop.module.css";
 
 const SendRecoverPasswordEmailPage = () => {
   const navigate = useNavigate();
@@ -24,31 +25,29 @@ const SendRecoverPasswordEmailPage = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <TextInputField
-        name="email"
-        label=""
-        type="text"
-        placeholder="Email"
-        register={register}
-        registerOptions={{
-          required: "Campo Obrigatório",
-        }}
-        error={errors.email}
-      />
-      <Row xs={2} className="g-4">
-        <Col>
-      <Button type="submit" disabled={isSubmitting}>
-        ENVIAR
-      </Button>
-        </Col>
-        <Col>
-      <Button onClick={() => navigate(-1)} >
-      VOLTAR
-      </Button>
-        </Col>
-      </Row>
-    </Form>
+    <div className={styles.main}>
+      <h1 className={styles.mainText}>Insira o seu e-mail:</h1>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <TextInputField
+          className={styles.inputLogin}
+          name="email"
+          label=""
+          type="text"
+          placeholder="Email"
+          register={register}
+          registerOptions={{
+            required: "Campo Obrigatório",
+          }}
+          error={errors.email}
+        />
+        <Button type="submit" disabled={isSubmitting}>
+          ENVIAR
+        </Button>
+        <button className={styles.btn} onClick={() => navigate(-1)}>
+          VOLTAR
+        </button>
+      </Form>
+    </div>
   );
 };
 
