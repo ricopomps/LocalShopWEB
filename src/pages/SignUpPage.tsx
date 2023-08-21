@@ -44,7 +44,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
           name="username"
-          label="Usuário"
           type="text"
           placeholder="Usuário"
           register={register}
@@ -53,7 +52,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         />
         <TextInputField
           name="email"
-          label="E-mail"
           type="text"
           placeholder="E-mail"
           register={register}
@@ -62,7 +60,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         />
         <TextInputField
           name="cpf"
-          label="CPF"
           type="text"
           placeholder="CPF"
           register={register}
@@ -71,7 +68,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         />
         <TextInputField
           name="password"
-          label="Senha"
           type="password"
           placeholder="Senha"
           register={register}
@@ -80,7 +76,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         />
         <TextInputField
           name="confirmedPassword"
-          label="Confirmar Senha"
           type="password"
           placeholder="Confirmar Senha"
           register={register}
