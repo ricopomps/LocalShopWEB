@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import styles from "../styles/CadastroShopper.module.css";
+import styles from "./styles/CadastroShopper.module.css";
 
 const CadastroLojistaPage = () => {
   const placeholderLogin = "Insira seu login...";
@@ -11,16 +11,8 @@ const CadastroLojistaPage = () => {
   return (
     <div className="main">
       <img src={logo} alt="logo" className={styles.imageLogin} />
-      <input
-        type="text"
-        placeholder={placeholderLogin}
-        className={styles.inputLogin}
-      />
-      <input
-        type="text"
-        placeholder={placeholderEmail}
-        className={styles.inputLogin}
-      />
+      <input type="text" placeholder={placeholderLogin} />
+      <input type="text" placeholder={placeholderEmail} />
       <input
         type="text"
         placeholder={placeholderCNPJ}

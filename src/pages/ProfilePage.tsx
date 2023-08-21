@@ -8,39 +8,37 @@ import logo from "../assets/logo.svg";
 import { User } from "../models/user";
 import * as UserApi from "../network/notes_api";
 import { toast } from "react-toastify";
-interface ProfilePageProps{
+interface ProfilePageProps {
   user: User;
 }
 
-export interface ProfileForm{
-    name:string;
-    email:string;
-    cpf:string;
+export interface ProfileForm {
+  name: string;
+  email: string;
+  cpf: string;
 }
-const ProfilePage = ({user}:ProfilePageProps) => {
+const ProfilePage = ({ user }: ProfilePageProps) => {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ProfileForm>({
+    defaultValues: {
+      name: user?.username || "",
+      email: user?.email || "",
+      cpf: user?.cpf || "",
+    },
+  });
 
-const navigate = useNavigate();
-const {
-  register,
-  handleSubmit,
-  formState: { errors, isSubmitting },
-} = useForm<ProfileForm>({
-  defaultValues: {
-    name: user?.username || "",
-    email: user?.email || "",
-    cpf: user?.cpf || "",
-  },
-});
-
-
- const onSubmit = async( data : ProfileForm) =>{
-   try {
-    const response = await UserApi.updateUser(data);
-    toast.success("Atualização realizada com sucesso!");
-   } catch (error:any) {
-     toast.error(error.response.data.error);
-   }
- }
+  const onSubmit = async (data: ProfileForm) => {
+    try {
+      const response = await UserApi.updateUser(data);
+      toast.success("Atualização realizada com sucesso!");
+    } catch (error: any) {
+      toast.error(error.response.data.error);
+    }
+  };
   return (
     <div id={styles.principal}>
       <img src={logo} alt="logo" className={styles.imageLogin} />
@@ -74,11 +72,11 @@ const {
           disabled
         />
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
-          Alterar
+          ALTERAR
         </Button>
       </Form>
       <Button className={styles.btn} onClick={() => navigate(-1)}>
-        Voltar
+        VOLTAR
       </Button>
     </div>
   );

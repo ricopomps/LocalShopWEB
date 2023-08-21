@@ -1,10 +1,10 @@
 import "./index.css";
 import "./reset.css";
 import logo from "./assets/logo.svg";
-import { useNavigate } from "react-router-dom";
 const placeholderLogin = "Insira seu login...";
 const placeholderEmail = "Insira seu email...";
 const placeholderSenha = "Insira sua senha...";
+
 function CadastroShopper() {
   return (
     <div className="main">

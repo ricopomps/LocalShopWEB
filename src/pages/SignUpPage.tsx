@@ -18,6 +18,8 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   const placeholderEmail = "Insira seu email...";
   const placeholderSenha = "Insira sua senha...";
   const placeholderCPF = "Insira seu CPF...";
+  const placeholderSenhaConfirma = "Insira sua senha outra vez...";
+
   const navigate = useNavigate();
   const {
     register,
@@ -41,47 +43,52 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
       <img src={logo} alt="logo" className="imageLogin" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
+          className={styles.inputLogin}
           name="username"
           type="text"
-          placeholder="Usuário"
+          placeholder={placeholderLogin}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.username}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="email"
           type="text"
-          placeholder="E-mail"
+          placeholder={placeholderEmail}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="cpf"
           type="text"
-          placeholder="CPF"
+          placeholder={placeholderCPF}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.cpf}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="password"
           type="password"
-          placeholder="Senha"
+          placeholder={placeholderSenha}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="confirmedPassword"
           type="password"
-          placeholder="Confirmar Senha"
+          placeholder={placeholderSenhaConfirma}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
         <Button type="submit" disabled={isSubmitting}>
-          Cadastrar
+          CADASTRAR
         </Button>
       </Form>
       <button onClick={() => navigate(-1)} className="btn btn_login ">
