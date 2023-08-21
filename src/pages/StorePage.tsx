@@ -2,6 +2,7 @@ import { Alert, Button, Card, Form } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import { useForm } from "react-hook-form";
 import stylesUtils from "../styles/utils.module.css";
+import styles from "../styles/LoginDesktop.module.css";
 import { StoreInput } from "../network/storeApi";
 import { UnathorizedError } from "../errors/http_errors";
 import { useState } from "react";
@@ -44,14 +45,17 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
     }
   }
   return (
-    <Card>
+    <div className={styles.main}>
       <Card.Header>
-        <Card.Title>{store?._id ? "Editar" : "Cadastrar"} loja</Card.Title>
+        <Card.Title className={styles.mainText}>
+          {store?._id ? "Editar" : "Cadastrar"} loja
+        </Card.Title>
       </Card.Header>
       <Card.Body>
         {errorText && <Alert variant="danger">{errorText}</Alert>}
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
+            className={styles.inputLogin}
             name="name"
             label="Nome"
             type="text"
@@ -67,6 +71,7 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
             error={errors.name}
           />
           <TextInputField
+            className={styles.inputLogin}
             name="description"
             label="Descrição"
             type="text"
@@ -75,6 +80,7 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
             error={errors.description}
           />
           <TextInputField
+            className={styles.inputLogin}
             name="image"
             label="Link da imagem"
             type="text"
@@ -83,6 +89,7 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
             error={errors.image}
           />
           <TextInputField
+            className={styles.inputLogin}
             name="category"
             label="Categoria"
             type="text"
@@ -91,24 +98,21 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
             error={errors.description}
           />
           <TextInputField
+            className={styles.inputLogin}
             name="cnpj"
-            label="Cnpj"
+            label="CNPJ"
             type="text"
             placeholder="cnpj"
             register={register}
             error={errors.description}
           />
           <br />
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className={stylesUtils.width100}
-          >
-            {store?._id ? "Editar" : "Cadastrar"}
+          <Button type="submit" disabled={isSubmitting} className={styles.btn}>
+            {store?._id ? "EDITAR" : "CADASTRAR"}
           </Button>
         </Form>
       </Card.Body>
-    </Card>
+    </div>
   );
 };
 
