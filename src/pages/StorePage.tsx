@@ -8,6 +8,7 @@ import { useState } from "react";
 import * as StoreApi from "../network/storeApi";
 import { Store } from "../models/store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 interface StorePageProps {
   store?: Store;
@@ -15,6 +16,7 @@ interface StorePageProps {
 }
 
 const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
+  const navigate = useNavigate();
   const [errorText, setErrorText] = useState<string | null>(null);
   const {
     register,
@@ -24,14 +26,15 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
   async function onSubmit(credentials: StoreInput) {
     try {
       setErrorText(null);
-      if (store){
+      if (store) {
         onCreateStoreSuccessful(
           await StoreApi.updateStore(store._id, credentials)
         );
-        toast.success("Loja editada com sucesso!")
+        toast.success("Loja editada com sucesso!");
       } else {
         onCreateStoreSuccessful(await StoreApi.createStore(credentials));
-        toast.success("Loja criada com sucesso!")
+        toast.success("Loja criada com sucesso!");
+        navigate("/products");
       }
     } catch (error) {
       if (error instanceof UnathorizedError) setErrorText(error.message);

@@ -75,7 +75,6 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
-            addProduct={() => {}}
             product={product}
             onProductClicked={setProductToEdit}
             onDeleteProductClicked={deleteProduct}
@@ -97,7 +96,13 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       </Button>
 
       {!showProductsLoadingError && (
-        <>{products.length > 0 ? productsGrid : <p>Não existem produtos cadastrados</p>}</>
+        <>
+          {products.length > 0 ? (
+            productsGrid
+          ) : (
+            <p>Não existem produtos cadastrados</p>
+          )}
+        </>
       )}
 
       {productsLoading && <Spinner animation="border" variant="primary" />}

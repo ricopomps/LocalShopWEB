@@ -2,13 +2,11 @@ import { Card } from "react-bootstrap";
 import styles from "../styles/Product.module.css";
 import { Product as ProductModel } from "../models/product";
 import { MdDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import { ReactComponent as Add2 } from "../assets/add.svg";
 import add from "../assets/add.svg";
 
 interface ProductProps {
   product: ProductModel;
-  addProduct: (product: ProductModel) => void;
+  addProduct?: (product: ProductModel) => void;
   onProductClicked: (product: ProductModel) => void;
   onDeleteProductClicked?: (product: ProductModel) => void;
   className?: string;
@@ -52,15 +50,17 @@ const Product = ({
           )}
           <p className={styles.productPrice}>R$ {price.toFixed(2)}</p>
           <p className={styles.productCategory}>{category}</p>
-          <img
-            onClick={(e) => {
-              e.stopPropagation();
-              addProduct(product);
-            }}
-            src={add}
-            alt="Add"
-            className={styles.addImage}
-          />
+          {addProduct && (
+            <img
+              onClick={(e) => {
+                e.stopPropagation();
+                addProduct(product);
+              }}
+              src={add}
+              alt="Add"
+              className={styles.addImage}
+            />
+          )}
         </div>
       </div>
     </Card>
