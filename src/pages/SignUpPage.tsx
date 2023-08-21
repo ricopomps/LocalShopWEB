@@ -26,13 +26,11 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   } = useForm<SignUpCredentials>();
 
   const onSubmit = async (data: SignUpCredentials) => {
-    console.log(data);
     try {
       data.userType = userType;
       const user = await NotesApi.signUp(data);
       onSignUpSuccessful(user);
       navigate(userType === UserType.shopper ? "/shopper" : "/store");
-      console.log("user", user);
     } catch (error) {
       console.log("error", error);
       alert(error);

@@ -23,7 +23,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
   const storeId = queryParameters.get("store");
   async function loadProducts(initial?: boolean) {
     try {
-      console.log("loadProducts", storeId);
       if (!storeId) throw Error("Loja não encontrada");
       setshowProductsLoadingError(false);
       setProductsLoading(true);

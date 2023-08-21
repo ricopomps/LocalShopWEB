@@ -32,7 +32,6 @@ export async function login(credentials: LoginCredentials): Promise<User> {
   const {
     data: { user, accessToken },
   } = await getApi().post("/api/auth", credentials);
-  console.log(accessToken);
   sessionStorage.removeItem("token");
   sessionStorage.setItem("token", accessToken);
   return user;

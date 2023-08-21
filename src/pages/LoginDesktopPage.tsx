@@ -30,7 +30,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
       } else {
         navigate(store ? "/products" : "/store");
       }
-      console.log("user", user);
     } catch (error) {
       console.log("error", error);
       alert(error);
