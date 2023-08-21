@@ -68,7 +68,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
         <p>Erro inesperado. Favor recarregar a página</p>
       )}
       {!storesLoading && !showStoresLoadingError && (
-        <>{stores.length > 0 ? storesGrid : <p>Não existem notas</p>}</>
+        <>{stores.length > 0 ? storesGrid : <p>Não existem lojas cadastradas</p>}</>
       )}
 
       {storeToEdit && (

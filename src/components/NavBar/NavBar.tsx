@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { User } from "../../models/user";
+import { User, UserType } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,29 +27,19 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        <Navbar.Brand as={Link} to="/products">
+        {loggedInUser?.userType === UserType.shopper ? <Navbar.Brand as={Link} to="/shopper">
+          Lojas
+        </Navbar.Brand>:<Navbar.Brand as={Link} to="/products">
           Produtos
-        </Navbar.Brand>
+        </Navbar.Brand>}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            <Nav.Link as={Link} to="/privacy">
+            {/* <Nav.Link as={Link} to="/privacy">
               Privacidade
-            </Nav.Link>
-            <Nav.Link as={Link} to="/home">
-              HomePage
-            </Nav.Link>
-            <Nav.Link as={Link} to="/cadlojista">
-              Cadastro Lojista
-            </Nav.Link>
-            <Nav.Link as={Link} to="/cadshopper">
-              Cadastro Shopper
-            </Nav.Link>
-            <Nav.Link as={Link} to="/logindesktop">
-              Login Desktop
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link as={Link} to="/profile">
-              Profile 
+              Perfil 
             </Nav.Link>
           </Nav>
           {loggedInUser?.store && (
