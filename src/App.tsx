@@ -21,6 +21,7 @@ import HomePage from "./pages/HomePage";
 import StoreListPage from "./pages/StoreListPage";
 import StorePage from "./pages/StorePage";
 import ProductsPageLoggedInView from "./components/ProductsPageLoggedInView";
+import ProfilePage from "./pages/ProfilePage";
 import RecoverPasswordPage from "./pages/RecoverPasswordPage";
 import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
 import ProductListPage from "./pages/ProductListPage";
@@ -90,6 +91,26 @@ function App() {
                     store={loggedInUser?.store}
                   />
                 }
+              />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/cadlojista" element={<CadastroLojistaPage />} />
+            <Route path="/cadshopper" element={<CadastroShopperPage />} />
+            <Route path="/shopper" element={<StoreListPage />} />
+            {loggedInUser && <Route 
+              path="/profile"
+              element={<ProfilePage user={loggedInUser} />}
+            />}
+            <Route
+              path="/store"
+              element={
+                <StorePage
+                  onCreateStoreSuccessful={(store: Store) =>
+                    setLoggedInUser({ ...loggedInUser!, store: store })
+                  }
+                  store={loggedInUser?.store}
+                />
+              }
               />
               <Route
                 path="/logindesktop"

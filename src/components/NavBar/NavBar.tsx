@@ -48,6 +48,9 @@ const NavBar = ({
             <Nav.Link as={Link} to="/logindesktop">
               Login Desktop
             </Nav.Link>
+            <Nav.Link as={Link} to="/profile">
+              Profile 
+            </Nav.Link>
           </Nav>
           {loggedInUser?.store && (
             <Nav>
