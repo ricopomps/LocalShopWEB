@@ -50,7 +50,6 @@ const {
           name="name"
           label="Nome:"
           type="text"
-          placeholder=""
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.name}
@@ -60,7 +59,6 @@ const {
           name="email"
           label="Email:"
           type="text"
-          placeholder=""
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
@@ -73,6 +71,7 @@ const {
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.cpf}
+          disabled
         />
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           Alterar
