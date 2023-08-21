@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
 import SignUpModal from "./components/SignUpModal";
 import LoginModal from "./components/LoginModal";
-import { User } from "./models/user";
+import { User, UserType } from "./models/user";
 import * as NotesApi from "./network/notes_api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotesPage from "./pages/NotesPages";
@@ -14,8 +14,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Store } from "./models/store";
 import { redirect } from "react-router-dom";
-import CadastroLojistaPage from "./pages/CadastroLojistaPage";
-import CadastroShopperPage from "./pages/CadastroShopperPage";
+import SignUpPage from "./pages/SignUpPage";
 import LoginDesktopPage from "./pages/LoginDesktopPage";
 import HomePage from "./pages/HomePage";
 import StoreListPage from "./pages/StoreListPage";
@@ -72,8 +71,24 @@ function App() {
               )}
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/cadlojista" element={<CadastroLojistaPage />} />
-              <Route path="/cadshopper" element={<CadastroShopperPage />} />
+              <Route
+                path="/cadlojista"
+                element={
+                  <SignUpPage
+                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                    userType={UserType.store}
+                  />
+                }
+              />
+              <Route
+                path="/cadshopper"
+                element={
+                  <SignUpPage
+                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                    userType={UserType.shopper}
+                  />
+                }
+              />
               <Route path="/store/product" element={<ProductListPage />} />
               <Route path="/shopper" element={<StoreListPage />} />
               <Route

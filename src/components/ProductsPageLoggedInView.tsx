@@ -62,6 +62,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
+            addProduct={() => {}}
             product={product}
             onProductClicked={setProductToEdit}
             onDeleteProductClicked={deleteProduct}
