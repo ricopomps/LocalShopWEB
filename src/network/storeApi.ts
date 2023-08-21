@@ -13,6 +13,7 @@ export interface StoreInput {
   name: string;
   description?: string;
   image?: string;
+  cnpj: string
 }
 
 export async function createStore(store: StoreInput): Promise<Store> {

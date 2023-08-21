@@ -5,6 +5,7 @@ import * as ProductsApi from "../network/products_api";
 import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
 import styles from "../styles/AddEditProductDialog.module.css";
+import { toast } from "react-toastify";
 
 interface AddEditProductDialogProps {
   productToEdit?: Product;
@@ -50,10 +51,10 @@ const AddEditProductDialog = ({
           storeId,
         });
       }
+      toast.success("Produto editado com sucesso!");
       onProductSaved(productResponse);
-    } catch (error) {
-      console.error(error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   }
 

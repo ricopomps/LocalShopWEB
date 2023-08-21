@@ -7,6 +7,7 @@ import { Product } from "../models/product";
 import TextInputField from "../components/form/TextInputField";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/AddEditProductDialog.module.css";
+import { toast } from "react-toastify";
 
 interface AddEditProductPageProps {
   //productToEdit?: Product;
@@ -58,11 +59,10 @@ const AddEditProductPage = ({
           storeId,
         });
       }
-      console.log(productResponse);
-      //onProductSaved(productResponse);
-    } catch (error) {
-      console.error(error);
-      alert(error);
+      toast.success("Produto cadastrado com sucesso!")
+      navigate("/products")
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   }
   return (

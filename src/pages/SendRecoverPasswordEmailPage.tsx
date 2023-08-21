@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -36,10 +36,18 @@ const SendRecoverPasswordEmailPage = () => {
         }}
         error={errors.email}
       />
+      <Row xs={2} className="g-4">
+        <Col>
       <Button type="submit" disabled={isSubmitting}>
         ENVIAR
       </Button>
-      <button onClick={() => navigate(-1)}>VOLTAR</button>
+        </Col>
+        <Col>
+      <Button onClick={() => navigate(-1)} >
+      VOLTAR
+      </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };
