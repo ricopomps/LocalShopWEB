@@ -20,7 +20,8 @@ export interface SignUpCredentials {
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
   const { data } = await getApi().post("/api/users/signup", credentials);
-  return data;
+  sessionStorage.setItem("token", data.accessToken);
+  return data.user;
 }
 
 export interface LoginCredentials {

@@ -40,7 +40,7 @@ const SendRecoverPasswordEmailPage = () => {
           }}
           error={errors.email}
         />
-        <Button type="submit" disabled={isSubmitting}>
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           ENVIAR
         </Button>
         <button className={styles.btn} onClick={() => navigate(-1)}>

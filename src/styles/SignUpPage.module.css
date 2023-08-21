@@ -12,7 +12,6 @@
 .imageLogin {
   width: 25%;
 }
-
 .inputLogin {
   font-family: "Inter", sans-serif;
   font-size: 26px;
@@ -26,9 +25,16 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 0.5em;
   height: 2em;
-  margin: 0.25em 0 0.25em 0;
+}
+
+.inputLogin:focus {
+  background-color: #5c5c5c;
+  color: #cecece;
+}
+.inputLogin::placeholder {
+  background-color: #5c5c5c;
+  color: #cecece;
 }
 
 .inputSenha {
@@ -52,16 +58,17 @@
 .btn_cadastro {
   padding: 0.5em 1em;
   font-weight: 700;
-  font-size: 25px;
-  width: 15em;
+  font-size: 20px;
+  width: 10em;
   height: 2.7em;
   margin-top: 1em;
+  margin: 0 auto;
   font-weight: 900;
 }
 
 .btn {
   font-family: "Gotham", sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   background-color: #f8ce41;
   padding: 0.5em 1em;
@@ -75,6 +82,7 @@
   gap: 0.5em;
   width: 10em;
   cursor: pointer;
+  margin: auto;
 }
 
 .btn:hover {

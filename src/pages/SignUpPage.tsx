@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import styles from "../styles/CadastroShopper.module.css";
+import styles from "../styles/SignUpPage.module.css";
 import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../network/notes_api";
 import { Button, Form } from "react-bootstrap";
@@ -14,11 +14,11 @@ interface SignUpPageProps {
 }
 
 const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
-  const placeholderLogin = "Insira seu login...";
-  const placeholderEmail = "Insira seu email...";
-  const placeholderSenha = "Insira sua senha...";
-  const placeholderCPF = "Insira seu CPF...";
-  const placeholderSenhaConfirma = "Insira sua senha outra vez...";
+  const placeholderLogin = "Login";
+  const placeholderEmail = "E-mail";
+  const placeholderSenha = "Senha";
+  const placeholderCPF = "CPF";
+  const placeholderSenhaConfirma = "Confirmação de senha";
 
   const navigate = useNavigate();
   const {
@@ -39,7 +39,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
     }
   };
   return (
-    <div className="main">
+    <div className={styles.main}>
       <img src={logo} alt="logo" className="imageLogin" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
@@ -87,11 +87,11 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
-        <Button type="submit" disabled={isSubmitting}>
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           CADASTRAR
         </Button>
       </Form>
-      <button onClick={() => navigate(-1)} className="btn btn_login ">
+      <button onClick={() => navigate(-1)} className={styles.btn}>
         VOLTAR
       </button>
     </div>
