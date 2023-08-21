@@ -12,7 +12,7 @@ export function getApi() {
       "Content-Type": "application/json",
     },
   });
-  console.log("token", token);
+
   if (token) {
     api.defaults.headers.common.Authorization = `Bearer ${token}`;
   }

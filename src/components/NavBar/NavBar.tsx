@@ -27,7 +27,7 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/products">
           Produtos
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar" />
@@ -47,6 +47,9 @@ const NavBar = ({
             </Nav.Link>
             <Nav.Link as={Link} to="/logindesktop">
               Login Desktop
+            </Nav.Link>
+            <Nav.Link as={Link} to="/profile">
+              Profile 
             </Nav.Link>
           </Nav>
           {loggedInUser?.store && (

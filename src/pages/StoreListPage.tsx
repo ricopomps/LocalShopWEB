@@ -6,10 +6,13 @@ import styles from "../styles/StoresPage.module.css";
 import Product from "../components/Product";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
+import { useNavigate } from "react-router-dom";
+import Store from "../components/Store";
 
-interface ShopperPageProps {}
+interface StoreListPageProps {}
 
-const ShopperPage = ({}: ShopperPageProps) => {
+const StoreListPage = ({}: StoreListPageProps) => {
+  const navigate = useNavigate();
   const [stores, setStores] = useState<StoreModel[]>([]);
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
@@ -31,17 +34,10 @@ const ShopperPage = ({}: ShopperPageProps) => {
     }
     loadStores();
   }, []);
-  async function deleteStore(store: StoreModel) {
-    try {
-      await StoresApi.deleteStore(store._id);
-      setStores(
-        stores.filter((existingStore) => existingStore._id !== store._id)
-      );
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  }
+
+  const goToStore = (store: StoreModel) => {
+    navigate("/store/product?store=" + store._id);
+  };
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const handleWheelScroll = (e: any) => {
@@ -55,12 +51,11 @@ const ShopperPage = ({}: ShopperPageProps) => {
     <HorizontalScroll>
       {stores.map((store) => (
         <Col key={store._id}>
-          <Product
-            product={store}
-            onProductClicked={setStoreToEdit}
-            onDeleteProductClicked={deleteStore}
-            className={styles.product}
-          ></Product>
+          <Store
+            store={store}
+            onStoreClicked={goToStore}
+            className={styles.store}
+          ></Store>
         </Col>
       ))}
     </HorizontalScroll>
@@ -88,4 +83,4 @@ const ShopperPage = ({}: ShopperPageProps) => {
   );
 };
 
-export default ShopperPage;
+export default StoreListPage;

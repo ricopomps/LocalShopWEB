@@ -9,6 +9,7 @@ import AddProductDialog from "./AddEditProductDialog";
 import Product from "./Product";
 import { Store } from "../models/store";
 import { setSessionStoreId } from "../network/storeApi";
+import InfiniteScroll from "./InfiniteScroll";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -21,24 +22,27 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
   const [productsLoading, setProductsLoading] = useState(true);
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
-
-  useEffect(() => {
-    async function loadProducts() {
-      try {
-        setshowProductsLoadingError(false);
-        setProductsLoading(true);
-        await setSessionStoreId(store._id);
-        const products = await ProductsApi.fetchProducts();
-        setProducts(products);
-      } catch (error) {
-        console.error(error);
-        setshowProductsLoadingError(true);
-      } finally {
-        setProductsLoading(false);
-      }
+  const [page, setPage] = useState(0);
+  async function loadProducts(initial?: boolean) {
+    try {
+      setshowProductsLoadingError(false);
+      setProductsLoading(true);
+      await setSessionStoreId(store._id);
+      const products = await ProductsApi.fetchProducts(store._id, page);
+      if (initial) setProducts(products);
+      else setProducts((prevItems) => [...prevItems, ...products]);
+      setPage(page + 1);
+    } catch (error) {
+      console.error(error);
+      setshowProductsLoadingError(true);
+    } finally {
+      setProductsLoading(false);
     }
-    loadProducts();
+  }
+  useEffect(() => {
+    loadProducts(true);
   }, []);
+
   async function deleteProduct(product: ProductModel) {
     try {
       await ProductsApi.deleteProduct(product._id);
@@ -58,6 +62,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
+            addProduct={() => {}}
             product={product}
             onProductClicked={setProductToEdit}
             onDeleteProductClicked={deleteProduct}
@@ -78,15 +83,15 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
         Adicionar novo produto
       </Button>
 
+      {!showProductsLoadingError && (
+        <>{products.length > 0 ? productsGrid : <p>Não existem notas</p>}</>
+      )}
+
       {productsLoading && <Spinner animation="border" variant="primary" />}
       {showProductsLoadingError && (
         <p>Erro inesperado. Favor recarregar a página</p>
       )}
-
-      {!productsLoading && !showProductsLoadingError && (
-        <>{products.length > 0 ? productsGrid : <p>Não existem notas</p>}</>
-      )}
-
+      <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       {showAddProductDialog && (
         <AddProductDialog
           storeId={store._id}

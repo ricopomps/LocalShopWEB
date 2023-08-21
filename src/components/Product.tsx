@@ -1,36 +1,34 @@
 import { Card } from "react-bootstrap";
 import styles from "../styles/Product.module.css";
-import stylesUtils from "../styles/utils.module.css";
 import { Product as ProductModel } from "../models/product";
-import { formatDate } from "../utils/formatDate";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as Add2 } from "../assets/add.svg";
+import add from "../assets/add.svg";
 
 interface ProductProps {
   product: ProductModel;
+  addProduct: (product: ProductModel) => void;
   onProductClicked: (product: ProductModel) => void;
-  onDeleteProductClicked: (product: ProductModel) => void;
+  onDeleteProductClicked?: (product: ProductModel) => void;
   className?: string;
 }
 
 const Product = ({
   product,
+  addProduct,
   onProductClicked,
   onDeleteProductClicked,
   className,
 }: ProductProps) => {
-  const { name, description, createdAt, updatedAt } = product;
-
-  let createdUpdatedText: string;
-  if (updatedAt > createdAt) {
-    createdUpdatedText = "Atualizado: " + formatDate(updatedAt);
-  } else {
-    createdUpdatedText = "Criado: " + formatDate(createdAt);
-  }
+  const { name, category } = product;
+  const price = product.price ?? 0;
 
   return (
     <Card
       onClick={() => onProductClicked(product)}
       className={`${styles.productCard} ${className}`}
+      style={{ width: "350px", height: "400px" }}
     >
       {product.image && (
         <Card.Img
@@ -40,20 +38,31 @@ const Product = ({
           className={styles.productImage}
         />
       )}
-      <Card.Body className={styles.cardBody}>
-        <Card.Title className={stylesUtils.flexCenter}>
-          {name}
-          <MdDelete
-            className="text-muted ms-auto"
+      <div className={styles.cardBody}>
+        <div className={styles.productDetails}>
+          <p className={styles.productName}>{name}</p>
+          {onDeleteProductClicked && (
+            <MdDelete
+              className="text-muted ms-auto"
+              onClick={(e) => {
+                onDeleteProductClicked(product);
+                e.stopPropagation();
+              }}
+            />
+          )}
+          <p className={styles.productPrice}>R$ {price.toFixed(2)}</p>
+          <p className={styles.productCategory}>{category}</p>
+          <img
             onClick={(e) => {
-              onDeleteProductClicked(product);
               e.stopPropagation();
+              addProduct(product);
             }}
+            src={add}
+            alt="Add"
+            className={styles.addImage}
           />
-        </Card.Title>
-        <Card.Text className={styles.productText}>{description}</Card.Text>
-      </Card.Body>
-      <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
+        </div>
+      </div>
     </Card>
   );
 };
