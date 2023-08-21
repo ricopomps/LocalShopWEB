@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ProductInput } from "../network/products_api";
@@ -12,6 +11,7 @@ interface AddEditProductDialogProps {
   onDismiss: () => void;
   onProductSaved: (product: Product) => void;
   storeId: string;
+  categoryList: string[];
 }
 
 const AddEditProductDialog = ({
@@ -19,18 +19,8 @@ const AddEditProductDialog = ({
   onDismiss,
   onProductSaved,
   storeId,
+  categoryList,
 }: AddEditProductDialogProps) => {
-
-  const [categories, setCategories] = useState<string[]>([""]);
-
-  async function loadCategories() {
-    const a: string[] = (await ProductsApi.getCategories()).categories;
-    setCategories(a);
-  }
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   const {
     register,
@@ -109,7 +99,7 @@ const AddEditProductDialog = ({
             label=""
             type="text"
             as="select"
-            options={categories.map((c) => {
+            options={categoryList.map((c) => {
               return { value: c, key: c };
             })}
             hasDefaultValue={true}

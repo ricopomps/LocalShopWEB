@@ -45,6 +45,17 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
     loadProducts(true);
   }, []);
 
+  const [categories, setCategories] = useState<string[]>([""]);
+
+  async function loadCategories() {
+    const a: string[] = (await ProductsApi.getCategories()).categories;
+    setCategories(a);
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
   async function deleteProduct(product: ProductModel) {
     try {
       await ProductsApi.deleteProduct(product._id);
@@ -97,6 +108,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
         <AddProductDialog
           storeId={store._id}
           onDismiss={() => setShowAddProductDialog(false)}
+          categoryList={categories}
           onProductSaved={(newProduct) => {
             setProducts([...products, newProduct]);
             setShowAddProductDialog(false);
@@ -108,6 +120,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
           storeId={store._id}
           onDismiss={() => setProductToEdit(null)}
           productToEdit={productToEdit}
+          categoryList={categories}
           onProductSaved={(updatedProduct) => {
             setProducts(
               products.map((existingProduct) =>
