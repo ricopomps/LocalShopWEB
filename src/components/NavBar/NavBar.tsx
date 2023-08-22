@@ -32,20 +32,20 @@ const NavBar = ({
             Lojas
           </Navbar.Brand>
         ) : (
-          <Navbar.Brand as={Link} to="/products">
+          <Navbar.Brand className={styles.textNavbar} as={Link} to="/products">
             Produtos
           </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            <Nav.Link as={Link} to="/profile">
+            <Nav.Link className={styles.textNavbar} as={Link} to="/profile">
               Perfil
             </Nav.Link>
           </Nav>
           {loggedInUser?.store && (
             <Nav>
-              <Nav.Link as={Link} to="/store">
+              <Nav.Link className={styles.textNavbar} as={Link} to="/store">
                 Visualizar loja
               </Nav.Link>
             </Nav>

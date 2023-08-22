@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TextInputField from "../components/form/TextInputField";
 import * as AuthApi from "../network/authApi";
 import { RecoverPasswordForm } from "../network/authApi";
+import styles from "../styles/LoginDesktop.module.css";
 
 const RecoverPasswordPage = () => {
   const location = useLocation();
@@ -31,8 +32,9 @@ const RecoverPasswordPage = () => {
 
   const passwordMinLength = 7;
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form className={styles.main} onSubmit={handleSubmit(onSubmit)}>
       <TextInputField
+        className={styles.inputLogin}
         name="newPassword"
         label=""
         type="password"
@@ -48,6 +50,7 @@ const RecoverPasswordPage = () => {
         error={errors.newPassword}
       />
       <TextInputField
+        className={styles.inputLogin}
         name="newPasswordConfirmation"
         label=""
         type="password"
