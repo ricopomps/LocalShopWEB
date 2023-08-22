@@ -1,23 +1,36 @@
-import React, { useState } from "react";
-import styles from "../styles/Grid.module.css";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-
+import { toast } from "react-toastify";
+import styles from "../styles/Grid.module.css";
+import * as MapApi from "../network/mapApi";
 interface GridProps {
   rows: number;
   cols: number;
+  storeId: string;
+  edit?: boolean;
 }
 
-interface CellCoordinates {
+export interface CellCoordinates {
   x: number;
   y: number;
   type: string;
 }
 
-const Grid: React.FC<GridProps> = ({ rows, cols }) => {
+const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
   const [selectedStyle, setSelectedStyle] = useState<string>("");
   const cellSize = 50;
   const spacing = 10;
+
+  useEffect(() => {
+    const fetchMap = async () => {
+      const baseData = await MapApi.getMap(storeId);
+
+      if (baseData) setSelectedCells(baseData.items);
+    };
+
+    fetchMap();
+  }, []);
 
   const supportColumn = [
     { style: styles.green, text: "Prateleira" },
@@ -27,6 +40,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols }) => {
   ];
 
   const handleClick = (x: number, y: number, type: string) => {
+    if (!edit) return;
     const cellIsSelected = selectedCells.some(
       (cell) => cell.x === x && cell.y === y
     );
@@ -67,6 +81,15 @@ const Grid: React.FC<GridProps> = ({ rows, cols }) => {
     gap: `${spacing}px`,
   };
 
+  const saveMap = async () => {
+    try {
+      await MapApi.saveMap({ items: selectedCells });
+      toast.success("Mapa salvo com sucesso");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
   return (
     <Row>
       <Col>
@@ -88,8 +111,12 @@ const Grid: React.FC<GridProps> = ({ rows, cols }) => {
         </div>
       </Col>
       <Col>
-        <Button onClick={() => setSelectedCells([])}>clear</Button>
-        <Button onClick={() => console.log([selectedCells])}>show</Button>
+        {edit && (
+          <>
+            <Button onClick={() => setSelectedCells([])}>Limpar</Button>
+            <Button onClick={saveMap}>Salvar</Button>
+          </>
+        )}
         <div className={styles.supportColumn} style={supportColumnStyle}>
           {supportColumn.map((item, index) => (
             <div

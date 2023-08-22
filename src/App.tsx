@@ -26,6 +26,7 @@ import RecoverPasswordPage from "./pages/RecoverPasswordPage";
 import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
 import ProductListPage from "./pages/ProductListPage";
 import MapPage from "./pages/MapPage";
+import MapViewPage from "./pages/MapViewPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -92,7 +93,13 @@ function App() {
                 }
               />
               <Route path="/store/product" element={<ProductListPage />} />
-              <Route path="/map" element={<MapPage />} />
+              {loggedInUser?.store && (
+                <Route
+                  path="/map"
+                  element={<MapPage storeId={loggedInUser?.store._id} />}
+                />
+              )}
+              <Route path="/map" element={<MapViewPage />} />
               <Route path="/shopper" element={<StoreListPage />} />
               <Route
                 path="/forgotpassword"
