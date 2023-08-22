@@ -94,10 +94,13 @@ const Grid: React.FC<GridProps> = ({ rows, cols }) => {
           {supportColumn.map((item, index) => (
             <div
               key={`support-cell-${index}`}
-              className={`${styles.gridCell} ${item.style}`}
+              className={styles.supportCellContainer}
               onClick={() => setSelectedStyle(item.text)}
             >
-              {item.text}
+              <div className={`${styles.gridCell} ${item.style}`}>
+                <div className={styles.supportSquare}></div>
+              </div>
+              <span className={styles.supportText}>{item.text}</span>
             </div>
           ))}
         </div>

@@ -41,3 +41,20 @@
   justify-content: center;
   background-color: #f0f0f0;
 }
+
+.supportCellContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.supportSquare {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+}
+
+.supportText {
+  font-size: 14px;
+  color: #f0f0f0;
+}
