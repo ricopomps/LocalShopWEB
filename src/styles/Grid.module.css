@@ -1,3 +1,7 @@
+.gridContainer {
+  display: flex;
+}
+
 .grid {
   display: grid;
 }
@@ -10,6 +14,30 @@
   background-color: #f0f0f0;
 }
 
-.gridCellGreen {
-  background-color: #20a03a;
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.purple {
+  background-color: purple;
+}
+
+.supportColumn {
+  display: grid;
+}
+
+.supportCell {
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
 }
