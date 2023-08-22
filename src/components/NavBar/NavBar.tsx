@@ -43,12 +43,20 @@ const NavBar = ({
               Perfil
             </Nav.Link>
           </Nav>
+
           {loggedInUser?.store && (
-            <Nav>
-              <Nav.Link className={styles.textNavbar} as={Link} to="/store">
-                Visualizar loja
-              </Nav.Link>
-            </Nav>
+            <>
+              <Nav>
+                <Nav.Link as={Link} to="/map">
+                  Mapa
+                </Nav.Link>
+              </Nav>
+              <Nav>
+                <Nav.Link as={Link} to="/store">
+                  Visualizar loja
+                </Nav.Link>
+              </Nav>
+            </>
           )}
           <Nav className="ms-auto">
             {loggedInUser ? (

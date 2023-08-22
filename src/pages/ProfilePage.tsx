@@ -1,6 +1,5 @@
 import { Button, Form } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
-import { LoginCredentials } from "../network/notes_api";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProfilePage.module.css";
