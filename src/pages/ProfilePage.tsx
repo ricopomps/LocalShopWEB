@@ -13,7 +13,7 @@ interface ProfilePageProps {
 }
 
 export interface ProfileForm {
-  name: string;
+  username: string;
   email: string;
   cpf: string;
 }
@@ -25,7 +25,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
     formState: { errors, isSubmitting },
   } = useForm<ProfileForm>({
     defaultValues: {
-      name: user?.username || "",
+      username: user?.username || "",
       email: user?.email || "",
       cpf: user?.cpf || "",
     },
@@ -45,12 +45,12 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
           className={styles.input}
-          name="name"
+          name="username"
           label="Nome:"
           type="text"
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
-          error={errors.name}
+          error={errors.username}
         />
         <TextInputField
           className={styles.input}
