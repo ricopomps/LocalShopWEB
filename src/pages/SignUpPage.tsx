@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import styles from "../styles/CadastroShopper.module.css";
+import styles from "../styles/SignUpPage.module.css";
 import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../network/notes_api";
 import { Button, Form } from "react-bootstrap";
@@ -14,10 +14,12 @@ interface SignUpPageProps {
 }
 
 const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
-  const placeholderLogin = "Insira seu login...";
-  const placeholderEmail = "Insira seu email...";
-  const placeholderSenha = "Insira sua senha...";
-  const placeholderCPF = "Insira seu CPF...";
+  const placeholderLogin = "Login";
+  const placeholderEmail = "E-mail";
+  const placeholderSenha = "Senha";
+  const placeholderCPF = "CPF";
+  const placeholderSenhaConfirma = "Confirmação de senha";
+
   const navigate = useNavigate();
   const {
     register,
@@ -37,54 +39,59 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
     }
   };
   return (
-    <div className="main">
+    <div className={styles.main}>
       <img src={logo} alt="logo" className="imageLogin" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
+          className={styles.inputLogin}
           name="username"
           type="text"
-          placeholder="Usuário"
+          placeholder={placeholderLogin}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.username}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="email"
           type="text"
-          placeholder="E-mail"
+          placeholder={placeholderEmail}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="cpf"
           type="text"
-          placeholder="CPF"
+          placeholder={placeholderCPF}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.cpf}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="password"
           type="password"
-          placeholder="Senha"
+          placeholder={placeholderSenha}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
         <TextInputField
+          className={styles.inputLogin}
           name="confirmedPassword"
           type="password"
-          placeholder="Confirmar Senha"
+          placeholder={placeholderSenhaConfirma}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
-        <Button type="submit" disabled={isSubmitting}>
-          Cadastrar
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
+          CADASTRAR
         </Button>
       </Form>
-      <button onClick={() => navigate(-1)} className="btn btn_login ">
+      <button onClick={() => navigate(-1)} className={styles.btn}>
         VOLTAR
       </button>
     </div>

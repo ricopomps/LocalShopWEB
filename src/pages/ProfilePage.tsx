@@ -71,11 +71,11 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
           disabled
         />
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
-          Alterar
+          ALTERAR
         </Button>
       </Form>
       <Button className={styles.btn} onClick={() => navigate(-1)}>
-        Voltar
+        VOLTAR
       </Button>
     </div>
   );
