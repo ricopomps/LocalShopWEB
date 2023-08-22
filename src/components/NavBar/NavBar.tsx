@@ -43,6 +43,11 @@ const NavBar = ({
               Perfil
             </Nav.Link>
           </Nav>
+          <Nav>
+            <Nav.Link as={Link} to="/map">
+              Mapa
+            </Nav.Link>
+          </Nav>
           {loggedInUser?.store && (
             <Nav>
               <Nav.Link as={Link} to="/store">

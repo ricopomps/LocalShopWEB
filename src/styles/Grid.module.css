@@ -1,0 +1,15 @@
+.grid {
+  display: grid;
+}
+
+.gridCell {
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.gridCellGreen {
+  background-color: #20a03a;
+}

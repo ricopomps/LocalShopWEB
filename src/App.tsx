@@ -25,6 +25,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RecoverPasswordPage from "./pages/RecoverPasswordPage";
 import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
 import ProductListPage from "./pages/ProductListPage";
+import MapPage from "./pages/MapPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -91,6 +92,7 @@ function App() {
                 }
               />
               <Route path="/store/product" element={<ProductListPage />} />
+              <Route path="/map" element={<MapPage />} />
               <Route path="/shopper" element={<StoreListPage />} />
               <Route
                 path="/forgotpassword"
@@ -116,23 +118,25 @@ function App() {
                   />
                 }
               />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/shopper" element={<StoreListPage />} />
-            {loggedInUser && <Route 
-              path="/profile"
-              element={<ProfilePage user={loggedInUser} />}
-            />}
-            <Route
-              path="/store"
-              element={
-                <StorePage
-                  onCreateStoreSuccessful={(store: Store) =>
-                    setLoggedInUser({ ...loggedInUser!, store: store })
-                  }
-                  store={loggedInUser?.store}
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/shopper" element={<StoreListPage />} />
+              {loggedInUser && (
+                <Route
+                  path="/profile"
+                  element={<ProfilePage user={loggedInUser} />}
                 />
-              }
+              )}
+              <Route
+                path="/store"
+                element={
+                  <StorePage
+                    onCreateStoreSuccessful={(store: Store) =>
+                      setLoggedInUser({ ...loggedInUser!, store: store })
+                    }
+                    store={loggedInUser?.store}
+                  />
+                }
               />
               <Route
                 path="/logindesktop"
