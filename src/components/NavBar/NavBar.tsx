@@ -47,12 +47,12 @@ const NavBar = ({
           {loggedInUser?.store && (
             <>
               <Nav>
-                <Nav.Link as={Link} to="/map">
+                <Nav.Link className={styles.textNavbar} as={Link} to="/map">
                   Mapa
                 </Nav.Link>
               </Nav>
               <Nav>
-                <Nav.Link as={Link} to="/store">
+                <Nav.Link className={styles.textNavbar} as={Link} to="/store">
                   Visualizar loja
                 </Nav.Link>
               </Nav>

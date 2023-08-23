@@ -42,7 +42,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
         <TextInputField
           className={styles.inputLogin}
           name="username"
-          label=""
           type="text"
           placeholder="Usuário"
           register={register}
@@ -52,7 +51,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
         <TextInputField
           className={styles.inputLogin}
           name="password"
-          label=""
           type="password"
           placeholder="Senha"
           register={register}
