@@ -20,8 +20,8 @@ export interface SignUpCredentials {
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
   const { data } = await getApi().post("/api/users/signup", credentials);
-  sessionStorage.setItem("token", data);
-  return data;
+  sessionStorage.setItem("token", data.accessToken);
+  return data.user;
 }
 
 export interface LoginCredentials {
@@ -33,7 +33,6 @@ export async function login(credentials: LoginCredentials): Promise<User> {
   const {
     data: { user, accessToken },
   } = await getApi().post("/api/auth", credentials);
-  console.log(accessToken);
   sessionStorage.removeItem("token");
   sessionStorage.setItem("token", accessToken);
   return user;
@@ -42,11 +41,11 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 export async function logout() {
   await getApi().post("/api/auth/logout");
   sessionStorage.removeItem("token");
-} 
+}
 
-export async function updateUser(user: ProfileForm){
-   const response = await getApi().patch("/api/users",user);
-   return response.data;
+export async function updateUser(user: ProfileForm) {
+  const response = await getApi().patch("/api/users", user);
+  return response.data;
 }
 
 //NOTES ROUTES

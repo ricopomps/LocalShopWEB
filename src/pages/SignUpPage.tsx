@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import styles from "../styles/CadastroShopper.module.css";
+import styles from "../styles/SignUpPage.module.css";
 import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../network/notes_api";
 import { Button, Form } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
+import { toast } from "react-toastify";
 
 interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
@@ -14,10 +15,12 @@ interface SignUpPageProps {
 }
 
 const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
-  const placeholderLogin = "Insira seu login...";
-  const placeholderEmail = "Insira seu email...";
-  const placeholderSenha = "Insira sua senha...";
-  const placeholderCPF = "Insira seu CPF...";
+  const placeholderLogin = "Login";
+  const placeholderEmail = "E-mail";
+  const placeholderSenha = "Senha";
+  const placeholderCPF = "CPF";
+  const placeholderSenhaConfirma = "Confirmação de senha";
+
   const navigate = useNavigate();
   const {
     register,
@@ -26,26 +29,24 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   } = useForm<SignUpCredentials>();
 
   const onSubmit = async (data: SignUpCredentials) => {
-    console.log(data);
     try {
       data.userType = userType;
       const user = await NotesApi.signUp(data);
+      toast.success("Cadastro realizado com sucesso!");
       onSignUpSuccessful(user);
       navigate(userType === UserType.shopper ? "/shopper" : "/store");
-      console.log("user", user);
-    } catch (error) {
-      console.log("error", error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
   return (
-    <div className="main">
+    <div className={styles.main}>
       <img src={logo} alt="logo" className="imageLogin" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
           name="username"
           type="text"
-          placeholder="Usuário"
+          placeholder={placeholderLogin}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.username}
@@ -53,7 +54,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         <TextInputField
           name="email"
           type="text"
-          placeholder="E-mail"
+          placeholder={placeholderEmail}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
@@ -61,7 +62,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         <TextInputField
           name="cpf"
           type="text"
-          placeholder="CPF"
+          placeholder={placeholderCPF}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.cpf}
@@ -69,7 +70,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         <TextInputField
           name="password"
           type="password"
-          placeholder="Senha"
+          placeholder={placeholderSenha}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
@@ -77,16 +78,16 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         <TextInputField
           name="confirmedPassword"
           type="password"
-          placeholder="Confirmar Senha"
+          placeholder={placeholderSenhaConfirma}
           register={register}
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
-        <Button type="submit" disabled={isSubmitting}>
-          Cadastrar
+        <Button className={styles.btn} type="submit" disabled={isSubmitting}>
+          CADASTRAR
         </Button>
       </Form>
-      <button onClick={() => navigate(-1)} className="btn btn_login ">
+      <button onClick={() => navigate(-1)} className={styles.btn}>
         VOLTAR
       </button>
     </div>

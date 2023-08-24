@@ -23,6 +23,10 @@
   height: 2em;
 }
 
+label {
+  color: #dddddd;
+}
+
 .inputLogin:focus {
   background-color: #5c5c5c;
   color: #dddddd;

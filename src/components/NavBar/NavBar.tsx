@@ -27,27 +27,36 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        {loggedInUser?.userType === UserType.shopper ? <Navbar.Brand as={Link} to="/shopper">
-          Lojas
-        </Navbar.Brand>:<Navbar.Brand as={Link} to="/products">
-          Produtos
-        </Navbar.Brand>}
+        {loggedInUser?.userType === UserType.shopper ? (
+          <Navbar.Brand as={Link} to="/shopper">
+            Lojas
+          </Navbar.Brand>
+        ) : (
+          <Navbar.Brand className={styles.textNavbar} as={Link} to="/products">
+            Produtos
+          </Navbar.Brand>
+        )}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            {/* <Nav.Link as={Link} to="/privacy">
-              Privacidade
-            </Nav.Link> */}
-            <Nav.Link as={Link} to="/profile">
-              Perfil 
+            <Nav.Link className={styles.textNavbar} as={Link} to="/profile">
+              Perfil
             </Nav.Link>
           </Nav>
+
           {loggedInUser?.store && (
-            <Nav>
-              <Nav.Link as={Link} to="/store">
-                Visualizar loja
-              </Nav.Link>
-            </Nav>
+            <>
+              <Nav>
+                <Nav.Link className={styles.textNavbar} as={Link} to="/map">
+                  Mapa
+                </Nav.Link>
+              </Nav>
+              <Nav>
+                <Nav.Link className={styles.textNavbar} as={Link} to="/store">
+                  Visualizar loja
+                </Nav.Link>
+              </Nav>
+            </>
           )}
           <Nav className="ms-auto">
             {loggedInUser ? (

@@ -1,5 +1,6 @@
 import { Form } from "react-bootstrap";
 import { RegisterOptions, UseFormRegister, FieldError } from "react-hook-form";
+import styles from "../../styles/TextInputField.module.css";
 
 interface option {
   value: string | number;
@@ -29,7 +30,6 @@ const TextInputField = ({
   margin = true,
   ...props
 }: TextInputFieldProps) => {
-  console.log("wjads", label)
   return (
     <Form.Group
       className={margin ? "mb-3" : undefined}
@@ -37,6 +37,7 @@ const TextInputField = ({
     >
       {label && <Form.Label>{label}</Form.Label>}
       <Form.Control
+        className={styles.input}
         {...register(name, registerOptions)}
         {...props}
         placeholder={placeholder}

@@ -1,6 +1,7 @@
 import { Button, Navbar } from "react-bootstrap";
 import { User } from "../../models/user";
 import * as NotesApi from "../../network/notes_api";
+import styles from "../../styles/navbar.module.css";
 
 interface NavBarLoggedInViewProps {
   user: User;
@@ -21,7 +22,9 @@ const NavBarLoggedInView = ({
   }
   return (
     <>
-      <Navbar.Text>Logado como: {user.username}</Navbar.Text>
+      <Navbar.Text className={styles.textLogged}>
+        Logado como: {user.username}
+      </Navbar.Text>
       <Button onClick={logout}>Sair</Button>
     </>
   );

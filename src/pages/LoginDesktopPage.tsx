@@ -30,12 +30,10 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
       } else {
         navigate(store ? "/products" : "/store");
       }
-      console.log("user", user);
     } catch (error) {
       console.log("error", error);
       alert(error);
     }
-    console.log(data);
   };
   return (
     <div className={styles.main}>
@@ -44,7 +42,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
         <TextInputField
           className={styles.inputLogin}
           name="username"
-          label=""
           type="text"
           placeholder="Usuário"
           register={register}
@@ -54,7 +51,6 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
         <TextInputField
           className={styles.inputLogin}
           name="password"
-          label=""
           type="password"
           placeholder="Senha"
           register={register}

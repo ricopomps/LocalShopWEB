@@ -1,7 +1,31 @@
+import { useForm } from "react-hook-form";
+import TextInputField from "../components/form/TextInputField";
+import { LoginCredentials } from "../network/notes_api";
+
 const PrivacyPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginCredentials>();
   return (
     <div>
-      <p>Página privada</p>
+      <TextInputField
+        name="username"
+        type="text"
+        placeholder="Usuário"
+        register={register}
+        registerOptions={{ required: "Campo Obrigatório" }}
+        error={errors.username}
+      />
+      <TextInputField
+        name="password"
+        type="password"
+        placeholder="Senha"
+        register={register}
+        registerOptions={{ required: "Campo Obrigatório" }}
+        error={errors.password}
+      />
     </div>
   );
 };

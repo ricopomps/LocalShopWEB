@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
 import * as ProductsApi from "../network/products_api";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
 import ShoppingList, { ProductItem } from "../components/ShoppingList";
 import Product from "../components/Product";
-import { toast } from "react-toastify";
 
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [showProductsLoadingError, setshowProductsLoadingError] =
@@ -23,7 +23,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
   const storeId = queryParameters.get("store");
   async function loadProducts(initial?: boolean) {
     try {
-      console.log("loadProducts", storeId);
       if (!storeId) throw Error("Loja não encontrada");
       setshowProductsLoadingError(false);
       setProductsLoading(true);
@@ -79,14 +78,18 @@ const ProductListPage = ({}: ProductListPageProps) => {
     );
   };
 
+  const goToStoreMap = () => {
+    navigate("/map?store=" + storeId);
+  };
+
   const productsGrid = (
     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.productsGrid}`}>
       {products.map((product) => (
         <Col key={product._id}>
           <Product
-          addProduct={addProductToShoppingCart}
+            addProduct={addProductToShoppingCart}
             product={product}
-            onProductClicked={() => {}}
+            onProductClicked={goToStoreMap}
             className={styles.product}
           ></Product>
         </Col>
@@ -96,6 +99,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
 
   return (
     <>
+      <Button onClick={goToStoreMap}>Ir para o mapa</Button>
       {!showProductsLoadingError && (
         <>
           {products.length > 0 ? (
