@@ -7,6 +7,7 @@ import { Button, Form } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
+import { toast } from "react-toastify";
 
 interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
@@ -31,11 +32,11 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
     try {
       data.userType = userType;
       const user = await NotesApi.signUp(data);
+      toast.success("Cadastro realizado com sucesso!");
       onSignUpSuccessful(user);
       navigate(userType === UserType.shopper ? "/shopper" : "/store");
-    } catch (error) {
-      console.log("error", error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
   return (
@@ -43,7 +44,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
       <img src={logo} alt="logo" className="imageLogin" />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
-          className={styles.inputLogin}
           name="username"
           type="text"
           placeholder={placeholderLogin}
@@ -52,7 +52,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           error={errors.username}
         />
         <TextInputField
-          className={styles.inputLogin}
           name="email"
           type="text"
           placeholder={placeholderEmail}
@@ -61,7 +60,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           error={errors.email}
         />
         <TextInputField
-          className={styles.inputLogin}
           name="cpf"
           type="text"
           placeholder={placeholderCPF}
@@ -70,7 +68,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           error={errors.cpf}
         />
         <TextInputField
-          className={styles.inputLogin}
           name="password"
           type="password"
           placeholder={placeholderSenha}
@@ -79,7 +76,6 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           error={errors.password}
         />
         <TextInputField
-          className={styles.inputLogin}
           name="confirmedPassword"
           type="password"
           placeholder={placeholderSenhaConfirma}

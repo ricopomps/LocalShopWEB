@@ -4,6 +4,8 @@ import styles from "../styles/ShoppingList.module.css";
 import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
+import cart from "../assets/cart.svg";
+
 interface ShoppingListProps {
   storeId: string | null;
   productsItems: ProductItem[];
@@ -19,6 +21,7 @@ export interface ProductItem {
 }
 
 interface ShoppingListItemProps {
+  className?: string;
   productItem: ProductItem;
   isSelected: boolean;
   onSelect: (id: string) => void;
@@ -100,6 +103,7 @@ const ShoppingList = ({
   };
 
   const ShoppingItem = ({
+    className,
     productItem,
     isSelected,
     onSelect,
@@ -112,7 +116,7 @@ const ShoppingList = ({
     };
 
     return (
-      <div className={styles.shoppingItem}>
+      <div className={`${styles.shoppingItem} ${className}`}>
         <Form.Check
           type="checkbox"
           label=""
@@ -121,21 +125,23 @@ const ShoppingList = ({
         />
         <div className={styles.itemInfo}>
           <p className={styles.itemText}>{productItem.product.name}</p>
-          <p className={styles.itemPrice}>R${productItem.product.price}</p>
+          <p className={styles.itemPrice}>
+            R${productItem.product.price?.toFixed(2)}
+          </p>
         </div>
         <div className={styles.itemControls}>
-          <button
-            onClick={() => onIncrease(productItem.product._id)}
-            className={styles.itemControlButton}
-          >
-            +
-          </button>
-          <span className={styles.itemCount}>{productItem.quantity}</span>
           <button
             onClick={() => onDecrease(productItem.product._id)}
             className={styles.itemControlButton}
           >
             -
+          </button>
+          <span className={styles.itemCount}>{productItem.quantity}</span>
+          <button
+            onClick={() => onIncrease(productItem.product._id)}
+            className={styles.itemControlButton}
+          >
+            +
           </button>
           <button
             onClick={() => onDelete(productItem.product._id)}
@@ -168,18 +174,22 @@ const ShoppingList = ({
 
   return (
     <>
-      <Button
-        variant="primary"
+      <img
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCart();
+        }}
+        src={cart}
+        alt="cart"
         className={styles.toggleButton}
-        onClick={toggleCart}
-      >
-        Toggle Cart
-      </Button>
+      />
       <Container
         className={`${styles.cartSidebar} ${cartOpen ? styles.open : ""}`}
       >
+        <h1 className={styles.cartText}> Carrinho </h1>
         {productsItems.map((item) => (
           <ShoppingItem
+            className={styles.textoCarrinho}
             key={item.product._id}
             productItem={item}
             isSelected={selectedItemIds.includes(item.product._id)}
@@ -190,9 +200,11 @@ const ShoppingList = ({
           />
         ))}
         <div className={styles.totalPrice}>
-          Total Price: R${calculateTotalPrice().toFixed(2)}
+          Preço total: R${calculateTotalPrice().toFixed(2)}
         </div>
-        <Button onClick={onSave}>Salvar</Button>
+        <Button className={styles.btnSalvar} onClick={onSave}>
+          Salvar
+        </Button>
       </Container>
     </>
   );

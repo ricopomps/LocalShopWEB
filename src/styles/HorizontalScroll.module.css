@@ -5,6 +5,11 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.container::-webkit-scrollbar {
+.container::-webkit-scrollbar:horizontal {
   display: none;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background: #000;
+  border-radius: 10px;
 }

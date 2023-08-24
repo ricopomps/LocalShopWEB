@@ -41,7 +41,7 @@ const Store = ({
         />
       )}
       <Card.Body className={styles.cardBody}>
-        <Card.Title className={stylesUtils.flexCenter}>
+        <Card.Title className={`${stylesUtils.flexCenter} ${styles.titleText}`}>
           {name}
           {onDeleteStoreClicked && (
             <MdDelete
@@ -53,7 +53,9 @@ const Store = ({
             />
           )}
         </Card.Title>
-        <Card.Text className={styles.storeText}>{description}</Card.Text>
+        <Card.Text className={`${stylesUtils.flexCenter}${styles.storeText}`}>
+          {description}
+        </Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
     </Card>
