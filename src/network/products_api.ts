@@ -57,3 +57,8 @@ export async function getProductList(): Promise<
   const response = await getApi().get(`${baseUrl}/list`);
   return response.data;
 }
+
+export async function getProduct(productId: string): Promise<Product> {
+  const response = await getApi().get(`${baseUrl}/${productId}`);
+  return response.data;
+}

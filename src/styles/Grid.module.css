@@ -30,6 +30,10 @@
   background-color: purple;
 }
 
+.selected {
+  border: 5px solid var(--amarelo);
+}
+
 .supportColumn {
   display: grid;
 }

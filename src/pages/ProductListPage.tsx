@@ -79,7 +79,11 @@ const ProductListPage = ({}: ProductListPageProps) => {
   };
 
   const goToStoreMap = () => {
-    navigate("/map?store=" + storeId);
+    navigate(`/map?store=${storeId}`);
+  };
+
+  const goToProductPageMap = (productId: string) => {
+    navigate(`/product?store=${storeId}&product=${productId}`);
   };
 
   const productsGrid = (
@@ -89,7 +93,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
           <Product
             addProduct={addProductToShoppingCart}
             product={product}
-            onProductClicked={goToStoreMap}
+            onProductClicked={() => goToProductPageMap(product._id)}
             className={styles.product}
           ></Product>
         </Col>

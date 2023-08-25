@@ -3,8 +3,8 @@ import { Button, Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
-import AlertModal from "./Modal/AlertModal";
 import AlocateProductModal from "./Modal/AlocateProductModal";
+import { useLocation } from "react-router-dom";
 interface GridProps {
   rows: number;
   cols: number;
@@ -19,6 +19,10 @@ export interface CellCoordinates {
 }
 
 const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
+  const location = useLocation();
+  const queryParameters = new URLSearchParams(location.search);
+  const locationX = queryParameters.get("x");
+  const locationY = queryParameters.get("y");
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
   const [selectedCell, setSelectedCell] = useState<CellCoordinates | undefined>(
     undefined
@@ -104,6 +108,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
     }
   };
 
+  const productSelected = (x: number, y: number) => {
+    if (
+      locationX &&
+      locationY &&
+      x === parseInt(locationX) &&
+      y === parseInt(locationY)
+    )
+      return styles.selected;
+  };
+
   return (
     <Row>
       <Col>
@@ -118,7 +132,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
                 onClick={() => handleClick(x, y, selectedStyle)}
                 className={`${styles.gridCell} ${
                   isCellSelected(x, y) && getCellSyle(x, y)
-                }`}
+                } ${productSelected(x, y)}`}
               ></div>
             );
           })}
@@ -144,15 +158,17 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
               <span className={styles.supportText}>{item.text}</span>
             </div>
           ))}
-          <div
-            className={styles.supportCellContainer}
-            onClick={() => setAlocateProduct(!alocateProduct)}
-          >
-            <div className={`${styles.gridCell}`}>
-              <div className={styles.supportSquare}></div>
+          {edit && (
+            <div
+              className={styles.supportCellContainer}
+              onClick={() => setAlocateProduct(!alocateProduct)}
+            >
+              <div className={`${styles.gridCell}`}>
+                <div className={styles.supportSquare}></div>
+              </div>
+              <span className={styles.supportText}>Alocar produtos</span>
             </div>
-            <span className={styles.supportText}>Alocar produtos</span>
-          </div>
+          )}
         </div>
       </Col>
       {selectedCell && (
