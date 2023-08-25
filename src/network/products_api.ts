@@ -1,3 +1,4 @@
+import { CellCoordinates } from "../components/Grid";
 import { Product } from "../models/product";
 import { getApi } from "./api";
 
@@ -18,12 +19,14 @@ export async function fetchProducts(
 }
 
 export interface ProductInput {
+  _id?: string;
   name: string;
   description?: string;
   image?: string;
   price: number;
   category: string;
   storeId: string;
+  location?: CellCoordinates;
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {
@@ -44,8 +47,13 @@ export async function deleteProduct(productId: string) {
 }
 
 export async function getCategories() {
-  const response = await getApi().get(
-    "/api/products/categories"
-  );
+  const response = await getApi().get(`${baseUrl}/categories`);
+  return response.data;
+}
+
+export async function getProductList(): Promise<
+  { _id: string; name: string }[]
+> {
+  const response = await getApi().get(`${baseUrl}/list`);
   return response.data;
 }

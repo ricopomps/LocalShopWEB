@@ -2,7 +2,7 @@ import { Form } from "react-bootstrap";
 import { RegisterOptions, UseFormRegister, FieldError } from "react-hook-form";
 import styles from "../../styles/TextInputField.module.css";
 
-interface option {
+export interface Option {
   value: string | number;
   key: string | number;
 }
@@ -12,7 +12,7 @@ interface TextInputFieldProps {
   register: UseFormRegister<any>;
   registerOptions?: RegisterOptions;
   error?: FieldError;
-  options?: option[];
+  options?: Option[];
   hasDefaultValue?: boolean;
   margin?: boolean;
   [x: string]: any;

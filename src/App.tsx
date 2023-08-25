@@ -27,6 +27,7 @@ import SendRecoverPasswordEmailPage from "./pages/SendRecoverPasswordEmailPage";
 import ProductListPage from "./pages/ProductListPage";
 import MapPage from "./pages/MapPage";
 import MapViewPage from "./pages/MapViewPage";
+import ProductPage from "./pages/ProductPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -100,6 +101,7 @@ function App() {
                 />
               )}
               <Route path="/map" element={<MapViewPage />} />
+              <Route path="/product" element={<ProductPage />} />
               <Route path="/shopper" element={<StoreListPage />} />
               <Route
                 path="/forgotpassword"

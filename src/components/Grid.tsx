@@ -3,6 +3,8 @@ import { Button, Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
+import AlertModal from "./Modal/AlertModal";
+import AlocateProductModal from "./Modal/AlocateProductModal";
 interface GridProps {
   rows: number;
   cols: number;
@@ -13,12 +15,16 @@ interface GridProps {
 export interface CellCoordinates {
   x: number;
   y: number;
-  type: string;
+  type?: string;
 }
 
 const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
+  const [selectedCell, setSelectedCell] = useState<CellCoordinates | undefined>(
+    undefined
+  );
   const [selectedStyle, setSelectedStyle] = useState<string>("");
+  const [alocateProduct, setAlocateProduct] = useState(false);
   const cellSize = 50;
   const spacing = 10;
 
@@ -41,14 +47,22 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
 
   const handleClick = (x: number, y: number, type: string) => {
     if (!edit) return;
-    const cellIsSelected = selectedCells.some(
-      (cell) => cell.x === x && cell.y === y
-    );
-    const newSelectedCells = cellIsSelected
-      ? selectedCells.filter((cell) => cell.x !== x || cell.y !== y)
-      : [...selectedCells, { x, y, type }];
+    if (alocateProduct) {
+      handleAlocateProduct(x, y);
+    } else {
+      const cellIsSelected = selectedCells.some(
+        (cell) => cell.x === x && cell.y === y
+      );
+      const newSelectedCells = cellIsSelected
+        ? selectedCells.filter((cell) => cell.x !== x || cell.y !== y)
+        : [...selectedCells, { x, y, type }];
 
-    setSelectedCells(newSelectedCells);
+      setSelectedCells(newSelectedCells);
+    }
+  };
+
+  const handleAlocateProduct = (x: number, y: number) => {
+    setSelectedCell({ x, y });
   };
 
   const isCellSelected = (x: number, y: number) => {
@@ -130,8 +144,30 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
               <span className={styles.supportText}>{item.text}</span>
             </div>
           ))}
+          <div
+            className={styles.supportCellContainer}
+            onClick={() => setAlocateProduct(!alocateProduct)}
+          >
+            <div className={`${styles.gridCell}`}>
+              <div className={styles.supportSquare}></div>
+            </div>
+            <span className={styles.supportText}>Alocar produtos</span>
+          </div>
         </div>
       </Col>
+      {selectedCell && (
+        <AlocateProductModal
+          acceptText="Alocar"
+          dismissText="Recusar"
+          location={selectedCell}
+          onAccepted={() => {
+            setSelectedCell(undefined);
+          }}
+          onDismiss={() => {
+            setSelectedCell(undefined);
+          }}
+        />
+      )}
     </Row>
   );
 };
