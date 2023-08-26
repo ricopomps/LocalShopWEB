@@ -9,8 +9,12 @@ import ShoppingList from "../components/ShoppingList";
 import { useShoppingList } from "../context/ShoppingListContext";
 
 const ProductPage = () => {
-  const { handleItemCountIncrease, handleItemCountDecrease } =
-    useShoppingList();
+  const {
+    shoppingList: { productsItems },
+    handleItemCountIncrease,
+    handleItemCountDecrease,
+    addProduct,
+  } = useShoppingList();
   const location = useLocation();
   const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(
     null
@@ -54,7 +58,17 @@ const ProductPage = () => {
       <Button onClick={() => handleItemCountDecrease(selectedProduct._id)}>
         -
       </Button>
-      <Button onClick={() => handleItemCountIncrease(selectedProduct._id)}>
+      <Button
+        onClick={() => {
+          if (
+            productsItems.find(
+              (item) => item.product._id === selectedProduct._id
+            )
+          )
+            handleItemCountIncrease(selectedProduct._id);
+          else addProduct(selectedProduct);
+        }}
+      >
         +
       </Button>
 

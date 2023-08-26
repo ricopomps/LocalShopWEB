@@ -12,10 +12,7 @@ import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
-  const {
-    shoppingList: { productsItems },
-    setProductsItems,
-  } = useShoppingList();
+  const { addProduct } = useShoppingList();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,22 +49,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
     if (!cartOpen) toggleCart();
   }, []);
 
-  const addProductToShoppingCart = (product: ProductModel) => {
-    const existingProduct = productsItems.find(
-      (item) => item.product._id === product._id
-    );
-    if (!existingProduct) {
-      setProductsItems([...productsItems, { product, quantity: 1 }]);
-      setCartOpen(true);
-    } else {
-      setProductsItems(
-        productsItems.filter((item) => item.product._id !== product._id)
-      );
-
-      removeProductFromShoppingCart(product._id);
-    }
-  };
-
   const toggleCart = () => {
     setCartOpen(!cartOpen);
   };
@@ -91,7 +72,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
-            addProduct={addProductToShoppingCart}
+            addProduct={addProduct}
             product={product}
             onProductClicked={() => goToProductPageMap(product._id)}
             className={styles.product}
