@@ -1,4 +1,4 @@
-import { ProductItem } from "../components/ShoppingList";
+import { ProductItem } from "../context/ShoppingListContext";
 import { getApi } from "./api";
 
 export interface ShoppingList {

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
 import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
 import cart from "../assets/cart.svg";
+import { ProductItem } from "../context/ShoppingListContext";
 
 interface ShoppingListProps {
   storeId: string | null;
@@ -13,11 +14,6 @@ interface ShoppingListProps {
   onDelete: (id: string) => void;
   cartOpen: boolean;
   toggleCart: () => void;
-}
-
-export interface ProductItem {
-  product: Product;
-  quantity: number;
 }
 
 interface ShoppingListItemProps {
@@ -119,7 +115,6 @@ const ShoppingList = ({
       <div className={`${styles.shoppingItem} ${className}`}>
         <Form.Check
           type="checkbox"
-          label=""
           checked={isSelected}
           onChange={handleCheckboxChange}
         />

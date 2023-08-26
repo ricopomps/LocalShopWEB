@@ -6,19 +6,25 @@ import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
-import ShoppingList, { ProductItem } from "../components/ShoppingList";
+import ShoppingList from "../components/ShoppingList";
 import Product from "../components/Product";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
+  const { shoppingList } = useShoppingList();
+
   const location = useLocation();
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
   const [page, setPage] = useState(0);
+
   const queryParameters = new URLSearchParams(location.search);
   const storeId = queryParameters.get("store");
   async function loadProducts(initial?: boolean) {
@@ -37,8 +43,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
       setProductsLoading(false);
     }
   }
-  const [cartOpen, setCartOpen] = useState(false);
-  const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
   useEffect(() => {
     const getPreviousShoppingList = async () => {
       try {
