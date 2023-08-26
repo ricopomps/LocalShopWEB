@@ -5,6 +5,8 @@ import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
 import cart from "../assets/cart.svg";
 import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
+import { useNavigate } from "react-router-dom";
+import { Product } from "../models/product";
 
 interface ShoppingListProps {
   storeId: string | null;
@@ -37,7 +39,7 @@ const ShoppingList = ({
     handleItemCountIncrease,
     handleItemCountDecrease,
   } = useShoppingList();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const getPreviousShoppingList = async () => {
       try {
@@ -83,6 +85,12 @@ const ShoppingList = ({
     return total;
   };
 
+  const goToStoreMap = (product: Product) => {
+    navigate(
+      `/map?store=${storeId}&x=${product.location?.x}&y=${product.location?.y}`
+    );
+  };
+
   const ShoppingItem = ({
     className,
     productItem,
@@ -103,7 +111,10 @@ const ShoppingList = ({
           checked={isSelected}
           onChange={handleCheckboxChange}
         />
-        <div className={styles.itemInfo}>
+        <div
+          className={styles.itemInfo}
+          onClick={() => goToStoreMap(productItem.product)}
+        >
           <p className={styles.itemText}>{productItem.product.name}</p>
           <p className={styles.itemPrice}>
             R${productItem.product.price?.toFixed(2)}
