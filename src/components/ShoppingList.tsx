@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
 import * as ShoppingListApi from "../network/shoppingListApi";
@@ -34,6 +34,8 @@ const ShoppingList = ({
     setSelectedItemIds,
     setProductsItems,
     setStoreId,
+    handleItemCountIncrease,
+    handleItemCountDecrease,
   } = useShoppingList();
 
   useEffect(() => {
@@ -62,39 +64,6 @@ const ShoppingList = ({
       selectedItems = [...prevSelectedItems, itemId];
     }
     setSelectedItemIds(selectedItems);
-  };
-
-  const handleItemCountIncrease = (itemId: string) => {
-    const productItem = productsItems.find(
-      (item) => item.product._id === itemId
-    );
-
-    if (productItem) {
-      productItem.quantity++;
-      const updatedProductsItems = productsItems.map((item) =>
-        item.product._id === itemId ? productItem : item
-      );
-      setProductsItems(updatedProductsItems);
-    }
-  };
-
-  const handleItemCountDecrease = (itemId: string) => {
-    const productItem = productsItems.find(
-      (item) => item.product._id === itemId
-    );
-
-    if (productItem) {
-      productItem.quantity--;
-
-      if (productItem.quantity <= 0) {
-        handleItemDelete(itemId);
-      } else {
-        const updatedProductsItems = productsItems.map((item) =>
-          item.product._id === itemId ? productItem : item
-        );
-        setProductsItems(updatedProductsItems);
-      }
-    }
   };
 
   const handleItemDelete = (itemId: string) => {

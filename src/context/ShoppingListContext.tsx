@@ -24,6 +24,8 @@ export enum REDUCER_ACTION_TYPE {
   SET_SELECTED_ITEMS,
   SET_PRODUCT_ITEMS,
   SET_STORE_ID,
+  INCREASE_COUNT,
+  DECREASE_COUNT,
 }
 
 export type ReducerAction = {
@@ -72,11 +74,59 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       };
     }
     case REDUCER_ACTION_TYPE.SET_STORE_ID: {
+      console.log("REDUCER_ACTION_TYPE.SET_STORE_ID");
+
       return {
         ...state,
         shoppingList: {
           ...state.shoppingList,
           storeId: action.payload,
+        },
+      };
+    }
+    case REDUCER_ACTION_TYPE.INCREASE_COUNT: {
+      const itemId = action.payload;
+
+      const updatedProductItems = state.shoppingList.productsItems.map(
+        (item) => {
+          if (item.product._id === itemId) {
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+            };
+          }
+          return item;
+        }
+      );
+
+      return {
+        ...state,
+        shoppingList: {
+          ...state.shoppingList,
+          productsItems: updatedProductItems,
+        },
+      };
+    }
+    case REDUCER_ACTION_TYPE.DECREASE_COUNT: {
+      const itemId = action.payload;
+
+      const updatedProductItems = state.shoppingList.productsItems
+        .map((item) => {
+          if (item.product._id === itemId) {
+            return {
+              ...item,
+              quantity: item.quantity - 1,
+            };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0);
+
+      return {
+        ...state,
+        shoppingList: {
+          ...state.shoppingList,
+          productsItems: updatedProductItems,
         },
       };
     }
@@ -122,6 +172,20 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const handleItemCountIncrease = useCallback((itemId: string) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.INCREASE_COUNT,
+      payload: itemId,
+    });
+  }, []);
+
+  const handleItemCountDecrease = useCallback((itemId: string) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.DECREASE_COUNT,
+      payload: itemId,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
@@ -129,6 +193,8 @@ const useShoppingListContext = (initialState: StateType) => {
     setSelectedItemIds,
     setProductsItems,
     setStoreId,
+    handleItemCountIncrease,
+    handleItemCountDecrease,
   };
 };
 
@@ -141,6 +207,8 @@ const initialContextState: UseShoppingListContextType = {
   setSelectedItemIds: (selectedItemIds: string[]) => {},
   setProductsItems: (selectedProducts: ProductItem[]) => {},
   setStoreId: (storeId: string) => {},
+  handleItemCountIncrease: (itemId: string) => {},
+  handleItemCountDecrease: (itemId: string) => {},
 };
 
 export const ShoppingListContext =
@@ -168,6 +236,8 @@ type UseShoppingListHookType = {
   setSelectedItemIds: (selectedItemIds: string[]) => void;
   setProductsItems: (selectedProducts: ProductItem[]) => void;
   setStoreId: (storeId: string) => void;
+  handleItemCountIncrease: (itemId: string) => void;
+  handleItemCountDecrease: (itemId: string) => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
@@ -178,6 +248,8 @@ export const useShoppingList = (): UseShoppingListHookType => {
     setSelectedItemIds,
     setProductsItems,
     setStoreId,
+    handleItemCountIncrease,
+    handleItemCountDecrease,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
@@ -186,5 +258,7 @@ export const useShoppingList = (): UseShoppingListHookType => {
     setSelectedItemIds,
     setProductsItems,
     setStoreId,
+    handleItemCountIncrease,
+    handleItemCountDecrease,
   };
 };

@@ -6,8 +6,11 @@ import { Product as ProductModel } from "../models/product";
 import Product from "../components/Product";
 import { Button } from "react-bootstrap";
 import ShoppingList from "../components/ShoppingList";
+import { useShoppingList } from "../context/ShoppingListContext";
 
 const ProductPage = () => {
+  const { handleItemCountIncrease, handleItemCountDecrease } =
+    useShoppingList();
   const location = useLocation();
   const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(
     null
@@ -48,8 +51,12 @@ const ProductPage = () => {
       <Button onClick={goToStoreMap}>Ver localização</Button>
       <Button onClick={goBackToStore}>Voltar para loja</Button>
       <Product product={selectedProduct} onProductClicked={() => {}} />
-      <Button onClick={() => {}}>-</Button>
-      <Button onClick={() => {}}>+</Button>
+      <Button onClick={() => handleItemCountDecrease(selectedProduct._id)}>
+        -
+      </Button>
+      <Button onClick={() => handleItemCountIncrease(selectedProduct._id)}>
+        +
+      </Button>
 
       <ShoppingList
         cartOpen={true}
