@@ -34,6 +34,7 @@ const ShoppingList = ({
   const {
     shoppingList: { productsItems, selectedItemIds, storeId: storeIdContext },
     setSelectedItemIds,
+    clearShoppingList,
     setProductsItems,
     setStoreId,
     handleItemCountIncrease,
@@ -48,8 +49,10 @@ const ShoppingList = ({
 
         if (shoppingList?.products) {
           setProductsItems(shoppingList.products);
-          toggleCart();
+        } else if (storeIdContext && storeId !== storeIdContext) {
+          clearShoppingList();
         }
+        toggleCart();
       } catch (error) {}
     };
     if (storeId) setStoreId(storeId);
