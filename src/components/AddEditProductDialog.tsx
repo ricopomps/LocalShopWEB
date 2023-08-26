@@ -70,7 +70,7 @@ const AddEditProductDialog = ({
         <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="name"
-            label=""
+            label="Nome:"
             type="text"
             placeholder="Nome do produto"
             register={register}
@@ -80,7 +80,7 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="description"
-            label=""
+            label="Descrição do produto:"
             as="textarea"
             rows={5}
             placeholder="Descrição do produto"
@@ -89,7 +89,7 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="image"
-            label=""
+            label="Imagem do produto:"
             type="text"
             placeholder="Imagem"
             register={register}
@@ -97,7 +97,7 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="category"
-            label=""
+            label="Categoria:"
             type="text"
             as="select"
             options={categoryList.map((c) => {
@@ -110,7 +110,7 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="price"
-            label=""
+            label="Preço:"
             type="text"
             placeholder="Preço"
             register={register}
