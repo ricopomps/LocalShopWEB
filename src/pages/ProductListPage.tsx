@@ -13,7 +13,7 @@ import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
-  const { shoppingList } = useShoppingList();
+  const { shoppingList, setProductsItems } = useShoppingList();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,11 +63,15 @@ const ProductListPage = ({}: ProductListPageProps) => {
     const existingProduct = productsSelected.find(
       (item) => item.product._id === product._id
     );
-
     if (!existingProduct) {
+      setProductsItems([...productsSelected, { product, quantity: 1 }]);
       setProductsSelected([...productsSelected, { product, quantity: 1 }]);
       setCartOpen(true);
     } else {
+      setProductsItems(
+        productsSelected.filter((item) => item.product._id !== product._id)
+      );
+
       removeProductFromShoppingCart(product._id);
     }
   };
@@ -125,7 +129,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       <ShoppingList
         storeId={storeId}
-        productsItems={productsSelected}
+        productsItems={shoppingList.productsItems}
         setProductsItems={setProductsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}

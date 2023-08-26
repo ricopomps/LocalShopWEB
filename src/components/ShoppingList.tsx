@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
-import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
 import cart from "../assets/cart.svg";
-import { ProductItem } from "../context/ShoppingListContext";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 
 interface ShoppingListProps {
   storeId: string | null;
@@ -29,21 +28,26 @@ interface ShoppingListItemProps {
 const ShoppingList = ({
   storeId,
   productsItems,
-  setProductsItems,
+  //   setProductsItems,
   onDelete,
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
-  const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+  const {
+    shoppingList: { selectedItemIds },
+    setSelectedItemIds,
+    setProductsItems,
+  } = useShoppingList();
 
   const handleItemSelect = (itemId: string) => {
-    setSelectedItemIds((prevSelectedItems) => {
-      if (prevSelectedItems.includes(itemId)) {
-        return prevSelectedItems.filter((id) => id !== itemId);
-      } else {
-        return [...prevSelectedItems, itemId];
-      }
-    });
+    const prevSelectedItems = selectedItemIds;
+    let selectedItems;
+    if (prevSelectedItems.includes(itemId)) {
+      selectedItems = prevSelectedItems.filter((id) => id !== itemId);
+    } else {
+      selectedItems = [...prevSelectedItems, itemId];
+    }
+    setSelectedItemIds(selectedItems);
   };
 
   const handleItemCountIncrease = (itemId: string) => {
@@ -80,9 +84,7 @@ const ShoppingList = ({
   };
 
   const handleItemDelete = (itemId: string) => {
-    setSelectedItemIds((prevSelectedItems) =>
-      prevSelectedItems.filter((id) => id !== itemId)
-    );
+    setSelectedItemIds(selectedItemIds.filter((id) => id !== itemId));
     const updatedProductsItems = productsItems.filter(
       (item) => item.product._id !== itemId
     );

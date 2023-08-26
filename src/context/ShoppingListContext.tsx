@@ -9,6 +9,7 @@ import { Product } from "../models/product";
 
 export interface ShoppingList {
   productsItems: ProductItem[];
+  selectedItemIds: string[];
 }
 
 export interface ProductItem {
@@ -19,6 +20,8 @@ export interface ProductItem {
 export enum REDUCER_ACTION_TYPE {
   SET_SHOPPING_LIST,
   CLEAR_SHOPPING_LIST,
+  SET_SELECTED_ITEMS,
+  SET_PRODUCT_ITEMS,
 }
 
 export type ReducerAction = {
@@ -27,11 +30,11 @@ export type ReducerAction = {
 };
 
 type StateType = {
-  shoppingList?: ShoppingList;
+  shoppingList: ShoppingList;
 };
 
 export const initialState: StateType = {
-  shoppingList: undefined,
+  shoppingList: { productsItems: [], selectedItemIds: [] },
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -45,7 +48,25 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
     case REDUCER_ACTION_TYPE.CLEAR_SHOPPING_LIST: {
       return {
         ...state,
-        shoppingList: undefined,
+        shoppingList: { productsItems: [], selectedItemIds: [] },
+      };
+    }
+    case REDUCER_ACTION_TYPE.SET_SELECTED_ITEMS: {
+      return {
+        ...state,
+        shoppingList: {
+          ...state.shoppingList,
+          selectedItemIds: action.payload,
+        },
+      };
+    }
+    case REDUCER_ACTION_TYPE.SET_PRODUCT_ITEMS: {
+      return {
+        ...state,
+        shoppingList: {
+          ...state.shoppingList,
+          productsItems: action.payload,
+        },
       };
     }
     default: {
@@ -56,7 +77,6 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 
 const useShoppingListContext = (initialState: StateType) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   const setShoppingList = useCallback((shoppingList: ShoppingList) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.SET_SHOPPING_LIST,
@@ -70,10 +90,26 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const setSelectedItemIds = useCallback((selectedItemIds: string[]) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_SELECTED_ITEMS,
+      payload: selectedItemIds,
+    });
+  }, []);
+
+  const setProductsItems = useCallback((selectedItemIds: ProductItem[]) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_PRODUCT_ITEMS,
+      payload: selectedItemIds,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
     clearShoppingList,
+    setSelectedItemIds,
+    setProductsItems,
   };
 };
 
@@ -83,6 +119,8 @@ const initialContextState: UseShoppingListContextType = {
   state: initialState,
   setShoppingList: (shoppingList: ShoppingList) => {},
   clearShoppingList: () => {},
+  setSelectedItemIds: (selectedItemIds: string[]) => {},
+  setProductsItems: (selectedProducts: ProductItem[]) => {},
 };
 
 export const ShoppingListContext =
@@ -104,9 +142,11 @@ export const ShoppingListProvider = ({
 };
 
 type UseShoppingListHookType = {
-  shoppingList?: ShoppingList;
+  shoppingList: ShoppingList;
   setShoppingList: (shoppingList: ShoppingList) => void;
   clearShoppingList: () => void;
+  setSelectedItemIds: (selectedItemIds: string[]) => void;
+  setProductsItems: (selectedProducts: ProductItem[]) => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
@@ -114,10 +154,14 @@ export const useShoppingList = (): UseShoppingListHookType => {
     state: { shoppingList },
     setShoppingList,
     clearShoppingList,
+    setSelectedItemIds,
+    setProductsItems,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
     setShoppingList,
     clearShoppingList,
+    setSelectedItemIds,
+    setProductsItems,
   };
 };
