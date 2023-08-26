@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
 import * as ProductsApi from "../network/products_api";
-import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
@@ -13,7 +12,10 @@ import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
-  const { shoppingList, setProductsItems } = useShoppingList();
+  const {
+    shoppingList: { productsItems },
+    setProductsItems,
+  } = useShoppingList();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
 
   const queryParameters = new URLSearchParams(location.search);
   const storeId = queryParameters.get("store");
+
   async function loadProducts(initial?: boolean) {
     try {
       if (!storeId) throw Error("Loja não encontrada");
@@ -43,33 +46,22 @@ const ProductListPage = ({}: ProductListPageProps) => {
       setProductsLoading(false);
     }
   }
-  useEffect(() => {
-    const getPreviousShoppingList = async () => {
-      try {
-        if (!storeId) throw Error("Loja não encontrada");
-        const shoppingList = await ShoppingListApi.getShoppingList(storeId);
 
-        if (shoppingList?.products) {
-          setProductsSelected(shoppingList.products);
-          setCartOpen(true);
-        }
-      } catch (error) {}
-    };
-    getPreviousShoppingList();
+  useEffect(() => {
     loadProducts(true);
+    if (!cartOpen) toggleCart();
   }, []);
 
   const addProductToShoppingCart = (product: ProductModel) => {
-    const existingProduct = productsSelected.find(
+    const existingProduct = productsItems.find(
       (item) => item.product._id === product._id
     );
     if (!existingProduct) {
-      setProductsItems([...productsSelected, { product, quantity: 1 }]);
-      setProductsSelected([...productsSelected, { product, quantity: 1 }]);
+      setProductsItems([...productsItems, { product, quantity: 1 }]);
       setCartOpen(true);
     } else {
       setProductsItems(
-        productsSelected.filter((item) => item.product._id !== product._id)
+        productsItems.filter((item) => item.product._id !== product._id)
       );
 
       removeProductFromShoppingCart(product._id);
@@ -129,8 +121,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
       <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       <ShoppingList
         storeId={storeId}
-        productsItems={shoppingList.productsItems}
-        setProductsItems={setProductsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}
         toggleCart={toggleCart}

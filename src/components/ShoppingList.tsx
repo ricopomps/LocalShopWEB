@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
 import * as ShoppingListApi from "../network/shoppingListApi";
@@ -8,8 +8,6 @@ import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 
 interface ShoppingListProps {
   storeId: string | null;
-  productsItems: ProductItem[];
-  setProductsItems: (productItem: ProductItem[]) => void;
   onDelete: (id: string) => void;
   cartOpen: boolean;
   toggleCart: () => void;
@@ -27,17 +25,33 @@ interface ShoppingListItemProps {
 
 const ShoppingList = ({
   storeId,
-  productsItems,
-  //   setProductsItems,
   onDelete,
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
   const {
-    shoppingList: { selectedItemIds },
+    shoppingList: { productsItems, selectedItemIds, storeId: storeIdContext },
     setSelectedItemIds,
     setProductsItems,
+    setStoreId,
   } = useShoppingList();
+
+  useEffect(() => {
+    const getPreviousShoppingList = async () => {
+      try {
+        if (!storeId) throw Error("Loja não encontrada");
+        const shoppingList = await ShoppingListApi.getShoppingList(storeId);
+
+        if (shoppingList?.products) {
+          setProductsItems(shoppingList.products);
+          toggleCart();
+        }
+      } catch (error) {}
+    };
+    if (storeId) setStoreId(storeId);
+    if (productsItems.length === 0 || storeId !== storeIdContext)
+      getPreviousShoppingList();
+  }, []);
 
   const handleItemSelect = (itemId: string) => {
     const prevSelectedItems = selectedItemIds;

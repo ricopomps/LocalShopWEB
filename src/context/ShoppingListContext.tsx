@@ -8,6 +8,7 @@ import {
 import { Product } from "../models/product";
 
 export interface ShoppingList {
+  storeId?: string;
   productsItems: ProductItem[];
   selectedItemIds: string[];
 }
@@ -22,6 +23,7 @@ export enum REDUCER_ACTION_TYPE {
   CLEAR_SHOPPING_LIST,
   SET_SELECTED_ITEMS,
   SET_PRODUCT_ITEMS,
+  SET_STORE_ID,
 }
 
 export type ReducerAction = {
@@ -69,6 +71,15 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         },
       };
     }
+    case REDUCER_ACTION_TYPE.SET_STORE_ID: {
+      return {
+        ...state,
+        shoppingList: {
+          ...state.shoppingList,
+          storeId: action.payload,
+        },
+      };
+    }
     default: {
       return state;
     }
@@ -104,12 +115,20 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const setStoreId = useCallback((storeId: string) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_STORE_ID,
+      payload: storeId,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
     clearShoppingList,
     setSelectedItemIds,
     setProductsItems,
+    setStoreId,
   };
 };
 
@@ -121,6 +140,7 @@ const initialContextState: UseShoppingListContextType = {
   clearShoppingList: () => {},
   setSelectedItemIds: (selectedItemIds: string[]) => {},
   setProductsItems: (selectedProducts: ProductItem[]) => {},
+  setStoreId: (storeId: string) => {},
 };
 
 export const ShoppingListContext =
@@ -147,6 +167,7 @@ type UseShoppingListHookType = {
   clearShoppingList: () => void;
   setSelectedItemIds: (selectedItemIds: string[]) => void;
   setProductsItems: (selectedProducts: ProductItem[]) => void;
+  setStoreId: (storeId: string) => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
@@ -156,6 +177,7 @@ export const useShoppingList = (): UseShoppingListHookType => {
     clearShoppingList,
     setSelectedItemIds,
     setProductsItems,
+    setStoreId,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
@@ -163,5 +185,6 @@ export const useShoppingList = (): UseShoppingListHookType => {
     clearShoppingList,
     setSelectedItemIds,
     setProductsItems,
+    setStoreId,
   };
 };

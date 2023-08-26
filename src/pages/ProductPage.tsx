@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Product as ProductModel } from "../models/product";
 import Product from "../components/Product";
 import { Button } from "react-bootstrap";
+import ShoppingList from "../components/ShoppingList";
 
 const ProductPage = () => {
   const location = useLocation();
@@ -36,12 +37,26 @@ const ProductPage = () => {
       );
   };
 
+  const goBackToStore = () => {
+    navigate("/store/product?store=" + store);
+  };
+
   if (!selectedProduct) return <></>;
 
   return (
     <>
       <Button onClick={goToStoreMap}>Ver localização</Button>
+      <Button onClick={goBackToStore}>Voltar para loja</Button>
       <Product product={selectedProduct} onProductClicked={() => {}} />
+      <Button onClick={() => {}}>-</Button>
+      <Button onClick={() => {}}>+</Button>
+
+      <ShoppingList
+        cartOpen={true}
+        storeId={store}
+        toggleCart={() => {}}
+        onDelete={() => {}}
+      />
     </>
   );
 };
