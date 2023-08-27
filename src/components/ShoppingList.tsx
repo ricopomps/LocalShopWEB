@@ -5,6 +5,7 @@ import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
 import cart from "../assets/cart.svg";
+import favstore from "../assets/favstore.svg";
 
 interface ShoppingListProps {
   storeId: string | null;
@@ -183,6 +184,7 @@ const ShoppingList = ({
         alt="cart"
         className={styles.toggleButton}
       />
+
       <Container
         className={`${styles.cartSidebar} ${cartOpen ? styles.open : ""}`}
       >

@@ -31,7 +31,6 @@ import ProductPage from "./pages/ProductPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -46,6 +45,28 @@ function App() {
     }
     fetchLoggedInUser();
   }, []);
+
+  const refreshFavStore = (storeId: string) => {
+    if (loggedInUser) {
+      if (loggedInUser.favoriteStores) {
+        if (loggedInUser.favoriteStores.includes(storeId)) {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteStores: loggedInUser.favoriteStores.filter(
+              (id) => id !== storeId
+            ),
+          });
+        } else {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteStores: [...loggedInUser.favoriteStores, storeId],
+          });
+        }
+      } else {
+        setLoggedInUser({ ...loggedInUser, favoriteStores: [storeId] });
+      }
+    }
+  };
   return (
     <>
       <ToastContainer />
@@ -93,7 +114,17 @@ function App() {
                   />
                 }
               />
-              <Route path="/store/product" element={<ProductListPage />} />
+              {loggedInUser && (
+                <Route
+                  path="/store/product"
+                  element={
+                    <ProductListPage
+                      loggedUser={loggedInUser}
+                      refreshFavStore={refreshFavStore}
+                    />
+                  }
+                />
+              )}
               {loggedInUser?.store && (
                 <Route
                   path="/map"
