@@ -106,14 +106,10 @@
   gap: 0.5em;
   cursor: pointer;
   margin-bottom: 15px;
-  z-index: 1026;
   margin-left: 15px;
 }
 
 .bntFilterGlass {
-  font-family: "Gotham", sans-serif;
-  font-size: 24px;
-  font-weight: 700;
   background-color: #5c5c5c;
   padding: 0.5em 1em;
   border: none;
@@ -125,7 +121,6 @@
   justify-content: center;
   gap: 0.5em;
   cursor: pointer;
-  color: black;
   margin-bottom: 15px;
   margin-left: 15px;
   min-width: 2.4em;
