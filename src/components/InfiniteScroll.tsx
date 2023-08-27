@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface InfiniteScrollProps {
   onLoadMore: () => void;
@@ -9,21 +9,33 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   onLoadMore,
   isLoading,
 }) => {
+  const lastScrollY = useRef(window.scrollY);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        isLoading
-      ) {
-        return;
+      if (!isLoading) {
+        const currentScrollY = window.scrollY;
+        const scrollDirection = currentScrollY > lastScrollY.current ? "down" : "up";
+        
+        if (
+          (scrollDirection === "down" && 
+            window.innerHeight + currentScrollY >=
+            document.documentElement.scrollHeight - 100) ||
+          (scrollDirection === "up" && currentScrollY === 0)
+        ) {
+          onLoadMore();
+        }
+
+        lastScrollY.current = currentScrollY;
       }
-      onLoadMore();
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [isLoading, onLoadMore]);
+
   return null;
 };
 
