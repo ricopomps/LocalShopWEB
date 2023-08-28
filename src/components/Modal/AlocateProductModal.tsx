@@ -90,18 +90,11 @@ const AlocateProductModal = ({
         </Form>
         <Modal.Footer className={styles.footer}>
           <Button
-            className={styles.btnModal}
+            className={`${styles.btnModal} ${styles.danger}`}
             onClick={onDismiss}
             variant={dismissButtonVariant}
           >
             {dismissText}
-          </Button>
-          <Button
-            className={styles.btnModal}
-            onClick={onAccepted}
-            variant={acceptButtonVariant}
-          >
-            {acceptText}
           </Button>
         </Modal.Footer>
       </Modal>

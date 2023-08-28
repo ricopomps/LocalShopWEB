@@ -15,6 +15,10 @@
   justify-content: center;
 }
 
+.danger {
+  background-color: #f44336;
+}
+
 .form {
   display: grid;
   position: relative;
