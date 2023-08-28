@@ -29,6 +29,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
   const [page, setPage] = useState(0);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const queryParameters = new URLSearchParams(location.search);
   const storeId = queryParameters.get("store");
@@ -49,15 +50,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
       setProductsLoading(false);
     }
   }
-  
-  const [cartOpen, setCartOpen] = useState(false);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
-  useEffect(() => {
-    const getPreviousShoppingList = async () => {
-      try {
-        if (!storeId) throw Error("Loja não encontrada");
-        const shoppingList = await ShoppingListApi.getShoppingList(storeId);
 
   useEffect(() => {
     loadProducts(true);
@@ -103,10 +95,10 @@ const ProductListPage = ({}: ProductListPageProps) => {
 
   const [categories, setCategories] = useState<string[]>([""]);
 
-  async function loadCategories() {
+  const loadCategories = async () => {
     const a: string[] = (await ProductsApi.getCategories()).categories;
     setCategories(a);
-  }
+  };
 
   useEffect(() => {
     loadCategories();
@@ -118,8 +110,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
     formState: { isSubmitting },
   } = useForm<ListProducts>({});
 
-  async function onSubmit(input: ListProducts) {
-    console.log("oi");
+  const onSubmit = async (input: ListProducts) => {
     try {
       let listResponse;
       if (!storeId) throw Error("Loja não encontrada");
@@ -128,7 +119,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
-  }
+  };
 
   return (
     <>
