@@ -32,12 +32,13 @@ import {
   ShoppingListProvider,
   initialState,
 } from "./context/ShoppingListContext";
+import NotificationBar from "./components/NotificationBar";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-
+  const [openNotification, setOpenNotification] = useState(false);
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
@@ -86,8 +87,13 @@ function App() {
                   setLoggedInUser(null);
                   return redirect("");
                 }}
+                toggleNotifications={() =>
+                  setOpenNotification(!openNotification)
+                }
               />
             )}
+            {loggedInUser && <NotificationBar open={openNotification} />}
+
             <Container className={styles.pageContainer}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
