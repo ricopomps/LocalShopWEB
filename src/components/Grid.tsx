@@ -162,9 +162,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
             <div
               key={`support-cell-${index}`}
               className={styles.supportCellContainer}
-              onClick={() => setSelectedStyle(item.text)}
+              onClick={() => {
+                setSelectedStyle(item.text);
+                setAlocateProduct(false);
+              }}
             >
-              <div className={`${styles.gridCell} ${item.style}`}>
+              <div
+                className={`${styles.gridCell} ${item.style} ${
+                  selectedStyle === item.text && styles.selected
+                }`}
+              >
                 <div className={styles.supportSquare}></div>
               </div>
               <span className={styles.supportText}>{item.text}</span>
@@ -173,9 +180,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
           {edit && (
             <div
               className={styles.supportCellContainer}
-              onClick={() => setAlocateProduct(!alocateProduct)}
+              onClick={() => {
+                setAlocateProduct(!alocateProduct);
+                setSelectedStyle("");
+              }}
             >
-              <div className={`${styles.gridCell}`}>
+              <div
+                className={`${styles.gridCell} ${
+                  alocateProduct && styles.selected
+                }`}
+              >
                 <div className={styles.supportSquare}></div>
               </div>
               <span className={styles.supportText}>Alocar produtos</span>

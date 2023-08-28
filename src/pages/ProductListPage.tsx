@@ -180,8 +180,6 @@ const ProductListPage = ({
           />
         )}
       </div>
-      <Button onClick={goToStoreMap}>Ir para o mapa</Button>
-
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.filterAlign}>
           <TextInputField
