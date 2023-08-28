@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Col, Spinner, Form, Button } from "react-bootstrap";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
-import * as ProductsApi from "../network/products_api";
 import styles from "../styles/StoresPage.module.css";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
@@ -61,7 +60,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const [categories, setCategories] = useState<string[]>([""]);
 
   async function loadCategories() {
-    const a: string[] = (await ProductsApi.getCategories()).categories;
+    const a: string[] = (await StoresApi.getCategories()).categories;
     setCategories(a);
   }
 
@@ -78,7 +77,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const onSubmit = async (input: ListStores) => {
     try {
       let listResponse;
-      listResponse = await StoresApi.fetchStores();
+      listResponse = await StoresApi.listStores(input);;
       setStores(listResponse);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
@@ -89,7 +88,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
     <>
       <Form onSubmit={handleSubmit(onSubmit)} className={styles.filterAlign}>
         <TextInputField
-          name="productName"
+          name="name"
           label=""
           type="text"
           placeholder="Pesquisar Produto"

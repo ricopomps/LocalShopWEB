@@ -35,8 +35,22 @@ export async function updateStore(
 }
 
 export interface ListStores {
-  storeName?: string;
+  name?: string;
   category?: string;
+}
+
+export async function listStores(
+  filterStores: ListStores
+): Promise<Store[]> {
+  const response = await getApi().get(`${baseUrl}/list`, {
+    params: filterStores,
+  });
+  return response.data;
+}
+
+export async function getCategories() {
+  const response = await getApi().get(`${baseUrl}/categories`);
+  return response.data;
 }
 
 export async function deleteStore(storeId: string) {
