@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner, Form } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
+import { IoStorefrontOutline, IoStorefrontSharp } from "react-icons/io5";
 import * as ProductsApi from "../network/products_api";
+import * as ShoppingListApi from "../network/shoppingListApi";
+import * as UsersApi from "../network/notes_api";
+import * as StoreApi from "../network/storeApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
 import ShoppingList from "../components/ShoppingList";
 import Product from "../components/Product";
+import { Store } from "../models/store";
+import { User } from "../models/user";
+import { set } from "react-hook-form";
+import { toast } from "react-toastify";
 import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import TextInputField from "../components/form/TextInputField";
 import { useForm } from "react-hook-form";
@@ -15,15 +23,21 @@ import { ListProducts } from "../network/products_api";
 import magnifying_glass from "../assets/magnifying_glass.svg";
 import filter from "../assets/filter.svg";
 
-interface ProductListPageProps {}
+interface ProductListPageProps {
+  loggedUser: User;
+  refreshFavStore: (storeId: string) => void;
+}
 
-const ProductListPage = ({}: ProductListPageProps) => {
+const ProductListPage = ({
+  loggedUser,
+  refreshFavStore,
+}: ProductListPageProps) => {
   const { addProduct } = useShoppingList();
-
   const location = useLocation();
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [storeName, setStoreName] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
   const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
   const [showProductsLoadingError, setshowProductsLoadingError] =
@@ -53,6 +67,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
 
   useEffect(() => {
     loadProducts(true);
+    getStoreName();
     if (!cartOpen) toggleCart();
   }, []);
 
@@ -78,6 +93,28 @@ const ProductListPage = ({}: ProductListPageProps) => {
     navigate(`/product?store=${storeId}&product=${productId}`);
   };
 
+  const addStoreFavorite = async () => {
+    try {
+      if (!storeId) throw Error("Loja não encontrada");
+      await UsersApi.favoriteStore(storeId);
+      refreshFavStore(storeId);
+      toast.success("Loja favoritada com sucesso!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const removeStoreFavorite = async () => {
+    try {
+      if (!storeId) throw Error("Loja não encontrada");
+      // await UsersApi.favoriteStore(storeId); removeFavoriteStore
+      refreshFavStore(storeId);
+      toast.success("Loja removida com sucesso dos favoritos!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
   const productsGrid = (
     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.productsGrid}`}>
       {products.map((product) => (
@@ -93,6 +130,31 @@ const ProductListPage = ({}: ProductListPageProps) => {
     </Row>
   );
 
+  const getStoreName = async () => {
+    if (storeId) {
+      const store = await StoreApi.getStore(storeId);
+      setStoreName(store.name);
+    }
+  };
+  return (
+    <>
+      <div className={styles.header}>
+        <h1 className={styles.storeTitle}>{storeName}</h1>
+        <Button className={styles.btnMapa} onClick={goToStoreMap}>
+          Ir para o mapa
+        </Button>
+        {storeId && loggedUser.favoriteStores?.includes(storeId) ? (
+          <IoStorefrontSharp
+            className={styles.favIcon}
+            onClick={removeStoreFavorite}
+          />
+        ) : (
+          <IoStorefrontOutline
+            className={styles.favIcon}
+            onClick={addStoreFavorite}
+          />
+        )}
+      </div>
   const [categories, setCategories] = useState<string[]>([""]);
 
   const loadCategories = async () => {
@@ -187,7 +249,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
           )}
         </div>
       </Form>
-
       {!showProductsLoadingError && (
         <>
           {products.length > 0 ? (

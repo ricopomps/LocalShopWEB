@@ -177,6 +177,7 @@ const ShoppingList = ({
         alt="cart"
         className={styles.toggleButton}
       />
+
       <Container
         className={`${styles.cartSidebar} ${cartOpen ? styles.open : ""}`}
       >

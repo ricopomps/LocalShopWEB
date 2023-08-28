@@ -48,6 +48,20 @@ export async function updateUser(user: ProfileForm) {
   return response.data;
 }
 
+export async function favoriteStore(storeId: string) {
+  const response = await getApi().post("/api/users/favoriteStores", {
+    storeId,
+  });
+  return response.data;
+}
+
+// export async function unfavoriteStore(storeId: string) {                         SUBSTITUIR POR FUNÇÃO DE MATHEUS
+//   const response = await getApi().delete("/api/users/favoriteStores", {          NO BACKEND
+//     storeId,
+//   });
+//   return response.data;
+// }
+
 //NOTES ROUTES
 export async function fetchNotes(): Promise<Note[]> {
   const response = await getApi().get("/api/notes", { withCredentials: true });
