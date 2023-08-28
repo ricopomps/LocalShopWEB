@@ -4,18 +4,22 @@ import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/navbar.module.css";
+import NotificationBar from "../NotificationBar";
+import { useState } from "react";
 
 interface NavBarProps {
   loggedInUser: User | null;
   onSignUpClicked: () => void;
   onLoginClicked: () => void;
   onLogoutSuccessful: () => void;
+  toggleNotifications: () => void;
 }
 const NavBar = ({
   loggedInUser,
   onLoginClicked,
   onLogoutSuccessful,
   onSignUpClicked,
+  toggleNotifications,
 }: NavBarProps) => {
   let navigate = useNavigate();
   return (
@@ -43,7 +47,14 @@ const NavBar = ({
               Perfil
             </Nav.Link>
           </Nav>
-
+          <Nav>
+            <Nav.Link
+              className={styles.textNavbar}
+              onClick={toggleNotifications}
+            >
+              Notificações
+            </Nav.Link>
+          </Nav>
           {loggedInUser?.store && (
             <>
               <Nav>

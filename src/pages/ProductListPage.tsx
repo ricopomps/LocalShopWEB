@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { ListProducts } from "../network/products_api";
 import magnifying_glass from "../assets/magnifying_glass.svg";
 import filter from "../assets/filter.svg";
+import NotificationBar from "../components/NotificationBar";
 
 interface ProductListPageProps {
   loggedUser: User;
@@ -263,6 +264,7 @@ const ProductListPage = ({
         cartOpen={cartOpen}
         toggleCart={toggleCart}
       />
+      <NotificationBar open={!cartOpen} />
     </>
   );
 };
