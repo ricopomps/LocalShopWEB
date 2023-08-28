@@ -13,11 +13,16 @@ export interface StoreInput {
   name: string;
   description?: string;
   image?: string;
-  cnpj: string
+  cnpj: string;
 }
 
 export async function createStore(store: StoreInput): Promise<Store> {
   const response = await getApi().post(baseUrl, store);
+  return response.data;
+}
+
+export async function getStore(storeId: string): Promise<Store> {
+  const response = await getApi().get(`${baseUrl}/${storeId}`);
   return response.data;
 }
 

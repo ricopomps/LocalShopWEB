@@ -28,7 +28,7 @@ const NavBar = ({
     >
       <Container className={styles.navbar}>
         {loggedInUser?.userType === UserType.shopper ? (
-          <Navbar.Brand as={Link} to="/shopper">
+          <Navbar.Brand className={styles.textNavbar} as={Link} to="/shopper">
             Lojas
           </Navbar.Brand>
         ) : (

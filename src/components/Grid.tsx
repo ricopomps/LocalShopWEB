@@ -5,6 +5,7 @@ import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
 import AlocateProductModal from "./Modal/AlocateProductModal";
 import { useLocation } from "react-router-dom";
+
 interface GridProps {
   rows: number;
   cols: number;
@@ -34,9 +35,13 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
 
   useEffect(() => {
     const fetchMap = async () => {
-      const baseData = await MapApi.getMap(storeId);
+      try {
+        const baseData = await MapApi.getMap(storeId);
 
-      if (baseData) setSelectedCells(baseData.items);
+        if (baseData) setSelectedCells(baseData.items);
+      } catch (error: any) {
+        toast.error(error?.response?.data?.error ?? error?.message);
+      }
     };
 
     fetchMap();
@@ -141,8 +146,15 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       <Col>
         {edit && (
           <>
-            <Button onClick={() => setSelectedCells([])}>Limpar</Button>
-            <Button onClick={saveMap}>Salvar</Button>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => setSelectedCells([])}
+            >
+              Limpar
+            </Button>
+            <Button className={styles.buttonMap} onClick={saveMap}>
+              Salvar
+            </Button>
           </>
         )}
         <div className={styles.supportColumn} style={supportColumnStyle}>
@@ -150,9 +162,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
             <div
               key={`support-cell-${index}`}
               className={styles.supportCellContainer}
-              onClick={() => setSelectedStyle(item.text)}
+              onClick={() => {
+                setSelectedStyle(item.text);
+                setAlocateProduct(false);
+              }}
             >
-              <div className={`${styles.gridCell} ${item.style}`}>
+              <div
+                className={`${styles.gridCell} ${item.style} ${
+                  selectedStyle === item.text && styles.selected
+                }`}
+              >
                 <div className={styles.supportSquare}></div>
               </div>
               <span className={styles.supportText}>{item.text}</span>
@@ -161,9 +180,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
           {edit && (
             <div
               className={styles.supportCellContainer}
-              onClick={() => setAlocateProduct(!alocateProduct)}
+              onClick={() => {
+                setAlocateProduct(!alocateProduct);
+                setSelectedStyle("");
+              }}
             >
-              <div className={`${styles.gridCell}`}>
+              <div
+                className={`${styles.gridCell} ${
+                  alocateProduct && styles.selected
+                }`}
+              >
                 <div className={styles.supportSquare}></div>
               </div>
               <span className={styles.supportText}>Alocar produtos</span>
