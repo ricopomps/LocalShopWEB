@@ -75,7 +75,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
     formState: { isSubmitting },
   } = useForm<ListStores>({});
 
-  async function onSubmit(input: ListStores) {
+  const onSubmit = async (input: ListStores) => {
     try {
       let listResponse;
       listResponse = await StoresApi.fetchStores();
@@ -83,7 +83,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
-  }
+  };
 
   return (
     <>
