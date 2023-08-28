@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { Row } from "react-bootstrap";
 import styles from "../styles/HorizontalScroll.module.css";
-import {AiOutlineArrowRight} from "react-icons/ai";
-import {AiOutlineArrowLeft} from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 interface HorizontalScrollProps {
   children: React.ReactNode;
   className?: string;
@@ -28,7 +28,7 @@ const HorizontalScroll: React.FC<HorizontalScrollProps> = ({
       container.scrollLeft += scrollAmount;
     }
   };
-  
+
   return (
     <div className={`${styles.container} ${className}`}>
       <Row
@@ -43,11 +43,11 @@ const HorizontalScroll: React.FC<HorizontalScrollProps> = ({
       </Row>
       <div className={styles.scrollIndicators}>
         <AiOutlineArrowLeft
-         onClick={() => scroll("left")}
+          onClick={() => scroll("left")}
           className={styles.scrollIndicatorLeft}
         />
         <AiOutlineArrowRight
-         onClick={() => scroll("right")}
+          onClick={() => scroll("right")}
           className={styles.scrollIndicatorRight}
         />
       </div>

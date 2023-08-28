@@ -77,7 +77,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const onSubmit = async (input: ListStores) => {
     try {
       let listResponse;
-      listResponse = await StoresApi.listStores(input);;
+      listResponse = await StoresApi.listStores(input);
       setStores(listResponse);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
@@ -91,7 +91,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
           name="name"
           label=""
           type="text"
-          placeholder="Pesquisar Produto"
+          placeholder="Pesquisar Loja"
           register={register}
           className={styles.inputFilter}
         ></TextInputField>
