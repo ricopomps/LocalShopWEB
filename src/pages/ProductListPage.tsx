@@ -3,7 +3,6 @@ import { Button, Col, Row, Spinner, Form } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
 import { IoStorefrontOutline, IoStorefrontSharp } from "react-icons/io5";
 import * as ProductsApi from "../network/products_api";
-import * as ShoppingListApi from "../network/shoppingListApi";
 import * as UsersApi from "../network/notes_api";
 import * as StoreApi from "../network/storeApi";
 import styles from "../styles/ProductsPage.module.css";
@@ -11,14 +10,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
 import ShoppingList from "../components/ShoppingList";
 import Product from "../components/Product";
-import { Store } from "../models/store";
 import { User } from "../models/user";
-import { set } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import TextInputField from "../components/form/TextInputField";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { ListProducts } from "../network/products_api";
 import magnifying_glass from "../assets/magnifying_glass.svg";
 import filter from "../assets/filter.svg";
@@ -107,7 +103,7 @@ const ProductListPage = ({
   const removeStoreFavorite = async () => {
     try {
       if (!storeId) throw Error("Loja não encontrada");
-      // await UsersApi.favoriteStore(storeId); removeFavoriteStore
+      await UsersApi.unfavoriteStore(storeId);
       refreshFavStore(storeId);
       toast.success("Loja removida com sucesso dos favoritos!");
     } catch (error: any) {
@@ -136,25 +132,7 @@ const ProductListPage = ({
       setStoreName(store.name);
     }
   };
-  return (
-    <>
-      <div className={styles.header}>
-        <h1 className={styles.storeTitle}>{storeName}</h1>
-        <Button className={styles.btnMapa} onClick={goToStoreMap}>
-          Ir para o mapa
-        </Button>
-        {storeId && loggedUser.favoriteStores?.includes(storeId) ? (
-          <IoStorefrontSharp
-            className={styles.favIcon}
-            onClick={removeStoreFavorite}
-          />
-        ) : (
-          <IoStorefrontOutline
-            className={styles.favIcon}
-            onClick={addStoreFavorite}
-          />
-        )}
-      </div>
+
   const [categories, setCategories] = useState<string[]>([""]);
 
   const loadCategories = async () => {
@@ -185,6 +163,23 @@ const ProductListPage = ({
 
   return (
     <>
+      <div className={styles.header}>
+        <h1 className={styles.storeTitle}>{storeName}</h1>
+        <Button className={styles.btnMapa} onClick={goToStoreMap}>
+          Ir para o mapa
+        </Button>
+        {storeId && loggedUser.favoriteStores?.includes(storeId) ? (
+          <IoStorefrontSharp
+            className={styles.favIcon}
+            onClick={removeStoreFavorite}
+          />
+        ) : (
+          <IoStorefrontOutline
+            className={styles.favIcon}
+            onClick={addStoreFavorite}
+          />
+        )}
+      </div>
       <Button onClick={goToStoreMap}>Ir para o mapa</Button>
 
       <Form onSubmit={handleSubmit(onSubmit)}>

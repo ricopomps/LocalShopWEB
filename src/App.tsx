@@ -98,20 +98,25 @@ function App() {
                       <ProductsPageLoggedInView store={loggedInUser.store} />
                     }
                   />
-                }
-              />
-              {loggedInUser && (
-                <Route
-                  path="/store/product"
-                  element={
-                    <ProductListPage
-                      loggedUser={loggedInUser}
-                      refreshFavStore={refreshFavStore}
-                    />
-                  }
-                />
-              )}
-              {loggedInUser?.store && (
+                )}
+                {loggedInUser && (
+                  <Route
+                    path="/store/product"
+                    element={
+                      <ProductListPage
+                        loggedUser={loggedInUser}
+                        refreshFavStore={refreshFavStore}
+                      />
+                    }
+                  />
+                )}
+                {loggedInUser?.store && (
+                  <Route
+                    path="/products"
+                    element={
+                      <ProductsPageLoggedInView store={loggedInUser.store} />
+                    }
+                  />
                 )}
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/home" element={<HomePage />} />
@@ -133,7 +138,6 @@ function App() {
                     />
                   }
                 />
-                <Route path="/store/product" element={<ProductListPage />} />
                 {loggedInUser?.store && (
                   <Route
                     path="/map"
