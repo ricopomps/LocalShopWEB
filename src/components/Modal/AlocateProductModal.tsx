@@ -6,6 +6,7 @@ import * as ProductApi from "../../network/products_api";
 import { toast } from "react-toastify";
 import { CellCoordinates } from "../Grid";
 import { ProductInput } from "../../network/products_api";
+import styles from "../../styles/AlocateProductModal.module.css";
 
 interface AlocateProductModalProps {
   dismissText: string;
@@ -62,34 +63,49 @@ const AlocateProductModal = ({
     }
   };
   return (
-    <Modal show onHide={onDismiss}>
-      <Modal.Header closeButton>
-        <Modal.Title>Alocar produtos</Modal.Title>
-      </Modal.Header>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <TextInputField
-          name="_id"
-          label="Produtos"
-          type="text"
-          as="select"
-          options={productsList}
-          placeholder="Produto"
-          register={register}
-          registerOptions={{ required: "Campo Obrigatório" }}
-        />
-        <Button type="submit" disabled={isSubmitting}>
-          Alocar
-        </Button>
-      </Form>
-      <Modal.Footer>
-        <Button onClick={onDismiss} variant={dismissButtonVariant}>
-          {dismissText}
-        </Button>
-        <Button onClick={onAccepted} variant={acceptButtonVariant}>
-          {acceptText}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <div className={styles.modalMain}>
+      <Modal className={styles.modalMain} show onHide={onDismiss}>
+        <Modal.Header closeButton>
+          <Modal.Title>Alocar produtos</Modal.Title>
+        </Modal.Header>
+        <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <TextInputField
+            className={styles.input}
+            name="_id"
+            label="Produtos disponíveis"
+            type="text"
+            as="select"
+            options={productsList}
+            placeholder="Produto"
+            register={register}
+            registerOptions={{ required: "Campo Obrigatório" }}
+          />
+          <Button
+            className={styles.btnModal}
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Alocar
+          </Button>
+        </Form>
+        <Modal.Footer className={styles.footer}>
+          <Button
+            className={styles.btnModal}
+            onClick={onDismiss}
+            variant={dismissButtonVariant}
+          >
+            {dismissText}
+          </Button>
+          <Button
+            className={styles.btnModal}
+            onClick={onAccepted}
+            variant={acceptButtonVariant}
+          >
+            {acceptText}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 

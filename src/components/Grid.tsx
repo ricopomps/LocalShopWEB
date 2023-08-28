@@ -5,6 +5,7 @@ import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
 import AlocateProductModal from "./Modal/AlocateProductModal";
 import { useLocation } from "react-router-dom";
+
 interface GridProps {
   rows: number;
   cols: number;
@@ -145,8 +146,15 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       <Col>
         {edit && (
           <>
-            <Button onClick={() => setSelectedCells([])}>Limpar</Button>
-            <Button onClick={saveMap}>Salvar</Button>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => setSelectedCells([])}
+            >
+              Limpar
+            </Button>
+            <Button className={styles.buttonMap} onClick={saveMap}>
+              Salvar
+            </Button>
           </>
         )}
         <div className={styles.supportColumn} style={supportColumnStyle}>
