@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import styles from "../styles/ShoppingList.module.css";
-import { Product } from "../models/product";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import { toast } from "react-toastify";
 import cart from "../assets/cart.svg";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
+import { useNavigate } from "react-router-dom";
+import { Product } from "../models/product";
 
 interface ShoppingListProps {
   storeId: string | null;
-  productsItems: ProductItem[];
-  setProductsItems: (productItem: ProductItem[]) => void;
   onDelete: (id: string) => void;
   cartOpen: boolean;
   toggleCart: () => void;
-}
-
-export interface ProductItem {
-  product: Product;
-  quantity: number;
 }
 
 interface ShoppingListItemProps {
@@ -32,61 +27,52 @@ interface ShoppingListItemProps {
 
 const ShoppingList = ({
   storeId,
-  productsItems,
-  setProductsItems,
   onDelete,
   cartOpen,
   toggleCart,
 }: ShoppingListProps) => {
-  const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+  const {
+    shoppingList: { productsItems, selectedItemIds, storeId: storeIdContext },
+    setSelectedItemIds,
+    clearShoppingList,
+    setProductsItems,
+    setStoreId,
+    handleItemCountIncrease,
+    handleItemCountDecrease,
+  } = useShoppingList();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const getPreviousShoppingList = async () => {
+      try {
+        if (!storeId) throw Error("Loja não encontrada");
+        const shoppingList = await ShoppingListApi.getShoppingList(storeId);
+
+        if (shoppingList?.products) {
+          setProductsItems(shoppingList.products);
+        } else if (storeIdContext && storeId !== storeIdContext) {
+          clearShoppingList();
+        }
+        toggleCart();
+      } catch (error) {}
+    };
+    if (storeId) setStoreId(storeId);
+    if (productsItems.length === 0 || storeId !== storeIdContext)
+      getPreviousShoppingList();
+  }, []);
 
   const handleItemSelect = (itemId: string) => {
-    setSelectedItemIds((prevSelectedItems) => {
-      if (prevSelectedItems.includes(itemId)) {
-        return prevSelectedItems.filter((id) => id !== itemId);
-      } else {
-        return [...prevSelectedItems, itemId];
-      }
-    });
-  };
-
-  const handleItemCountIncrease = (itemId: string) => {
-    const productItem = productsItems.find(
-      (item) => item.product._id === itemId
-    );
-
-    if (productItem) {
-      productItem.quantity++;
-      const updatedProductsItems = productsItems.map((item) =>
-        item.product._id === itemId ? productItem : item
-      );
-      setProductsItems(updatedProductsItems);
+    const prevSelectedItems = selectedItemIds;
+    let selectedItems;
+    if (prevSelectedItems.includes(itemId)) {
+      selectedItems = prevSelectedItems.filter((id) => id !== itemId);
+    } else {
+      selectedItems = [...prevSelectedItems, itemId];
     }
-  };
-
-  const handleItemCountDecrease = (itemId: string) => {
-    const productItem = productsItems.find(
-      (item) => item.product._id === itemId
-    );
-
-    if (productItem) {
-      productItem.quantity--;
-
-      if (productItem.quantity <= 0) {
-        handleItemDelete(itemId);
-      } else {
-        const updatedProductsItems = productsItems.map((item) =>
-          item.product._id === itemId ? productItem : item
-        );
-        setProductsItems(updatedProductsItems);
-      }
-    }
+    setSelectedItemIds(selectedItems);
   };
 
   const handleItemDelete = (itemId: string) => {
-    setSelectedItemIds((prevSelectedItems) =>
-      prevSelectedItems.filter((id) => id !== itemId)
-    );
+    setSelectedItemIds(selectedItemIds.filter((id) => id !== itemId));
     const updatedProductsItems = productsItems.filter(
       (item) => item.product._id !== itemId
     );
@@ -100,6 +86,12 @@ const ShoppingList = ({
       total += (productItem.product.price || 10) * productItem.quantity;
     }
     return total;
+  };
+
+  const goToStoreMap = (product: Product) => {
+    navigate(
+      `/map?store=${storeId}&x=${product.location?.x}&y=${product.location?.y}`
+    );
   };
 
   const ShoppingItem = ({
@@ -119,11 +111,13 @@ const ShoppingList = ({
       <div className={`${styles.shoppingItem} ${className}`}>
         <Form.Check
           type="checkbox"
-          label=""
           checked={isSelected}
           onChange={handleCheckboxChange}
         />
-        <div className={styles.itemInfo}>
+        <div
+          className={styles.itemInfo}
+          onClick={() => goToStoreMap(productItem.product)}
+        >
           <p className={styles.itemText}>{productItem.product.name}</p>
           <p className={styles.itemPrice}>
             R${productItem.product.price?.toFixed(2)}

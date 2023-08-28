@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner, Form } from "react-bootstrap";
 import { Product as ProductModel } from "../models/product";
 import * as ProductsApi from "../network/products_api";
-import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/ProductsPage.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import InfiniteScroll from "../components/InfiniteScroll";
-import ShoppingList, { ProductItem } from "../components/ShoppingList";
+import ShoppingList from "../components/ShoppingList";
 import Product from "../components/Product";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import TextInputField from "../components/form/TextInputField";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -18,15 +18,21 @@ import filter from "../assets/filter.svg";
 interface ProductListPageProps {}
 
 const ProductListPage = ({}: ProductListPageProps) => {
+  const { addProduct } = useShoppingList();
+
   const location = useLocation();
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
   const [showProductsLoadingError, setshowProductsLoadingError] =
     useState(false);
   const [page, setPage] = useState(0);
+
   const queryParameters = new URLSearchParams(location.search);
   const storeId = queryParameters.get("store");
+
   async function loadProducts(initial?: boolean) {
     try {
       if (!storeId) throw Error("Loja não encontrada");
@@ -43,6 +49,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       setProductsLoading(false);
     }
   }
+  
   const [cartOpen, setCartOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [productsSelected, setProductsSelected] = useState<ProductItem[]>([]);
@@ -52,28 +59,10 @@ const ProductListPage = ({}: ProductListPageProps) => {
         if (!storeId) throw Error("Loja não encontrada");
         const shoppingList = await ShoppingListApi.getShoppingList(storeId);
 
-        if (shoppingList?.products) {
-          setProductsSelected(shoppingList.products);
-          setCartOpen(true);
-        }
-      } catch (error) {}
-    };
-    getPreviousShoppingList();
+  useEffect(() => {
     loadProducts(true);
+    if (!cartOpen) toggleCart();
   }, []);
-
-  const addProductToShoppingCart = (product: ProductModel) => {
-    const existingProduct = productsSelected.find(
-      (item) => item.product._id === product._id
-    );
-
-    if (!existingProduct) {
-      setProductsSelected([...productsSelected, { product, quantity: 1 }]);
-      setCartOpen(true);
-    } else {
-      removeProductFromShoppingCart(product._id);
-    }
-  };
 
   const toggleCart = () => {
     setCartOpen(!cartOpen);
@@ -102,7 +91,7 @@ const ProductListPage = ({}: ProductListPageProps) => {
       {products.map((product) => (
         <Col key={product._id}>
           <Product
-            addProduct={addProductToShoppingCart}
+            addProduct={addProduct}
             product={product}
             onProductClicked={() => goToProductPageMap(product._id)}
             className={styles.product}
@@ -225,8 +214,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
       <InfiniteScroll onLoadMore={loadProducts} isLoading={productsLoading} />
       <ShoppingList
         storeId={storeId}
-        productsItems={productsSelected}
-        setProductsItems={setProductsSelected}
         onDelete={removeProductFromShoppingCart}
         cartOpen={cartOpen}
         toggleCart={toggleCart}
