@@ -43,3 +43,143 @@
   display: flex;
   justify-content: space-between;
 }
+
+.inputNumber::-webkit-inner-spin-button,
+.inputNumber::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputNumberFilter {
+  width: 200px;
+  -moz-appearance: textfield;
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  background-color: #5c5c5c;
+  color: #dddddd;
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  gap: 0.5em;
+  height: 2em;
+  margin: 0.25em 0 0.25em 0;
+}
+
+.inputFilter {
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  background-color: #5c5c5c;
+  color: #dddddd;
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  gap: 0.5em;
+  height: 2em;
+  margin: 0.25em 0 0.25em 0;
+  width: 100%;
+}
+
+.selectFilter {
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  background-color: #5c5c5c;
+  color: #dddddd;
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  gap: 0.5em;
+  margin: 0.25em 0 0.25em 0;
+  width: 200px;
+}
+
+.selectFilter:focus {
+  background-color: #5c5c5c;
+  color: #d9d9d9;
+  outline: none;
+}
+
+.selectFilter:invalid {
+  color: #3a3a3a;
+}
+
+.inputFilter:focus {
+  background-color: #5c5c5c;
+  color: #d9d9d9;
+  outline: none;
+}
+
+.inputNumberFilter:focus {
+  background-color: #5c5c5c;
+  color: #d9d9d9;
+  outline: none;
+}
+
+.bntFilter {
+  background-color: #5c5c5c;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  cursor: pointer;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+.bntFilterGlass {
+  background-color: #5c5c5c;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  cursor: pointer;
+  margin-bottom: 15px;
+  margin-left: 15px;
+  min-width: 2.4em;
+  max-width: 35px;
+}
+
+.bntFilterGlass:hover {
+  background-color: #505050;
+  border-color: black;
+  transition: 0.5s;
+}
+
+.bntFilter:hover {
+  background-color: #505050;
+  border-color: black;
+  transition: 0.5s;
+}
+
+.bntFilterGlass:active {
+  background-color: #d3ae3e;
+  color: #5c5c5c;
+}
+
+.filterAlign {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.bntAlign {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}

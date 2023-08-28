@@ -35,9 +35,13 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
 
   useEffect(() => {
     const fetchMap = async () => {
-      const baseData = await MapApi.getMap(storeId);
+      try {
+        const baseData = await MapApi.getMap(storeId);
 
-      if (baseData) setSelectedCells(baseData.items);
+        if (baseData) setSelectedCells(baseData.items);
+      } catch (error: any) {
+        toast.error(error?.response?.data?.error ?? error?.message);
+      }
     };
 
     fetchMap();

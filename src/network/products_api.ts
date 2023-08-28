@@ -46,6 +46,24 @@ export async function deleteProduct(productId: string) {
   await getApi().delete(`${baseUrl}/${productId}`);
 }
 
+export interface ListProducts {
+  productName?: string;
+  category?: string;
+  priceFrom?: number;
+  priceTo?: number;
+}
+
+export async function listProducts(
+  storeId: string,
+  filterProducts: ListProducts
+): Promise<Product[]> {
+  const response = await getApi().get(
+    `${baseUrl}/store/${storeId}`,
+    {params: filterProducts}
+  );
+  return response.data;
+}
+
 export async function getCategories() {
   const response = await getApi().get(`${baseUrl}/categories`);
   return response.data;

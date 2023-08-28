@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Grid from "../components/Grid";
 import { Button } from "react-bootstrap";
+import ShoppingList from "../components/ShoppingList";
 
 const MapViewPage = () => {
   const location = useLocation();
@@ -15,6 +16,12 @@ const MapViewPage = () => {
       ) : (
         <p>Loja não encontrada</p>
       )}
+      <ShoppingList
+        cartOpen={true}
+        storeId={store}
+        toggleCart={() => {}}
+        onDelete={() => {}}
+      />
     </>
   );
 };
