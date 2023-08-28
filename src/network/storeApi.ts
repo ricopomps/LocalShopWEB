@@ -29,6 +29,11 @@ export async function updateStore(
   return response.data;
 }
 
+export interface ListStores {
+  storeName?: string;
+  category?: string;
+}
+
 export async function deleteStore(storeId: string) {
   await getApi().delete(`${baseUrl}/${storeId}`);
 }

@@ -130,7 +130,6 @@ const ProductListPage = ({}: ProductListPageProps) => {
   } = useForm<ListProducts>({});
 
   async function onSubmit(input: ListProducts) {
-    console.log("oi");
     try {
       let listResponse;
       if (!storeId) throw Error("Loja não encontrada");
