@@ -264,7 +264,6 @@ const ProductListPage = ({
         cartOpen={cartOpen}
         toggleCart={toggleCart}
       />
-      <NotificationBar open={!cartOpen} />
     </>
   );
 };

@@ -74,6 +74,11 @@
   margin-top: 12px;
 }
 
+.filterAlign::placeholder,
+.inputFilter::placeholder {
+  color: #dddddd;
+}
+
 .bntFilterGlass {
   background-color: #5c5c5c;
   padding: 0.5em 1em;
