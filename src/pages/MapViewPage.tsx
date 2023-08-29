@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Grid from "../components/Grid";
 import { Button } from "react-bootstrap";
 import ShoppingList from "../components/ShoppingList";
+import styles from "../styles/ProductPage.module.css";
 
 const MapViewPage = () => {
   const location = useLocation();
@@ -9,20 +10,24 @@ const MapViewPage = () => {
   const queryParameters = new URLSearchParams(location.search);
   const store = queryParameters.get("store");
   return (
-    <>
-      <Button onClick={() => navigate(-1)}>Voltar</Button>
-      {store ? (
-        <Grid rows={10} cols={10} storeId={store} />
-      ) : (
-        <p>Loja não encontrada</p>
-      )}
-      <ShoppingList
-        cartOpen={true}
-        storeId={store}
-        toggleCart={() => {}}
-        onDelete={() => {}}
-      />
-    </>
+    <div>
+      <Button className={styles.btnVoltar} onClick={() => navigate(-1)}>
+        Voltar
+      </Button>
+      <div className={styles.main}>
+        {store ? (
+          <Grid rows={10} cols={10} storeId={store} />
+        ) : (
+          <p>Loja não encontrada</p>
+        )}
+        <ShoppingList
+          cartOpen={true}
+          storeId={store}
+          toggleCart={() => {}}
+          onDelete={() => {}}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1em;
 }
 
 .danger {
@@ -24,12 +25,14 @@
   position: relative;
   align-items: center;
   justify-content: center;
+  background-color: #212529;
 }
 
 .footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--cinza-bg);
 }
 
 .input {
@@ -58,4 +61,9 @@
   outline: none;
   background-color: #5c5c5c;
   color: #dddddd;
+}
+
+.modalTitle {
+  background-color: var(--cinza-bg);
+  color: white;
 }

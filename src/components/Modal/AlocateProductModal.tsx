@@ -63,9 +63,9 @@ const AlocateProductModal = ({
     }
   };
   return (
-    <div className={styles.modalMain}>
+    <div>
       <Modal className={styles.modalMain} show onHide={onDismiss}>
-        <Modal.Header closeButton>
+        <Modal.Header className={styles.modalTitle} closeButton>
           <Modal.Title>Alocar produtos</Modal.Title>
         </Modal.Header>
         <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
