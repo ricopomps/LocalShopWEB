@@ -33,6 +33,7 @@ import {
   initialState,
 } from "./context/ShoppingListContext";
 import NotificationBar from "./components/NotificationBar";
+import ReportsPage from "./pages/ReportsPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -180,6 +181,9 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/shopper" element={<StoreListPage />} />
+                {loggedInUser?.userType === UserType.store && (
+                  <Route path="/reports" element={<ReportsPage />} />
+                )}
                 {loggedInUser && (
                   <Route
                     path="/profile"
