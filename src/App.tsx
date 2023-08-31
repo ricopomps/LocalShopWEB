@@ -34,6 +34,7 @@ import {
 } from "./context/ShoppingListContext";
 import NotificationBar from "./components/NotificationBar";
 import ReportsPage from "./pages/ReportsPage";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);

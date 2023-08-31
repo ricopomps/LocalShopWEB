@@ -1,0 +1,17 @@
+.formContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.datePicker {
+  height: 50px;
+  padding: 10px;
+  width: 75%;
+  border-radius: 10px;
+  border: none;
+}
+
+.endDatePickerContainer {
+  display: flex;
+  justify-content: end;
+}
