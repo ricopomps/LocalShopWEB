@@ -49,8 +49,9 @@ function transformDataForChart(backendData: ReportData): ChartData {
         backendData.flatMap((entry) => entry.values.map((value) => value.label))
       )
     );
+    const labelColors: string[] = ["#f8ce41", "#f87441", "#41f88b"];
 
-    uniqueLabels.forEach((label) => {
+    uniqueLabels.forEach((label, index) => {
       const data = backendData.map(
         (entry) =>
           entry.values.find((value) => value.label === label)?.value ?? 0
@@ -60,7 +61,7 @@ function transformDataForChart(backendData: ReportData): ChartData {
         label,
         minBarLength: 7,
         data,
-        backgroundColor: [`#f8ce41`],
+        backgroundColor: [labelColors[index % labelColors.length]],
         borderColor: "black",
         borderWidth: 2,
       });
