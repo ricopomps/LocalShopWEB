@@ -8,6 +8,7 @@ import LineChart from "../components/Chart/LineChart";
 import TextInputField from "../components/form/TextInputField";
 import styles from "../styles/ReportsPage.module.css";
 import * as ReportsApi from "../network/reportsApi";
+import { ChartData } from "../network/reportsApi";
 
 registerLocale("br", br);
 
@@ -16,49 +17,15 @@ enum Charts {
   sales = "Vendas",
 }
 
-interface ChartData {
-  data: {
-    label: string;
-    value: string | number;
-  }[];
-}
 const ReportsPage = () => {
   const [selectedChart, setSelectedChart] = useState<Charts>(Charts.profits);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const baseData = {
-    data: [
-      {
-        label: "Primeiro",
-        value: 10,
-      },
-      {
-        label: "Segundo",
-        value: 20,
-      },
-      {
-        label: "Terceiro",
-        value: 30,
-      },
-    ],
-  };
-  const [chartData, setChartData] = useState<ChartData>();
-  const [data, setData] = useState({
-    labels: chartData?.data.map((d) => d.label),
-    datasets: [
-      {
-        label: selectedChart,
-        data: chartData?.data.map((d) => d.value),
-        backgroundColor: [`#f8ce41`],
-        borderColor: "black",
-        borderWidth: 2,
-      },
-    ],
-  });
+  const [data, setData] = useState<ChartData>();
 
   const { register } = useForm();
-
   const ChartComponent = () => {
+    if (!data) return <></>;
     switch (selectedChart) {
       case Charts.profits: {
         return <BarChart data={data} />;
@@ -69,29 +36,27 @@ const ReportsPage = () => {
     }
   };
 
-  const setValueChart = (data: any) => {
-    setData({
-      labels: data.map((d: any) => d.month),
-      datasets: [
-        {
-          label: selectedChart,
-          data: data.map((d: any) => d.value),
-          backgroundColor: [`#f8ce41`],
-          borderColor: "black",
-          borderWidth: 2,
-        },
-      ],
-    });
-  };
-
   const getChart = async () => {
     try {
-      const response = await ReportsApi.getReport(startDate, endDate);
-      setValueChart(response);
+      let chartData: ChartData;
+      switch (selectedChart) {
+        case Charts.profits:
+          chartData = await ReportsApi.getReport(startDate, endDate);
+          break;
+
+        case Charts.sales:
+          chartData = await ReportsApi.getReportProductsSold(
+            startDate,
+            endDate
+          );
+          break;
+      }
+      setData(chartData);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
+
   return (
     <div>
       <div className={styles.formContainer}>
@@ -119,7 +84,6 @@ const ReportsPage = () => {
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             getChart();
             setSelectedChart(e.target.value as Charts);
-            setChartData(baseData);
           }}
         />
         <div className={styles.endDatePickerContainer}>

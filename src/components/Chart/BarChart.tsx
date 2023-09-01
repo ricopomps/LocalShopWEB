@@ -9,14 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { ChartData } from "../../network/reportsApi";
 
 interface BarChartProps {
-  data: any;
-}
-
-interface Data {
-  labels: string[];
-  values: string[] | number[];
+  data: ChartData;
 }
 
 ChartJS.register(

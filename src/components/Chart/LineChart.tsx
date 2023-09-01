@@ -10,14 +10,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { ChartData } from "../../network/reportsApi";
 
-interface BarChartProps {
-  data: any;
-}
-
-interface Data {
-  labels: string[];
-  values: string[] | number[];
+interface LineChartProps {
+  data: ChartData;
 }
 
 ChartJS.register(
@@ -30,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const BarChart: React.FC<BarChartProps> = ({ data }) => {
+const LineChart = ({ data }: LineChartProps) => {
   const options = {
     scales: {
       x: {
@@ -46,4 +42,4 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
   return <Line data={data} options={options} />;
 };
 
-export default BarChart;
+export default LineChart;
