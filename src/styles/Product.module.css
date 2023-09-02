@@ -23,6 +23,11 @@
   font-weight: bold;
   margin: 0;
 }
+.oldPrice {
+  font-weight: bold;
+  margin: 0;
+  text-decoration-line: line-through;
+}
 
 .productName {
   margin: 5px 0;

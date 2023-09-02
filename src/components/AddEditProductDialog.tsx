@@ -6,6 +6,8 @@ import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
 import styles from "../styles/AddEditProductDialog.module.css";
 import { toast } from "react-toastify";
+import CheckInputField from "./form/CheckInputField";
+import { useState } from "react";
 
 interface AddEditProductDialogProps {
   productToEdit?: Product;
@@ -22,6 +24,7 @@ const AddEditProductDialog = ({
   storeId,
   categoryList,
 }: AddEditProductDialogProps) => {
+const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
 
   const {
     register,
@@ -34,9 +37,12 @@ const AddEditProductDialog = ({
       image: productToEdit?.image || "",
       price: productToEdit?.price || 0,
       category: productToEdit?.category || "",
+      sale: productToEdit?.sale || false,
+      promotionPercent: productToEdit?.promotionPercent || 0,
+      oldPrice: productToEdit?.price || 0,
     },
   });
-
+  
   async function onSubmit(input: ProductInput) {
     try {
       let productResponse: Product;
@@ -70,7 +76,7 @@ const AddEditProductDialog = ({
         <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="name"
-            label=""
+            label="Nome:"
             type="text"
             placeholder="Nome do produto"
             register={register}
@@ -80,16 +86,16 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="description"
-            label=""
+            label="Descrição do produto:"
             as="textarea"
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className={styles.inputTextareaProduct}
+            className={styles.inputProduct}
           />
           <TextInputField
             name="image"
-            label=""
+            label="Imagem do produto:"
             type="text"
             placeholder="Imagem"
             register={register}
@@ -97,7 +103,7 @@ const AddEditProductDialog = ({
           />
           <TextInputField
             name="category"
-            label=""
+            label="Categoria:"
             type="text"
             as="select"
             options={categoryList.map((c) => {
@@ -109,13 +115,29 @@ const AddEditProductDialog = ({
             className={styles.selectProduct}
           />
           <TextInputField
-            name="price"
-            label=""
+            name={saleOpen ? "oldPrice":"price"} 
+            label="Preço:"
             type="text"
             placeholder="Preço"
             register={register}
             className={styles.inputProduct}
           />
+          <CheckInputField
+            name="sale"
+            label="Deseja colocar o produto em pormoção:"
+            type="checkbox"
+            register={register}
+            onChange = {() =>{setSaleOpen(!saleOpen)}}
+          />
+          
+          {saleOpen && <TextInputField
+            name="price"
+            label="Quantos novo preço do produto:"
+            type="text"
+            placeholder="Novo preço"
+            register={register}
+            className={styles.inputProduct}
+          />}
         </Form>
       </Modal.Body>
       <Modal.Footer className={styles.modalFooterProduct}>

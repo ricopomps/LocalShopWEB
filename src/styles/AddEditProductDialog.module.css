@@ -114,3 +114,17 @@
   background-color: #d3ae3e;
   color: #5c5c5c;
 }
+
+.inputCheck{
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  background-color: #5c5c5c;
+  color: #dddddd;
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  gap: 0.5em;
+  height: 2em;
+  margin: 0.25em 0 0.25em;
+}

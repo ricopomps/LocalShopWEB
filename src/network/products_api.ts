@@ -27,6 +27,9 @@ export interface ProductInput {
   category: string;
   storeId: string;
   location?: CellCoordinates;
+  sale?:boolean;
+  promotionPercent?: number;
+  oldPrice?:number;
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {
