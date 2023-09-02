@@ -220,6 +220,7 @@ const ProductListPage = ({
                 })}
                 hasDefaultValue={true}
                 placeholder="Categoria"
+                nullable={true}
                 register={register}
                 className={styles.selectFilter}
               />
