@@ -8,8 +8,23 @@ import { Button, Card } from "react-bootstrap";
 import ShoppingList from "../components/ShoppingList";
 import { useShoppingList } from "../context/ShoppingListContext";
 import styles from "../styles/ProductPage.module.css";
+import * as UsersApi from "../network/notes_api";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { User } from "../models/user";
 
-const ProductPage = () => {
+interface ProductPageProps {
+  loggedUser: User;
+  refreshFavProduct: (productId: string) => void;
+  addProductFavorite: (productId: string) => void;
+  removeProductFavorite: (productId: string) => void;
+}
+
+const ProductPage = ({
+  refreshFavProduct,
+  loggedUser,
+  addProductFavorite,
+  removeProductFavorite,
+}: ProductPageProps) => {
   const {
     shoppingList: { productsItems },
     handleItemCountIncrease,
@@ -24,6 +39,7 @@ const ProductPage = () => {
   const store = queryParameters.get("store");
   const product = queryParameters.get("product");
   const navigate = useNavigate();
+  const productId = queryParameters.get("product");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +73,17 @@ const ProductPage = () => {
         <Button onClick={goBackToStore}>Voltar para loja</Button>
       </div>
       <div className={styles.main}>
+        {productId && loggedUser.favoriteProducts?.includes(productId) ? (
+          <AiFillHeart
+            className={styles.favIcon}
+            onClick={() => removeProductFavorite(productId)}
+          />
+        ) : (
+          <AiOutlineHeart
+            className={styles.favIcon}
+            onClick={() => productId && addProductFavorite(productId)}
+          />
+        )}
         <Button className={styles.btnProduct} onClick={goToStoreMap}>
           Ver localização
         </Button>

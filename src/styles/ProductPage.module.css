@@ -37,3 +37,10 @@
   color: var(--amarelo);
   font-size: 24px;
 }
+
+.favIcon {
+  font-size: 60px;
+  background-color: var(--amarelo);
+  border-radius: 20%;
+  padding: 10px;
+}

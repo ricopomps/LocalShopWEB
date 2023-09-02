@@ -23,11 +23,15 @@ import NotificationBar from "../components/NotificationBar";
 interface ProductListPageProps {
   loggedUser: User;
   refreshFavStore: (storeId: string) => void;
+  addProductFavorite: (productId: string) => void;
+  removeProductFavorite: (productId: string) => void;
 }
 
 const ProductListPage = ({
   loggedUser,
   refreshFavStore,
+  addProductFavorite,
+  removeProductFavorite,
 }: ProductListPageProps) => {
   const { addProduct } = useShoppingList();
   const location = useLocation();
@@ -121,6 +125,9 @@ const ProductListPage = ({
             product={product}
             onProductClicked={() => goToProductPageMap(product._id)}
             className={styles.product}
+            loggedUser={loggedUser}
+            addProductFavorite={addProductFavorite}
+            removeProductFavorite={removeProductFavorite}
           ></Product>
         </Col>
       ))}
