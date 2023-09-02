@@ -24,7 +24,7 @@ const AddEditProductDialog = ({
   storeId,
   categoryList,
 }: AddEditProductDialogProps) => {
-const [saleOpen, setSaleOpen] = useState(false);
+const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
 
   const {
     register,
@@ -39,10 +39,10 @@ const [saleOpen, setSaleOpen] = useState(false);
       category: productToEdit?.category || "",
       sale: productToEdit?.sale || false,
       promotionPercent: productToEdit?.promotionPercent || 0,
-      oldPrice: productToEdit?.oldPrice || productToEdit?.price || 0,
+      oldPrice: productToEdit?.price || 0,
     },
   });
-
+  
   async function onSubmit(input: ProductInput) {
     try {
       let productResponse: Product;
