@@ -4,6 +4,7 @@ export interface Notification {
   _id: string;
   userId: string;
   text: string;
+  read: boolean;
   createdAt: Date;
 }
 
@@ -24,4 +25,16 @@ export async function deleteNotification(
 ): Promise<void> {
   const { data } = await getApi().delete(`${baseUrl}/${notificationId}`);
   return data;
+}
+
+export async function readNotification(notificationId: string): Promise<void> {
+  await getApi().patch(`${baseUrl}/read/${notificationId}`);
+}
+
+export async function readAllNotifications(): Promise<void> {
+  await getApi().patch(baseUrl);
+}
+
+export async function removeAllNotifications(): Promise<void> {
+  await getApi().delete(baseUrl);
 }
