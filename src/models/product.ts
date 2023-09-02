@@ -10,4 +10,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   location?: CellCoordinates;
+  promotion?:boolean;
+  promotionPercent?:number;
+  oldPrice?:number;
 }

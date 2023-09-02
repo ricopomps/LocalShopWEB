@@ -6,7 +6,21 @@ import { Product } from "../models/product";
 import TextInputField from "./form/TextInputField";
 import styles from "../styles/AddEditProductDialog.module.css";
 import { toast } from "react-toastify";
+import CheckInputField from "./form/CheckInputField";
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const select = document.getElementById(
+    "rangeSelect"
+  ) as HTMLSelectElement;
+
+  for (let i = 1; i <= 100; i++) {
+    const option = document.createElement("option");
+    option.value = i.toString();
+    option.text = `Opção ${i}`;
+    select.appendChild(option);
+  }
+});
 interface AddEditProductDialogProps {
   productToEdit?: Product;
   onDismiss: () => void;
@@ -34,6 +48,9 @@ const AddEditProductDialog = ({
       image: productToEdit?.image || "",
       price: productToEdit?.price || 0,
       category: productToEdit?.category || "",
+      promotion: productToEdit?.promotion || false,
+      promotionPercent: productToEdit?.promotionPercent || 0,
+      oldPrice: productToEdit?.oldPrice || 0
     },
   });
 
@@ -85,7 +102,7 @@ const AddEditProductDialog = ({
             rows={5}
             placeholder="Descrição do produto"
             register={register}
-            className={styles.inputTextareaProduct}
+            className={styles.inputProduct}
           />
           <TextInputField
             name="image"
@@ -111,6 +128,21 @@ const AddEditProductDialog = ({
           <TextInputField
             name="price"
             label="Preço:"
+            type="text"
+            placeholder="Preço"
+            register={register}
+            className={styles.inputProduct}
+          />
+          <CheckInputField
+            name="promotion"
+            label="Deseja colocar o produto em pormoção:"
+            type="checkbox"
+            placeholder="Preço"
+            register={register}
+          />
+          <TextInputField
+            name="promotionPercent"
+            label="Quantos % de desconto:"
             type="text"
             placeholder="Preço"
             register={register}
