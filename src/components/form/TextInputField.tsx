@@ -15,6 +15,7 @@ interface TextInputFieldProps {
   options?: Option[];
   hasDefaultValue?: boolean;
   margin?: boolean;
+  nullable?: boolean;
   [x: string]: any;
 }
 
@@ -28,6 +29,7 @@ const TextInputField = ({
   hasDefaultValue,
   options,
   margin = true,
+  nullable = false,
   ...props
 }: TextInputFieldProps) => {
   return (
@@ -46,7 +48,7 @@ const TextInputField = ({
         {options ? (
           <>
             {hasDefaultValue && (
-              <option value={""} disabled selected>
+              <option value={""} disabled={!nullable} selected>
                 {placeholder}
               </option>
             )}

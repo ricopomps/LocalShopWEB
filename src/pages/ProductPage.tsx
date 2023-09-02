@@ -4,9 +4,33 @@ import * as ProductApi from "../network/products_api";
 import { toast } from "react-toastify";
 import { Product as ProductModel } from "../models/product";
 import Product from "../components/Product";
-import { Button } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import ShoppingList from "../components/ShoppingList";
+import { useShoppingList } from "../context/ShoppingListContext";
+import styles from "../styles/ProductPage.module.css";
+import * as UsersApi from "../network/notes_api";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { User } from "../models/user";
 
-const ProductPage = () => {
+interface ProductPageProps {
+  loggedUser: User;
+  refreshFavProduct: (productId: string) => void;
+  addProductFavorite: (productId: string) => void;
+  removeProductFavorite: (productId: string) => void;
+}
+
+const ProductPage = ({
+  refreshFavProduct,
+  loggedUser,
+  addProductFavorite,
+  removeProductFavorite,
+}: ProductPageProps) => {
+  const {
+    shoppingList: { productsItems },
+    handleItemCountIncrease,
+    handleItemCountDecrease,
+    addProduct,
+  } = useShoppingList();
   const location = useLocation();
   const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(
     null
@@ -15,6 +39,7 @@ const ProductPage = () => {
   const store = queryParameters.get("store");
   const product = queryParameters.get("product");
   const navigate = useNavigate();
+  const productId = queryParameters.get("product");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,13 +61,61 @@ const ProductPage = () => {
       );
   };
 
+  const goBackToStore = () => {
+    navigate("/store/product?store=" + store);
+  };
+
   if (!selectedProduct) return <></>;
 
   return (
-    <>
-      <Button onClick={goToStoreMap}>Ver localização</Button>
-      <Product product={selectedProduct} onProductClicked={() => {}} />
-    </>
+    <div>
+      <div>
+        <Button onClick={goBackToStore}>Voltar para loja</Button>
+      </div>
+      <div className={styles.main}>
+        {productId && loggedUser.favoriteProducts?.includes(productId) ? (
+          <AiFillHeart
+            className={styles.favIcon}
+            onClick={() => removeProductFavorite(productId)}
+          />
+        ) : (
+          <AiOutlineHeart
+            className={styles.favIcon}
+            onClick={() => productId && addProductFavorite(productId)}
+          />
+        )}
+        <Button className={styles.btnProduct} onClick={goToStoreMap}>
+          Ver localização
+        </Button>
+        <Product product={selectedProduct} onProductClicked={() => {}} />
+        <h3 className={styles.descricao}>Descrição</h3>
+        <Card className={styles.card}>{selectedProduct.description}</Card>
+        <div className={styles.menosmais}>
+          <Button onClick={() => handleItemCountDecrease(selectedProduct._id)}>
+            -
+          </Button>
+          <Button
+            onClick={() => {
+              if (
+                productsItems.find(
+                  (item) => item.product._id === selectedProduct._id
+                )
+              )
+                handleItemCountIncrease(selectedProduct._id);
+              else addProduct(selectedProduct);
+            }}
+          >
+            +
+          </Button>
+        </div>
+        <ShoppingList
+          cartOpen={true}
+          storeId={store}
+          toggleCart={() => {}}
+          onDelete={() => {}}
+        />
+      </div>
+    </div>
   );
 };
 

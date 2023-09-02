@@ -3,20 +3,29 @@ import styles from "../styles/Product.module.css";
 import { Product as ProductModel } from "../models/product";
 import { MdDelete } from "react-icons/md";
 import add from "../assets/add.svg";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { User } from "../models/user";
 
 interface ProductProps {
+  loggedUser?: User;
   product: ProductModel;
   addProduct?: (product: ProductModel) => void;
   onProductClicked: (product: ProductModel) => void;
   onDeleteProductClicked?: (product: ProductModel) => void;
+  addProductFavorite?: (productId: string) => void;
+  removeProductFavorite?: (productId: string) => void;
+
   className?: string;
 }
 
 const Product = ({
+  loggedUser,
   product,
   addProduct,
   onProductClicked,
   onDeleteProductClicked,
+  addProductFavorite,
+  removeProductFavorite,
   className,
 }: ProductProps) => {
   const { name, category } = product;
@@ -53,6 +62,28 @@ const Product = ({
           )}
           <p className={styles.productPrice}>R$ {price.toFixed(2)}</p>
           <p className={styles.productCategory}>{category}</p>
+          {loggedUser && (
+            <>
+              {loggedUser.favoriteProducts?.includes(product._id) &&
+              removeProductFavorite ? (
+                <AiFillHeart
+                  className={styles.favIcon}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeProductFavorite(product._id);
+                  }}
+                />
+              ) : (
+                <AiOutlineHeart
+                  className={styles.favIcon}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addProductFavorite && addProductFavorite(product._id);
+                  }}
+                />
+              )}
+            </>
+          )}
           {addProduct && (
             <img
               onClick={(e) => {

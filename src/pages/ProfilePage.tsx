@@ -6,6 +6,7 @@ import styles from "../styles/ProfilePage.module.css";
 import logo from "../assets/logo.svg";
 import { User } from "../models/user";
 import * as UserApi from "../network/notes_api";
+import * as NotificationApi from "../network/notificationApi";
 import { toast } from "react-toastify";
 interface ProfilePageProps {
   user: User;
@@ -35,7 +36,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
       const response = await UserApi.updateUser(data);
       toast.success("Atualização realizada com sucesso!");
     } catch (error: any) {
-      toast.error(error.response.data.error);
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
   return (

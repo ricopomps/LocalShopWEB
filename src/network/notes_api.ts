@@ -48,6 +48,34 @@ export async function updateUser(user: ProfileForm) {
   return response.data;
 }
 
+export async function favoriteStore(storeId: string) {
+  const response = await getApi().post("/api/users/favoriteStores", {
+    storeId,
+  });
+  return response.data;
+}
+
+export async function favoriteProduct(productId: string) {
+  const response = await getApi().post("/api/users/favoriteProduct", {
+    productId,
+  });
+  return response.data;
+}
+
+export async function unfavoriteProduct(productId: string) {
+  const response = await getApi().post("/api/users/unFavoriteProduct", {
+    productId,
+  });
+  return response.data;
+}
+
+export async function unfavoriteStore(storeId: string) {
+  const response = await getApi().post("/api/users/unFavoriteStores", {
+    storeId,
+  });
+  return response.data;
+}
+
 //NOTES ROUTES
 export async function fetchNotes(): Promise<Note[]> {
   const response = await getApi().get("/api/notes", { withCredentials: true });

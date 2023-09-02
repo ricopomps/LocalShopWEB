@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
@@ -28,13 +28,19 @@ import ProductListPage from "./pages/ProductListPage";
 import MapPage from "./pages/MapPage";
 import MapViewPage from "./pages/MapViewPage";
 import ProductPage from "./pages/ProductPage";
+import {
+  ShoppingListProvider,
+  initialState,
+} from "./context/ShoppingListContext";
+import NotificationBar from "./components/NotificationBar";
+import ReportsPage from "./pages/ReportsPage";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-
+  const [openNotification, setOpenNotification] = useState(false);
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
@@ -46,153 +52,261 @@ function App() {
     }
     fetchLoggedInUser();
   }, []);
+
+  const refreshFavStore = (storeId: string) => {
+    if (loggedInUser) {
+      if (loggedInUser.favoriteStores) {
+        if (loggedInUser.favoriteStores.includes(storeId)) {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteStores: loggedInUser.favoriteStores.filter(
+              (id) => id !== storeId
+            ),
+          });
+        } else {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteStores: [...loggedInUser.favoriteStores, storeId],
+          });
+        }
+      } else {
+        setLoggedInUser({ ...loggedInUser, favoriteStores: [storeId] });
+      }
+    }
+  };
+
+  const addProductFavorite = async (productId: string) => {
+    try {
+      if (!productId) throw Error("Produto não encontrado");
+      await NotesApi.favoriteProduct(productId);
+      refreshFavProduct(productId);
+      toast.success("Produto favoritado com sucesso!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const removeProductFavorite = async (productId: string) => {
+    try {
+      if (!productId) throw Error("Produto não encontrado!");
+      await NotesApi.unfavoriteProduct(productId);
+      refreshFavProduct(productId);
+      toast.success("Produto removido com sucesso dos favoritos!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const refreshFavProduct = (ProductId: string) => {
+    if (loggedInUser) {
+      if (loggedInUser.favoriteProducts) {
+        if (loggedInUser.favoriteProducts.includes(ProductId)) {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteProducts: loggedInUser.favoriteProducts.filter(
+              (id) => id !== ProductId
+            ),
+          });
+        } else {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteProducts: [...loggedInUser.favoriteProducts, ProductId],
+          });
+        }
+      } else {
+        setLoggedInUser({ ...loggedInUser, favoriteProducts: [ProductId] });
+      }
+    }
+  };
   return (
     <>
       <ToastContainer />
-      <BrowserRouter>
-        <div>
-          {loggedInUser && (
-            <NavBar
-              loggedInUser={loggedInUser}
-              onLoginClicked={() => setShowLoginModal(true)}
-              onSignUpClicked={() => setShowSignUpModal(true)}
-              onLogoutSuccessful={() => {
-                setLoggedInUser(null);
-                return redirect("");
-              }}
-            />
-          )}
-          <Container className={styles.pageContainer}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              {loggedInUser?.store && (
+      <ShoppingListProvider shoppingList={initialState.shoppingList}>
+        <BrowserRouter>
+          <div>
+            {loggedInUser && (
+              <NavBar
+                loggedInUser={loggedInUser}
+                onLoginClicked={() => setShowLoginModal(true)}
+                onSignUpClicked={() => setShowSignUpModal(true)}
+                onLogoutSuccessful={() => {
+                  setLoggedInUser(null);
+                  return redirect("");
+                }}
+                toggleNotifications={() =>
+                  setOpenNotification(!openNotification)
+                }
+              />
+            )}
+            {loggedInUser && <NotificationBar open={openNotification} />}
+
+            <Container className={styles.pageContainer}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                {loggedInUser?.store && (
+                  <Route
+                    path="/products"
+                    element={
+                      <ProductsPageLoggedInView store={loggedInUser.store} />
+                    }
+                  />
+                )}
+                {loggedInUser && (
+                  <Route
+                    path="/store/product"
+                    element={
+                      <ProductListPage
+                        loggedUser={loggedInUser}
+                        refreshFavStore={refreshFavStore}
+                        addProductFavorite={addProductFavorite}
+                        removeProductFavorite={removeProductFavorite}
+                      />
+                    }
+                  />
+                )}
+                {loggedInUser && (
+                  <Route
+                    path="/product"
+                    element={
+                      <ProductPage
+                        refreshFavProduct={refreshFavProduct}
+                        loggedUser={loggedInUser}
+                        addProductFavorite={addProductFavorite}
+                        removeProductFavorite={removeProductFavorite}
+                      />
+                    }
+                  />
+                )}
+                {loggedInUser?.store && (
+                  <Route
+                    path="/products"
+                    element={
+                      <ProductsPageLoggedInView store={loggedInUser.store} />
+                    }
+                  />
+                )}
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/home" element={<HomePage />} />
                 <Route
-                  path="/products"
+                  path="/cadlojista"
                   element={
-                    <ProductsPageLoggedInView store={loggedInUser.store} />
+                    <SignUpPage
+                      onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                      userType={UserType.store}
+                    />
                   }
                 />
-              )}
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route
-                path="/cadlojista"
-                element={
-                  <SignUpPage
-                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
-                    userType={UserType.store}
-                  />
-                }
-              />
-              <Route
-                path="/cadshopper"
-                element={
-                  <SignUpPage
-                    onSignUpSuccessful={(user) => setLoggedInUser(user)}
-                    userType={UserType.shopper}
-                  />
-                }
-              />
-              <Route path="/store/product" element={<ProductListPage />} />
-              {loggedInUser?.store && (
                 <Route
-                  path="/map"
-                  element={<MapPage storeId={loggedInUser?.store._id} />}
-                />
-              )}
-              <Route path="/map" element={<MapViewPage />} />
-              <Route path="/product" element={<ProductPage />} />
-              <Route path="/shopper" element={<StoreListPage />} />
-              <Route
-                path="/forgotpassword"
-                element={<SendRecoverPasswordEmailPage />}
-              />
-              {loggedInUser?.store && (
-                <Route
-                  path="/addeditproduct"
+                  path="/cadshopper"
                   element={
-                    <AddEditProductPage storeId={loggedInUser.store._id} />
+                    <SignUpPage
+                      onSignUpSuccessful={(user) => setLoggedInUser(user)}
+                      userType={UserType.shopper}
+                    />
                   }
                 />
-              )}
-              <Route path="/recover" element={<RecoverPasswordPage />} />
-              <Route
-                path="/store"
-                element={
-                  <StorePage
-                    onCreateStoreSuccessful={(store: Store) =>
-                      setLoggedInUser({ ...loggedInUser!, store: store })
-                    }
-                    store={loggedInUser?.store}
+                {loggedInUser?.store && (
+                  <Route
+                    path="/map"
+                    element={<MapPage storeId={loggedInUser?.store._id} />}
                   />
-                }
-              />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/shopper" element={<StoreListPage />} />
-              {loggedInUser && (
+                )}
+                <Route path="/map" element={<MapViewPage />} />
+                <Route path="/shopper" element={<StoreListPage />} />
                 <Route
-                  path="/profile"
-                  element={<ProfilePage user={loggedInUser} />}
+                  path="/forgotpassword"
+                  element={<SendRecoverPasswordEmailPage />}
                 />
-              )}
-              <Route
-                path="/store"
-                element={
-                  <StorePage
-                    onCreateStoreSuccessful={(store: Store) =>
-                      setLoggedInUser({ ...loggedInUser!, store: store })
+                {loggedInUser?.store && (
+                  <Route
+                    path="/addeditproduct"
+                    element={
+                      <AddEditProductPage storeId={loggedInUser.store._id} />
                     }
-                    store={loggedInUser?.store}
                   />
-                }
-              />
-              <Route
-                path="/logindesktop"
-                element={
-                  <LoginDesktopPage
-                    onLoginSuccessful={(user) => {
-                      setLoggedInUser(user);
-                    }}
+                )}
+                <Route path="/recover" element={<RecoverPasswordPage />} />
+                <Route
+                  path="/store"
+                  element={
+                    <StorePage
+                      onCreateStoreSuccessful={(store: Store) =>
+                        setLoggedInUser({ ...loggedInUser!, store: store })
+                      }
+                      store={loggedInUser?.store}
+                    />
+                  }
+                />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/shopper" element={<StoreListPage />} />
+                {loggedInUser?.userType === UserType.store && (
+                  <Route path="/reports" element={<ReportsPage />} />
+                )}
+                {loggedInUser && (
+                  <Route
+                    path="/profile"
+                    element={<ProfilePage user={loggedInUser} />}
                   />
-                }
+                )}
+                <Route
+                  path="/store"
+                  element={
+                    <StorePage
+                      onCreateStoreSuccessful={(store: Store) =>
+                        setLoggedInUser({ ...loggedInUser!, store: store })
+                      }
+                      store={loggedInUser?.store}
+                    />
+                  }
+                />
+                <Route
+                  path="/logindesktop"
+                  element={
+                    <LoginDesktopPage
+                      onLoginSuccessful={(user) => {
+                        setLoggedInUser(user);
+                      }}
+                    />
+                  }
+                />
+                <Route
+                  path="/store2"
+                  element={
+                    <NotesPage
+                      onCreateStoreSuccessful={
+                        (store: Store) =>
+                          setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
+                      }
+                      loggedInUser={loggedInUser}
+                      goToStorePage
+                    />
+                  }
+                />
+                <Route path="/*" element={<NotFoundPage />} />
+              </Routes>
+            </Container>
+            {showSignUpModal && (
+              <SignUpModal
+                onDismiss={() => setShowSignUpModal(false)}
+                onSignUpSuccessful={(user) => {
+                  setLoggedInUser(user);
+                  setShowSignUpModal(false);
+                }}
               />
-              <Route
-                path="/store2"
-                element={
-                  <NotesPage
-                    onCreateStoreSuccessful={
-                      (store: Store) =>
-                        setLoggedInUser({ ...loggedInUser!, store: store }) //IMPROVE THIS! REMOVE THE '!'
-                    }
-                    loggedInUser={loggedInUser}
-                    goToStorePage
-                  />
-                }
+            )}
+            {showLoginModal && (
+              <LoginModal
+                onDismiss={() => setShowLoginModal(false)}
+                onLoginSuccessful={(user) => {
+                  setLoggedInUser(user);
+                  setShowLoginModal(false);
+                }}
               />
-              <Route path="/*" element={<NotFoundPage />} />
-            </Routes>
-          </Container>
-          {showSignUpModal && (
-            <SignUpModal
-              onDismiss={() => setShowSignUpModal(false)}
-              onSignUpSuccessful={(user) => {
-                setLoggedInUser(user);
-                setShowSignUpModal(false);
-              }}
-            />
-          )}
-          {showLoginModal && (
-            <LoginModal
-              onDismiss={() => setShowLoginModal(false)}
-              onLoginSuccessful={(user) => {
-                setLoggedInUser(user);
-                setShowLoginModal(false);
-              }}
-            />
-          )}
-        </div>
-      </BrowserRouter>
+            )}
+          </div>
+        </BrowserRouter>
+      </ShoppingListProvider>
     </>
   );
 }
