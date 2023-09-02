@@ -75,8 +75,6 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       };
     }
     case REDUCER_ACTION_TYPE.SET_STORE_ID: {
-      console.log("REDUCER_ACTION_TYPE.SET_STORE_ID");
-
       return {
         ...state,
         shoppingList: {

@@ -8,6 +8,7 @@
   transition: right 0.3s ease-in-out;
   box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.2);
   z-index: 1025;
+  overflow-x: scroll;
 }
 
 .open {
@@ -111,7 +112,7 @@
   color: white;
   font-family: "Gotham", sans-serif;
   text-align: center;
-  margin: 15px 0;
+  margin: 8px 0;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
 }
@@ -119,9 +120,39 @@
 .textoCarrinho {
   font-family: "Inter", sans-serif;
   color: white;
+  padding: 0px 10px 0px 0px;
 }
 
 .btnSalvar {
   font-size: 20px;
   width: 100%;
+}
+
+.unread {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 10px 10px 8px 0px;
+  background-color: saddlebrown;
+}
+
+.eyeIcon {
+  height: 28px;
+  width: 28px;
+}
+.eyeIcon:hover {
+  color: var(--amarelo);
+}
+
+.removeIcon {
+  height: 28px;
+  width: 28px;
+}
+.removeIcon:hover {
+  color: red;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 8px;
+  gap: 8px;
 }

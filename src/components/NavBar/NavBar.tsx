@@ -55,6 +55,13 @@ const NavBar = ({
               Notificações
             </Nav.Link>
           </Nav>
+          {loggedInUser?.userType === UserType.store && (
+            <Nav>
+              <Nav.Link className={styles.textNavbar} as={Link} to="/reports">
+                Relatórios
+              </Nav.Link>
+            </Nav>
+          )}
           {loggedInUser?.store && (
             <>
               <Nav>

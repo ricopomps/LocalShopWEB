@@ -34,10 +34,9 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
   const onSubmit = async (data: ProfileForm) => {
     try {
       const response = await UserApi.updateUser(data);
-      await NotificationApi.createNotification();
       toast.success("Atualização realizada com sucesso!");
     } catch (error: any) {
-      toast.error(error.response.data.error);
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
   return (
