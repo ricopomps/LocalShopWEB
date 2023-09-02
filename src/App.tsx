@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
@@ -74,6 +74,50 @@ function App() {
       }
     }
   };
+
+  const addProductFavorite = async (productId: string) => {
+    try {
+      if (!productId) throw Error("Produto não encontrado");
+      await NotesApi.favoriteProduct(productId);
+      refreshFavProduct(productId);
+      toast.success("Produto favoritado com sucesso!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const removeProductFavorite = async (productId: string) => {
+    try {
+      if (!productId) throw Error("Produto não encontrado!");
+      await NotesApi.unfavoriteProduct(productId);
+      refreshFavProduct(productId);
+      toast.success("Produto removido com sucesso dos favoritos!");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const refreshFavProduct = (ProductId: string) => {
+    if (loggedInUser) {
+      if (loggedInUser.favoriteProducts) {
+        if (loggedInUser.favoriteProducts.includes(ProductId)) {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteProducts: loggedInUser.favoriteProducts.filter(
+              (id) => id !== ProductId
+            ),
+          });
+        } else {
+          setLoggedInUser({
+            ...loggedInUser,
+            favoriteProducts: [...loggedInUser.favoriteProducts, ProductId],
+          });
+        }
+      } else {
+        setLoggedInUser({ ...loggedInUser, favoriteProducts: [ProductId] });
+      }
+    }
+  };
   return (
     <>
       <ToastContainer />
@@ -114,6 +158,21 @@ function App() {
                       <ProductListPage
                         loggedUser={loggedInUser}
                         refreshFavStore={refreshFavStore}
+                        addProductFavorite={addProductFavorite}
+                        removeProductFavorite={removeProductFavorite}
+                      />
+                    }
+                  />
+                )}
+                {loggedInUser && (
+                  <Route
+                    path="/product"
+                    element={
+                      <ProductPage
+                        refreshFavProduct={refreshFavProduct}
+                        loggedUser={loggedInUser}
+                        addProductFavorite={addProductFavorite}
+                        removeProductFavorite={removeProductFavorite}
                       />
                     }
                   />
@@ -153,7 +212,6 @@ function App() {
                   />
                 )}
                 <Route path="/map" element={<MapViewPage />} />
-                <Route path="/product" element={<ProductPage />} />
                 <Route path="/shopper" element={<StoreListPage />} />
                 <Route
                   path="/forgotpassword"

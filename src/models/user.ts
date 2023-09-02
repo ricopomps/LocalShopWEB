@@ -7,6 +7,7 @@ export interface User {
   store?: Store;
   cpf: string;
   favoriteStores?: string[];
+  favoriteProducts?: string[];
 }
 
 export enum UserType {
