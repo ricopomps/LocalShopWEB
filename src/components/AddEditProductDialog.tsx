@@ -7,6 +7,7 @@ import TextInputField from "./form/TextInputField";
 import styles from "../styles/AddEditProductDialog.module.css";
 import { toast } from "react-toastify";
 import CheckInputField from "./form/CheckInputField";
+import { useState } from "react";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,6 +37,7 @@ const AddEditProductDialog = ({
   storeId,
   categoryList,
 }: AddEditProductDialogProps) => {
+const [saleOpen, setSaleOpen] = useState(false);
 
   const {
     register,
@@ -48,9 +50,9 @@ const AddEditProductDialog = ({
       image: productToEdit?.image || "",
       price: productToEdit?.price || 0,
       category: productToEdit?.category || "",
-      promotion: productToEdit?.promotion || false,
+      sale: productToEdit?.sale || false,
       promotionPercent: productToEdit?.promotionPercent || 0,
-      oldPrice: productToEdit?.oldPrice || 0
+      oldPrice: productToEdit?.oldPrice || productToEdit?.price || 0,
     },
   });
 
@@ -126,7 +128,7 @@ const AddEditProductDialog = ({
             className={styles.selectProduct}
           />
           <TextInputField
-            name="price"
+            name={saleOpen ? "oldPrice":"price"} 
             label="Preço:"
             type="text"
             placeholder="Preço"
@@ -134,20 +136,21 @@ const AddEditProductDialog = ({
             className={styles.inputProduct}
           />
           <CheckInputField
-            name="promotion"
+            name="sale"
             label="Deseja colocar o produto em pormoção:"
             type="checkbox"
-            placeholder="Preço"
             register={register}
+            onChange = {() =>{setSaleOpen(!saleOpen)}}
           />
-          <TextInputField
-            name="promotionPercent"
-            label="Quantos % de desconto:"
+          
+          {saleOpen && <TextInputField
+            name="price"
+            label="Quantos novo preço do produto:"
             type="text"
-            placeholder="Preço"
+            placeholder="Novo preço"
             register={register}
             className={styles.inputProduct}
-          />
+          />}
         </Form>
       </Modal.Body>
       <Modal.Footer className={styles.modalFooterProduct}>

@@ -27,7 +27,7 @@ export interface ProductInput {
   category: string;
   storeId: string;
   location?: CellCoordinates;
-  promotion?:boolean;
+  sale?:boolean;
   promotionPercent?: number;
   oldPrice?:number;
 }

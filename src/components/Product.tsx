@@ -21,7 +21,7 @@ const Product = ({
 }: ProductProps) => {
   const { name, category } = product;
   const price = product.price ?? 0;
-
+  const oldPrice = product.oldPrice ?? 0;
   return (
     <Card
       onClick={() => onProductClicked(product)}
@@ -47,6 +47,9 @@ const Product = ({
                 e.stopPropagation();
               }}
             />
+          )}
+          {product.sale && (
+            <p className={styles.oldPrice}>R$ {oldPrice.toFixed(2)}</p>
           )}
           <p className={styles.productPrice}>R$ {price.toFixed(2)}</p>
           <p className={styles.productCategory}>{category}</p>
