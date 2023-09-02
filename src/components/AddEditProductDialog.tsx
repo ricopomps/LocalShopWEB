@@ -9,19 +9,6 @@ import { toast } from "react-toastify";
 import CheckInputField from "./form/CheckInputField";
 import { useState } from "react";
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  const select = document.getElementById(
-    "rangeSelect"
-  ) as HTMLSelectElement;
-
-  for (let i = 1; i <= 100; i++) {
-    const option = document.createElement("option");
-    option.value = i.toString();
-    option.text = `Opção ${i}`;
-    select.appendChild(option);
-  }
-});
 interface AddEditProductDialogProps {
   productToEdit?: Product;
   onDismiss: () => void;
