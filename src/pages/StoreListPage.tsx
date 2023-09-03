@@ -12,6 +12,7 @@ import magnifying_glass from "../assets/magnifying_glass.svg";
 import { useForm } from "react-hook-form";
 import { ListStores } from "../network/storeApi";
 import { toast } from "react-toastify";
+import CheckInputField from "../components/form/CheckInputField";
 
 interface StoreListPageProps {}
 
@@ -89,7 +90,6 @@ const StoreListPage = ({}: StoreListPageProps) => {
       <Form onSubmit={handleSubmit(onSubmit)} className={styles.filterAlign}>
         <TextInputField
           name="name"
-          label=""
           type="text"
           placeholder="Pesquisar Loja"
           register={register}
@@ -97,7 +97,6 @@ const StoreListPage = ({}: StoreListPageProps) => {
         ></TextInputField>
         <TextInputField
           name="category"
-          label=""
           type="text"
           as="select"
           options={categories.map((c) => {
@@ -108,6 +107,12 @@ const StoreListPage = ({}: StoreListPageProps) => {
           nullable={true}
           register={register}
           className={styles.selectFilter}
+        />
+        <CheckInputField
+          name="favorite"
+          label="Favoritos"
+          type="checkbox"
+          register={register}
         />
         <Button
           type="submit"

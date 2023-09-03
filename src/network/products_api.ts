@@ -27,9 +27,9 @@ export interface ProductInput {
   category: string;
   storeId: string;
   location?: CellCoordinates;
-  sale?:boolean;
+  sale?: boolean;
   promotionPercent?: number;
-  oldPrice?:number;
+  oldPrice?: number;
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {
@@ -54,16 +54,16 @@ export interface ListProducts {
   category?: string;
   priceFrom?: number;
   priceTo?: number;
+  favorite?: boolean;
 }
 
 export async function listProducts(
   storeId: string,
   filterProducts: ListProducts
 ): Promise<Product[]> {
-  const response = await getApi().get(
-    `${baseUrl}/store/${storeId}`,
-    {params: filterProducts}
-  );
+  const response = await getApi().get(`${baseUrl}/store/${storeId}`, {
+    params: filterProducts,
+  });
   return response.data;
 }
 

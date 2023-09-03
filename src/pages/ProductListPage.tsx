@@ -19,6 +19,7 @@ import { ListProducts } from "../network/products_api";
 import magnifying_glass from "../assets/magnifying_glass.svg";
 import filter from "../assets/filter.svg";
 import filterCheio from "../assets/filtercheio.svg";
+import CheckInputField from "../components/form/CheckInputField";
 
 interface ProductListPageProps {
   loggedUser: User;
@@ -80,6 +81,7 @@ const ProductListPage = ({
     setValue("category", undefined);
     setValue("priceFrom", undefined);
     setValue("priceTo", undefined);
+    setValue("favorite", undefined);
     setFilterOpen(!filterOpen);
   };
 
@@ -257,6 +259,12 @@ const ProductListPage = ({
                 register={register}
                 className={styles.inputNumberFilter}
               ></TextInputField>
+              <CheckInputField
+                name="favorite"
+                label="Favoritos"
+                type="checkbox"
+                register={register}
+              />
             </>
           )}
         </div>
