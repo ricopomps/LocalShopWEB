@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import styles from "../styles/NotificationBar.module.css";
 import { toast } from "react-toastify";
@@ -6,6 +6,7 @@ import * as NotificationApi from "../network/notificationApi";
 import { formatDate } from "../utils/formatDate";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { MdOutlineRemoveCircle } from "react-icons/md";
+import InfiniteScroll from "./InfiniteScroll";
 interface NotificationBarProps {
   open: boolean;
 }
@@ -13,24 +14,36 @@ interface NotificationBarProps {
 interface NotificationBarItemProps {
   className?: string;
   notification: NotificationApi.Notification;
-  index: number;
 }
 
 const NotificationBar = ({ open }: NotificationBarProps) => {
   const [notifications, setNotifications] = useState<
     NotificationApi.Notification[]
   >([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
+  const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await NotificationApi.getNotification();
+  const fetchNotifications = async (initial?: boolean) => {
+    try {
+      setNotificationsLoading(true);
+      const response = await NotificationApi.getNotification(
+        initial ? 0 : page
+      );
+      if (initial) {
         setNotifications(response);
-      } catch (error: any) {
-        toast.error(error?.response?.data?.error ?? error?.message);
+        setPage(1);
+      } else {
+        setNotifications((prevItems) => [...prevItems, ...response]);
+        setPage(page + 1);
       }
-    };
-    fetchNotifications();
+      setNotificationsLoading(false);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+      setNotificationsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchNotifications(true);
   }, [open]);
 
   const onDelete = async (notificationId: string) => {
@@ -62,14 +75,14 @@ const NotificationBar = ({ open }: NotificationBarProps) => {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
-
+  const containerRef = useRef<HTMLDivElement>(null);
   const NotificationBarItem = ({
     className,
     notification,
-    index,
   }: NotificationBarItemProps) => {
     return (
       <div
+        key={notification._id}
         className={`${styles.shoppingItem} ${className} ${
           !notification.read && styles.unread
         }`}
@@ -122,7 +135,10 @@ const NotificationBar = ({ open }: NotificationBarProps) => {
 
   return (
     <>
-      <Container className={`${styles.cartSidebar} ${open ? styles.open : ""}`}>
+      <Container
+        ref={containerRef}
+        className={`${styles.notificationSidebar} ${open ? styles.open : ""}`}
+      >
         <h1 className={styles.cartText}> Notificações</h1>
         <div className={styles.iconContainer}>
           <AiFillEyeInvisible
@@ -138,9 +154,13 @@ const NotificationBar = ({ open }: NotificationBarProps) => {
           <NotificationBarItem
             className={styles.textoCarrinho}
             notification={notification}
-            index={index}
           />
         ))}
+        <InfiniteScroll
+          onLoadMore={fetchNotifications}
+          containerRef={containerRef}
+          isLoading={notificationsLoading}
+        />
       </Container>
     </>
   );

@@ -15,8 +15,16 @@ export async function createNotification(): Promise<void> {
   return data;
 }
 
-export async function getNotification(): Promise<Notification[]> {
-  const { data } = await getApi().get(`${baseUrl}`);
+export async function getNotification(
+  page: number,
+  take: number = 15
+): Promise<Notification[]> {
+  const { data } = await getApi().get(`${baseUrl}`, {
+    params: {
+      page,
+      take,
+    },
+  });
   return data;
 }
 
