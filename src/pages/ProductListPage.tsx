@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { ListProducts } from "../network/products_api";
 import magnifying_glass from "../assets/magnifying_glass.svg";
 import filter from "../assets/filter.svg";
-import NotificationBar from "../components/NotificationBar";
+import filterCheio from "../assets/filtercheio.svg";
 
 interface ProductListPageProps {
   loggedUser: User;
@@ -77,6 +77,9 @@ const ProductListPage = ({
   };
 
   const toggleFilter = () => {
+    setValue("category", undefined);
+    setValue("priceFrom", undefined);
+    setValue("priceTo", undefined);
     setFilterOpen(!filterOpen);
   };
 
@@ -155,6 +158,7 @@ const ProductListPage = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = useForm<ListProducts>({});
 
@@ -199,12 +203,21 @@ const ProductListPage = ({
             className={styles.inputFilter}
           ></TextInputField>
           <div className={styles.bntAlign}>
-            <img
-              onClick={toggleFilter}
-              src={filter}
-              alt="filter"
-              className={styles.bntFilter}
-            />
+            {filterOpen ? (
+              <img
+                onClick={toggleFilter}
+                src={filterCheio}
+                alt="filter"
+                className={styles.bntFilter}
+              />
+            ) : (
+              <img
+                onClick={toggleFilter}
+                src={filter}
+                alt="filter"
+                className={styles.bntFilter}
+              />
+            )}
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -219,7 +232,6 @@ const ProductListPage = ({
             <>
               <TextInputField
                 name="category"
-                label=""
                 type="text"
                 as="select"
                 options={categories.map((c) => {
@@ -233,7 +245,6 @@ const ProductListPage = ({
               />
               <TextInputField
                 name="priceFrom"
-                label=""
                 type="number"
                 placeholder="Valor Mínimo"
                 register={register}
@@ -241,7 +252,6 @@ const ProductListPage = ({
               ></TextInputField>
               <TextInputField
                 name="priceTo"
-                label=""
                 type="number"
                 placeholder="Valor Máximo"
                 register={register}

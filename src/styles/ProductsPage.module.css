@@ -54,6 +54,7 @@
   width: 200px;
   appearance: textfield;
   -webkit-appearance: none;
+  -moz-appearance: textfield;
   font-family: "Inter", sans-serif;
   font-size: 26px;
   font-weight: 300;
@@ -186,12 +187,10 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 12px;
 }
 
 .bntAlign {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 12px;
 }
