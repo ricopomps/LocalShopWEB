@@ -88,7 +88,19 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       };
     }
     case REDUCER_ACTION_TYPE.INCREASE_COUNT: {
-      const itemId = action.payload;
+      const stock = action.payload.stock;
+      if (!stock || stock < 0) {
+        return state;
+      }
+
+      const productInState = state.shoppingList.productsItems.find(
+        (item) => item.product._id === action.payload._id
+      );
+
+      if (productInState && productInState.quantity >= stock) {
+        return state;
+      }
+      const itemId = action.payload._id;
 
       const updatedProductItems = state.shoppingList.productsItems.map(
         (item) => {
@@ -134,11 +146,19 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       };
     }
     case REDUCER_ACTION_TYPE.ADD_PRODUCT: {
-      if (
-        state.shoppingList.productsItems.find(
-          (item) => item.product._id === action.payload._id
-        )
-      ) {
+      const stock = action.payload.stock;
+      if (!stock || stock < 0) {
+        return state;
+      }
+      const productInState = state.shoppingList.productsItems.find(
+        (item) => item.product._id === action.payload._id
+      );
+      if (productInState) {
+        if (productInState.quantity >= stock) {
+          return state;
+        }
+      }
+      if (productInState) {
         return {
           ...state,
           shoppingList: {
@@ -216,10 +236,10 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
-  const handleItemCountIncrease = useCallback((itemId: string) => {
+  const handleItemCountIncrease = useCallback((product: Product) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.INCREASE_COUNT,
-      payload: itemId,
+      payload: product,
     });
   }, []);
 
@@ -273,7 +293,7 @@ const initialContextState: UseShoppingListContextType = {
   setSelectedItemIds: (selectedItemIds: string[]) => {},
   setProductsItems: (selectedProducts: ProductItem[]) => {},
   setStoreId: (storeId: string) => {},
-  handleItemCountIncrease: (itemId: string) => {},
+  handleItemCountIncrease: (product: Product) => {},
   handleItemCountDecrease: (itemId: string) => {},
   addProduct: (product: Product) => {},
   openShoppingList: () => {},
@@ -306,7 +326,7 @@ type UseShoppingListHookType = {
   setSelectedItemIds: (selectedItemIds: string[]) => void;
   setProductsItems: (selectedProducts: ProductItem[]) => void;
   setStoreId: (storeId: string) => void;
-  handleItemCountIncrease: (itemId: string) => void;
+  handleItemCountIncrease: (product: Product) => void;
   handleItemCountDecrease: (itemId: string) => void;
   addProduct: (product: Product) => void;
   openShoppingList: () => void;

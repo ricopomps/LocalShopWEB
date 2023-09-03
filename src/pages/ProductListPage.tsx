@@ -126,7 +126,13 @@ const ProductListPage = ({
       {products.map((product) => (
         <Col key={product._id}>
           <Product
-            addProduct={addProduct}
+            addProduct={() => {
+              if ((product.stock && product.stock <= 0) || !product.stock) {
+                toast.error("Produto sem estoque");
+                return;
+              }
+              addProduct(product);
+            }}
             product={product}
             onProductClicked={() => goToProductPageMap(product._id)}
             className={styles.product}

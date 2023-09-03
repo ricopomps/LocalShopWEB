@@ -11,6 +11,7 @@ import { Store } from "../models/store";
 import { setSessionStoreId } from "../network/storeApi";
 import InfiniteScroll from "./InfiniteScroll";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -64,9 +65,8 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
           (existingProduct) => existingProduct._id !== product._id
         )
       );
-    } catch (error) {
-      console.log(error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   }
 

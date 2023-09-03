@@ -15,7 +15,6 @@ interface NotificationBarProps {
 interface NotificationBarItemProps {
   className?: string;
   notification: NotificationApi.Notification;
-  index: number;
 }
 
 const NotificationBar = ({ open, close }: NotificationBarProps) => {
@@ -68,10 +67,10 @@ const NotificationBar = ({ open, close }: NotificationBarProps) => {
   const NotificationBarItem = ({
     className,
     notification,
-    index,
   }: NotificationBarItemProps) => {
     return (
       <div
+        key={notification._id}
         className={`${styles.notificationItem} ${className} ${
           !notification.read && styles.unread
         }`}
@@ -150,7 +149,6 @@ const NotificationBar = ({ open, close }: NotificationBarProps) => {
           <NotificationBarItem
             className={styles.textoCarrinho}
             notification={notification}
-            index={index}
           />
         ))}
       </Container>

@@ -8,6 +8,7 @@ import * as NotesApi from "../network/notes_api";
 import * as StoresApi from "../network/storeApi";
 import { User, UserType } from "../models/user";
 import styles from "../styles/LoginDesktop.module.css";
+import { toast } from "react-toastify";
 
 interface LoginDesktopPageProps {
   onLoginSuccessful: (user: User) => void;
@@ -30,9 +31,8 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
       } else {
         navigate(store ? "/products" : "/store");
       }
-    } catch (error) {
-      console.log("error", error);
-      alert(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
   return (

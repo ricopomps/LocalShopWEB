@@ -91,18 +91,39 @@ const ProductPage = ({
         <h3 className={styles.descricao}>Descrição</h3>
         <Card className={styles.card}>{selectedProduct.description}</Card>
         <div className={styles.menosmais}>
-          <Button onClick={() => handleItemCountDecrease(selectedProduct._id)}>
+          <Button
+            className={styles.addRemoveButton}
+            onClick={() => handleItemCountDecrease(selectedProduct._id)}
+          >
             -
           </Button>
+          <Card className={styles.stock}>
+            <p>Estoque:</p>
+            <p>{selectedProduct.stock}</p>
+          </Card>
           <Button
+            className={styles.addRemoveButton}
             onClick={() => {
               if (
-                productsItems.find(
-                  (item) => item.product._id === selectedProduct._id
-                )
-              )
-                handleItemCountIncrease(selectedProduct._id);
-              else addProduct(selectedProduct);
+                (selectedProduct.stock && selectedProduct.stock <= 0) ||
+                !selectedProduct.stock
+              ) {
+                toast.error("Produto sem estoque");
+                return;
+              }
+              const productItem = productsItems.find(
+                (item) => item.product._id === selectedProduct._id
+              );
+              if (productItem) {
+                if (
+                  selectedProduct.stock &&
+                  selectedProduct.stock <= productItem.quantity
+                ) {
+                  toast.error("Produto sem estoque suficiente");
+                  return;
+                }
+                handleItemCountIncrease(selectedProduct);
+              } else addProduct(selectedProduct);
             }}
           >
             +

@@ -18,7 +18,7 @@ interface ShoppingListItemProps {
   productItem: ProductItem;
   isSelected: boolean;
   onSelect: (id: string) => void;
-  onIncrease: (id: string) => void;
+  onIncrease: (product: Product) => void;
   onDecrease: (id: string) => void;
   onDelete: (id: string) => void;
 }
@@ -134,7 +134,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
           </button>
           <span className={styles.itemCount}>{productItem.quantity}</span>
           <button
-            onClick={() => onIncrease(productItem.product._id)}
+            onClick={() => onIncrease(productItem.product)}
             className={styles.itemControlButton}
           >
             +
@@ -210,7 +210,21 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
             productItem={item}
             isSelected={selectedItemIds.includes(item.product._id)}
             onSelect={handleItemSelect}
-            onIncrease={handleItemCountIncrease}
+            onIncrease={() => {
+              const productItem = productsItems.find(
+                (productItem) => productItem.product._id === item.product._id
+              );
+              if (
+                (item.product.stock &&
+                  productItem &&
+                  item.product.stock <= productItem.quantity) ||
+                !item.product.stock
+              ) {
+                toast.error("Produto sem estoque suficiente");
+                return;
+              }
+              handleItemCountIncrease(item.product);
+            }}
             onDecrease={handleItemCountDecrease}
             onDelete={handleItemDelete}
           />

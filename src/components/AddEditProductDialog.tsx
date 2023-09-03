@@ -24,7 +24,7 @@ const AddEditProductDialog = ({
   storeId,
   categoryList,
 }: AddEditProductDialogProps) => {
-const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
+  const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
 
   const {
     register,
@@ -40,9 +40,10 @@ const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
       sale: productToEdit?.sale || false,
       promotionPercent: productToEdit?.promotionPercent || 0,
       oldPrice: productToEdit?.price || 0,
+      stock: productToEdit?.stock || 0,
     },
   });
-  
+
   async function onSubmit(input: ProductInput) {
     try {
       let productResponse: Product;
@@ -115,10 +116,18 @@ const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
             className={styles.selectProduct}
           />
           <TextInputField
-            name={saleOpen ? "oldPrice":"price"} 
+            name={saleOpen ? "oldPrice" : "price"}
             label="Preço:"
             type="text"
             placeholder="Preço"
+            register={register}
+            className={styles.inputProduct}
+          />
+          <TextInputField
+            name="stock"
+            label="Estoque:"
+            type="text"
+            placeholder="Estoque"
             register={register}
             className={styles.inputProduct}
           />
@@ -127,17 +136,21 @@ const [saleOpen, setSaleOpen] = useState(productToEdit?.sale || false);
             label="Deseja colocar o produto em pormoção:"
             type="checkbox"
             register={register}
-            onChange = {() =>{setSaleOpen(!saleOpen)}}
+            onChange={() => {
+              setSaleOpen(!saleOpen);
+            }}
           />
-          
-          {saleOpen && <TextInputField
-            name="price"
-            label="Quantos novo preço do produto:"
-            type="text"
-            placeholder="Novo preço"
-            register={register}
-            className={styles.inputProduct}
-          />}
+
+          {saleOpen && (
+            <TextInputField
+              name="price"
+              label="Quantos novo preço do produto:"
+              type="text"
+              placeholder="Novo preço"
+              register={register}
+              className={styles.inputProduct}
+            />
+          )}
         </Form>
       </Modal.Body>
       <Modal.Footer className={styles.modalFooterProduct}>

@@ -30,6 +30,7 @@ export interface ProductInput {
   sale?: boolean;
   promotionPercent?: number;
   oldPrice?: number;
+  stock?: number;
 }
 
 export async function createProduct(product: ProductInput): Promise<Product> {
