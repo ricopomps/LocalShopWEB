@@ -168,6 +168,25 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
     }
   };
 
+  const onFinish = async () => {
+    try {
+      const productsMapped = productsItems.map((item) => {
+        return {
+          product: item.product._id,
+          quantity: item.quantity,
+        };
+      });
+
+      if (!storeId) throw Error("Loja inválida");
+      const shoppingList = { storeId, products: productsMapped };
+      await ShoppingListApi.finishShoppingList(shoppingList);
+      toast.success("Lista de compras finalizada com sucesso!");
+      clearShoppingList();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
   return (
     <>
       <img
@@ -201,6 +220,9 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
         </div>
         <Button className={styles.btnSalvar} onClick={onSave}>
           Salvar
+        </Button>
+        <Button className={styles.btnFinalizar} onClick={onFinish}>
+          Finalizar
         </Button>
       </Container>
     </>

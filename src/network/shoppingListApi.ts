@@ -30,3 +30,7 @@ export const getShoppingList = async (
   const response = await getApi().get(`${baseUrl}/${storeId}`);
   return response.data;
 };
+
+export const finishShoppingList = async (shoppingList: ShoppingList) => {
+  await getApi().post(`${baseUrl}/finish`, shoppingList);
+};
