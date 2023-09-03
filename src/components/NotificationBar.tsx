@@ -124,7 +124,9 @@ const NotificationBar = ({ open, close }: NotificationBarProps) => {
 
   return (
     <>
-      <Container className={`${styles.cartSidebar} ${open ? styles.open : ""}`}>
+      <Container
+        className={`${styles.notificationSidebar} ${open ? styles.open : ""}`}
+      >
         <h1 className={styles.cartText}> Notificações</h1>
         <div className={styles.iconContainer}>
           <div>

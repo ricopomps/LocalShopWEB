@@ -71,7 +71,7 @@ const NavBar = ({
               </Nav>
               <Nav>
                 <Nav.Link className={styles.textNavbar} as={Link} to="/store">
-                  Visualizar loja
+                  Loja
                 </Nav.Link>
               </Nav>
             </>
