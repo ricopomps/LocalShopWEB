@@ -141,7 +141,12 @@ function App() {
                 }
               />
             )}
-            {loggedInUser && <NotificationBar open={openNotification} />}
+            {loggedInUser && (
+              <NotificationBar
+                open={openNotification}
+                close={() => setOpenNotification(false)}
+              />
+            )}
 
             <Container className={styles.pageContainer}>
               <Routes>

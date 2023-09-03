@@ -138,7 +138,9 @@
   background-color: saddlebrown;
 }
 
-.eyeIcon {
+.eyeIcon,
+.removeIcon,
+.closeIcon {
   height: 28px;
   width: 28px;
 }
@@ -146,17 +148,16 @@
   color: var(--amarelo);
 }
 
-.removeIcon {
-  height: 28px;
-  width: 28px;
-}
 .removeIcon:hover {
   color: red;
+}
+.closeIcon:hover {
+  color: var(--amarelo);
 }
 
 .iconContainer {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   margin-bottom: 8px;
   gap: 8px;
 }

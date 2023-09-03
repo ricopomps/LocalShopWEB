@@ -6,8 +6,10 @@ import * as NotificationApi from "../network/notificationApi";
 import { formatDate } from "../utils/formatDate";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { MdOutlineRemoveCircle } from "react-icons/md";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
 interface NotificationBarProps {
   open: boolean;
+  close: () => void;
 }
 
 interface NotificationBarItemProps {
@@ -16,7 +18,7 @@ interface NotificationBarItemProps {
   index: number;
 }
 
-const NotificationBar = ({ open }: NotificationBarProps) => {
+const NotificationBar = ({ open, close }: NotificationBarProps) => {
   const [notifications, setNotifications] = useState<
     NotificationApi.Notification[]
   >([]);
@@ -125,14 +127,22 @@ const NotificationBar = ({ open }: NotificationBarProps) => {
       <Container className={`${styles.cartSidebar} ${open ? styles.open : ""}`}>
         <h1 className={styles.cartText}> Notificações</h1>
         <div className={styles.iconContainer}>
-          <AiFillEyeInvisible
-            className={styles.eyeIcon}
-            onClick={readAllNotifications}
-          />
-          <MdOutlineRemoveCircle
-            className={styles.removeIcon}
-            onClick={deleteAllNotifications}
-          />
+          <div>
+            <BsFillArrowRightCircleFill
+              className={styles.closeIcon}
+              onClick={close}
+            />
+          </div>
+          <div className={styles.iconContainer}>
+            <AiFillEyeInvisible
+              className={styles.eyeIcon}
+              onClick={readAllNotifications}
+            />
+            <MdOutlineRemoveCircle
+              className={styles.removeIcon}
+              onClick={deleteAllNotifications}
+            />
+          </div>
         </div>
         {notifications.map((notification, index) => (
           <NotificationBarItem
