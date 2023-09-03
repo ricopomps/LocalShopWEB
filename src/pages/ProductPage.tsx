@@ -108,12 +108,7 @@ const ProductPage = ({
             +
           </Button>
         </div>
-        <ShoppingList
-          cartOpen={true}
-          storeId={store}
-          toggleCart={() => {}}
-          onDelete={() => {}}
-        />
+        <ShoppingList storeId={store} onDelete={() => {}} />
       </div>
     </div>
   );

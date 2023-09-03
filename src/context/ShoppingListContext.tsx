@@ -27,6 +27,8 @@ export enum REDUCER_ACTION_TYPE {
   INCREASE_COUNT,
   DECREASE_COUNT,
   ADD_PRODUCT,
+  OPEN_SHOPPING_LIST,
+  CLOSE_SHOPPING_LIST,
 }
 
 export type ReducerAction = {
@@ -36,10 +38,12 @@ export type ReducerAction = {
 
 type StateType = {
   shoppingList: ShoppingList;
+  open: boolean;
 };
 
 export const initialState: StateType = {
   shoppingList: { productsItems: [], selectedItemIds: [] },
+  open: false,
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -158,6 +162,18 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         },
       };
     }
+    case REDUCER_ACTION_TYPE.OPEN_SHOPPING_LIST: {
+      return {
+        ...state,
+        open: true,
+      };
+    }
+    case REDUCER_ACTION_TYPE.CLOSE_SHOPPING_LIST: {
+      return {
+        ...state,
+        open: false,
+      };
+    }
     default: {
       return state;
     }
@@ -221,6 +237,18 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const openShoppingList = useCallback(() => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.OPEN_SHOPPING_LIST,
+    });
+  }, []);
+
+  const closeShoppingList = useCallback(() => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.CLOSE_SHOPPING_LIST,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
@@ -231,6 +259,8 @@ const useShoppingListContext = (initialState: StateType) => {
     handleItemCountIncrease,
     handleItemCountDecrease,
     addProduct,
+    openShoppingList,
+    closeShoppingList,
   };
 };
 
@@ -246,6 +276,8 @@ const initialContextState: UseShoppingListContextType = {
   handleItemCountIncrease: (itemId: string) => {},
   handleItemCountDecrease: (itemId: string) => {},
   addProduct: (product: Product) => {},
+  openShoppingList: () => {},
+  closeShoppingList: () => {},
 };
 
 export const ShoppingListContext =
@@ -268,6 +300,7 @@ export const ShoppingListProvider = ({
 
 type UseShoppingListHookType = {
   shoppingList: ShoppingList;
+  open: boolean;
   setShoppingList: (shoppingList: ShoppingList) => void;
   clearShoppingList: () => void;
   setSelectedItemIds: (selectedItemIds: string[]) => void;
@@ -276,11 +309,13 @@ type UseShoppingListHookType = {
   handleItemCountIncrease: (itemId: string) => void;
   handleItemCountDecrease: (itemId: string) => void;
   addProduct: (product: Product) => void;
+  openShoppingList: () => void;
+  closeShoppingList: () => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
   const {
-    state: { shoppingList },
+    state: { shoppingList, open },
     setShoppingList,
     clearShoppingList,
     setSelectedItemIds,
@@ -289,9 +324,12 @@ export const useShoppingList = (): UseShoppingListHookType => {
     handleItemCountIncrease,
     handleItemCountDecrease,
     addProduct,
+    openShoppingList,
+    closeShoppingList,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
+    open,
     setShoppingList,
     clearShoppingList,
     setSelectedItemIds,
@@ -300,5 +338,7 @@ export const useShoppingList = (): UseShoppingListHookType => {
     handleItemCountIncrease,
     handleItemCountDecrease,
     addProduct,
+    openShoppingList,
+    closeShoppingList,
   };
 };

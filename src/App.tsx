@@ -121,7 +121,10 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <ShoppingListProvider shoppingList={initialState.shoppingList}>
+      <ShoppingListProvider
+        shoppingList={initialState.shoppingList}
+        open={initialState.open}
+      >
         <BrowserRouter>
           <div>
             {loggedInUser && (

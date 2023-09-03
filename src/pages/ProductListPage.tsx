@@ -269,8 +269,6 @@ const ProductListPage = ({
       <ShoppingList
         storeId={storeId}
         onDelete={removeProductFromShoppingCart}
-        cartOpen={cartOpen}
-        toggleCart={toggleCart}
       />
     </>
   );

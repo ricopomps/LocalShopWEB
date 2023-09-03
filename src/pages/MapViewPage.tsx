@@ -20,12 +20,7 @@ const MapViewPage = () => {
         ) : (
           <p>Loja não encontrada</p>
         )}
-        <ShoppingList
-          cartOpen={true}
-          storeId={store}
-          toggleCart={() => {}}
-          onDelete={() => {}}
-        />
+        <ShoppingList storeId={store} onDelete={() => {}} />
       </div>
     </div>
   );

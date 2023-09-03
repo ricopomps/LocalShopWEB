@@ -11,8 +11,6 @@ import { Product } from "../models/product";
 interface ShoppingListProps {
   storeId: string | null;
   onDelete: (id: string) => void;
-  cartOpen: boolean;
-  toggleCart: () => void;
 }
 
 interface ShoppingListItemProps {
@@ -25,22 +23,26 @@ interface ShoppingListItemProps {
   onDelete: (id: string) => void;
 }
 
-const ShoppingList = ({
-  storeId,
-  onDelete,
-  cartOpen,
-  toggleCart,
-}: ShoppingListProps) => {
+const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
   const {
     shoppingList: { productsItems, selectedItemIds, storeId: storeIdContext },
+    open: cartOpen,
     setSelectedItemIds,
     clearShoppingList,
     setProductsItems,
     setStoreId,
     handleItemCountIncrease,
     handleItemCountDecrease,
+    openShoppingList,
+    closeShoppingList,
   } = useShoppingList();
   const navigate = useNavigate();
+
+  const toggleCart = () => {
+    if (cartOpen) closeShoppingList();
+    else openShoppingList();
+  };
+
   useEffect(() => {
     const getPreviousShoppingList = async () => {
       try {
@@ -52,7 +54,7 @@ const ShoppingList = ({
         } else if (storeIdContext && storeId !== storeIdContext) {
           clearShoppingList();
         }
-        toggleCart();
+        openShoppingList();
       } catch (error) {}
     };
     if (storeId) setStoreId(storeId);
