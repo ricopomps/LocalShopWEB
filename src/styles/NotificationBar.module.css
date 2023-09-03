@@ -43,10 +43,14 @@
   z-index: 1026;
   box-shadow: #666 0px 0px 15px 0px;
 }
-.shoppingItem {
+.notificationItem {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.notificationItem:hover {
+  box-shadow: #666 0px 0px 15px 0px;
 }
 
 .itemInfo {

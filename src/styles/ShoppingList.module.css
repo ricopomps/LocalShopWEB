@@ -32,6 +32,10 @@
   margin-bottom: 10px;
 }
 
+.shoppingItem:hover {
+  box-shadow: #666 0px 0px 15px 0px;
+}
+
 .itemInfo {
   display: flex;
   flex-direction: column;

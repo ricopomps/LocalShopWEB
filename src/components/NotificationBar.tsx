@@ -70,7 +70,7 @@ const NotificationBar = ({ open }: NotificationBarProps) => {
   }: NotificationBarItemProps) => {
     return (
       <div
-        className={`${styles.shoppingItem} ${className} ${
+        className={`${styles.notificationItem} ${className} ${
           !notification.read && styles.unread
         }`}
         onClick={() => readNotification(notification)}
