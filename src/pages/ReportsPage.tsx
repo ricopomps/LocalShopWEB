@@ -29,11 +29,11 @@ const ReportsPage = () => {
     bar: { label: "Barra", implemented: true },
     line: { label: "Linha", implemented: true },
     pie: { label: "Pizza", implemented: false },
-    bubble: { label: "Bolha", implemented: true },
+    bubble: { label: "Bolha", implemented: false },
     doughnut: { label: "Rosquinha", implemented: false },
     polarArea: { label: "Área Polar", implemented: false },
     radar: { label: "Radar", implemented: false },
-    scatter: { label: "Dispersão", implemented: true },
+    scatter: { label: "Dispersão", implemented: false },
   };
 
   const getChart = async () => {
@@ -71,7 +71,9 @@ const ReportsPage = () => {
         return <Chart data={data} currency chartType={selectedChartType} />;
       }
       case Charts.sales: {
-        return <Chart data={data} chartType={selectedChartType} />;
+        return (
+          <Chart data={data} showLabelInTitle chartType={selectedChartType} />
+        );
       }
     }
   };
