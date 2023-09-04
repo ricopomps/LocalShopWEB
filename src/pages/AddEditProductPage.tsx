@@ -16,7 +16,6 @@ interface AddEditProductPageProps {
   storeId: string;
 }
 
-
 const AddEditProductPage = ({
   onProductSaved,
   storeId,
@@ -59,8 +58,8 @@ const AddEditProductPage = ({
           storeId,
         });
       }
-      toast.success("Produto cadastrado com sucesso!")
-      navigate("/products")
+      toast.success("Produto cadastrado com sucesso!");
+      navigate("/products");
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
@@ -70,7 +69,7 @@ const AddEditProductPage = ({
       <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
           name="name"
-          label=""
+          label="Nome do produto"
           type="text"
           placeholder="Nome do produto"
           register={register}
@@ -80,7 +79,7 @@ const AddEditProductPage = ({
         />
         <TextInputField
           name="description"
-          label=""
+          label="Descrição do produto"
           as="textarea"
           rows={5}
           placeholder="Descrição do produto"
@@ -89,7 +88,7 @@ const AddEditProductPage = ({
         />
         <TextInputField
           name="image"
-          label=""
+          label="Imagem"
           type="text"
           placeholder="Imagem"
           register={register}
@@ -97,7 +96,7 @@ const AddEditProductPage = ({
         />
         <TextInputField
           name="category"
-          label=""
+          label="Categoria"
           type="text"
           as="select"
           options={categories.map((c) => {
@@ -110,7 +109,7 @@ const AddEditProductPage = ({
         />
         <TextInputField
           name="price"
-          label=""
+          label="Preço"
           type="text"
           placeholder="Preço"
           register={register}
