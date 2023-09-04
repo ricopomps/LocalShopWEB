@@ -119,3 +119,17 @@ export async function getReportProductsSold(
   var treatedData = transformDataForChart(response.data);
   return treatedData;
 }
+
+export async function getIncomeReport(
+  startDate: Date,
+  endDate: Date
+): Promise<ChartData> {
+  const response = await getApi().get(`${baseUrl}/incomeReport`, {
+    params: {
+      startDate: startOfMonth(startDate),
+      endDate: endOfMonth(endDate),
+    },
+  });
+  var treatedData = transformDataForChart(response.data);
+  return treatedData;
+}

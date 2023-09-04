@@ -28,7 +28,7 @@ const ReportsPage = () => {
     if (!data) return <></>;
     switch (selectedChart) {
       case Charts.profits: {
-        return <BarChart data={data} />;
+        return <BarChart data={data} currency={true} />;
       }
       case Charts.sales: {
         return <LineChart data={data} />;
@@ -41,14 +41,11 @@ const ReportsPage = () => {
       let chartData: ChartData;
       switch (selectedChart) {
         case Charts.profits:
-          chartData = await ReportsApi.getReport(startDate, endDate);
+          chartData = await ReportsApi.getIncomeReport(startDate, endDate);
           break;
 
         case Charts.sales:
-          chartData = await ReportsApi.getReportProductsSold(
-            startDate,
-            endDate
-          );
+          chartData = await ReportsApi.getIncomeReport(startDate, endDate);
           break;
       }
       setData(chartData);
