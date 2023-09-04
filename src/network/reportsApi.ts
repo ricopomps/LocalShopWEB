@@ -140,3 +140,17 @@ export async function getIncomeReport(
   var treatedData = transformDataForChart(response.data, Charts.income);
   return treatedData;
 }
+
+export async function getIncomeByProductReport(
+  startDate: Date,
+  endDate: Date
+): Promise<ChartData> {
+  const response = await getApi().get(`${baseUrl}/incomeByProducts`, {
+    params: {
+      startDate: startOfMonth(startDate),
+      endDate: endOfMonth(endDate),
+    },
+  });
+  var treatedData = transformDataForChart(response.data, Charts.income);
+  return treatedData;
+}

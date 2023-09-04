@@ -14,6 +14,7 @@ registerLocale("br", br);
 export enum Charts {
   income = "Rendimentos",
   sales = "Produtos vendidos",
+  incomeByProducts = "Rendimentos por produto",
 }
 
 const ReportsPage = () => {
@@ -50,6 +51,12 @@ const ReportsPage = () => {
             endDate
           );
           break;
+        case Charts.incomeByProducts:
+          chartData = await ReportsApi.getIncomeByProductReport(
+            startDate,
+            endDate
+          );
+          break;
       }
       setData(chartData);
     } catch (error: any) {
@@ -73,6 +80,16 @@ const ReportsPage = () => {
       case Charts.sales: {
         return (
           <Chart data={data} showLabelInTitle chartType={selectedChartType} />
+        );
+      }
+      case Charts.incomeByProducts: {
+        return (
+          <Chart
+            data={data}
+            currency
+            showLabelInTitle
+            chartType={selectedChartType}
+          />
         );
       }
     }
