@@ -1,6 +1,6 @@
 import { Form } from "react-bootstrap";
 import { RegisterOptions, UseFormRegister, FieldError } from "react-hook-form";
-
+import styles from "../../styles/StoresPage.module.css";
 
 export interface Option {
   value: string | number;
@@ -16,6 +16,8 @@ interface CheckInputFieldProps {
   hasDefaultValue?: boolean;
   margin?: boolean;
   [x: string]: any;
+  className?: string;
+  classNameLabel?: string;
 }
 
 const CheckInputField = ({
@@ -28,15 +30,15 @@ const CheckInputField = ({
   hasDefaultValue,
   options,
   margin = true,
+  className,
+  classNameLabel,
   ...props
 }: CheckInputFieldProps) => {
   return (
-    <Form.Group
-      className={margin ? "mb-3" : undefined}
-      controlId={name + "-input"}
-    >
-      {label && <Form.Label>{label}</Form.Label>}
+    <Form.Group className={className} controlId={name + "-input"}>
+      {label && <Form.Label className={classNameLabel}>{label}</Form.Label>}
       <Form.Check
+        className={styles.checkFilter}
         {...register(name, registerOptions)}
         {...props}
         placeholder={placeholder}
