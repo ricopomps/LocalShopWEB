@@ -47,7 +47,6 @@ function transformDataForChart(
 ): ChartData {
   if (backendData?.length === 0)
     throw Error("Não existem dados para o período informado");
-  console.log(backendData);
   if (isMultipleReportData(backendData)) {
     const labels = backendData.map((entry) => entry.month);
     const datasets: Dataset[] = [];

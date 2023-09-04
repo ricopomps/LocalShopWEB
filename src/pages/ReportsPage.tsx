@@ -3,18 +3,17 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import DatePicker, { registerLocale } from "react-datepicker";
 import br from "date-fns/locale/pt-BR";
-import BarChart from "../components/Chart/BarChart";
-import LineChart from "../components/Chart/LineChart";
 import TextInputField from "../components/form/TextInputField";
 import styles from "../styles/ReportsPage.module.css";
 import * as ReportsApi from "../network/reportsApi";
 import { ChartData } from "../network/reportsApi";
+import Chart from "../components/Chart/Chart";
 
 registerLocale("br", br);
 
 export enum Charts {
   income = "Rendimentos",
-  sales = "Vendas",
+  sales = "Produtos vendidos",
 }
 
 const ReportsPage = () => {
@@ -29,11 +28,13 @@ const ReportsPage = () => {
       switch (selectedChart) {
         case Charts.income:
           chartData = await ReportsApi.getIncomeReport(startDate, endDate);
-          console.log(chartData);
           break;
 
         case Charts.sales:
-          chartData = await ReportsApi.getIncomeReport(startDate, endDate);
+          chartData = await ReportsApi.getReportProductsSold(
+            startDate,
+            endDate
+          );
           break;
       }
       setData(chartData);
@@ -53,10 +54,10 @@ const ReportsPage = () => {
     if (!data) return <></>;
     switch (selectedChart) {
       case Charts.income: {
-        return <BarChart data={data} currency={true} />;
+        return <Chart data={data} currency chartType="bar" />;
       }
       case Charts.sales: {
-        return <LineChart data={data} />;
+        return <Chart data={data} chartType="line" />;
       }
     }
   };
