@@ -144,7 +144,7 @@ const AddEditProductDialog = ({
           {saleOpen && (
             <TextInputField
               name="price"
-              label="Quantos novo preço do produto:"
+              label="Novo preço do produto:"
               type="text"
               placeholder="Novo preço"
               register={register}
