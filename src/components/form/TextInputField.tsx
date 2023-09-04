@@ -5,6 +5,8 @@ import styles from "../../styles/TextInputField.module.css";
 export interface Option {
   value: string | number;
   key: string | number;
+  disabled?: boolean;
+  show?: boolean;
 }
 interface TextInputFieldProps {
   name: string;
@@ -53,9 +55,19 @@ const TextInputField = ({
               </option>
             )}
             {options.map((option) => (
-              <option key={option.key} value={option.value}>
-                {option.key}
-              </option>
+              <>
+                {option.show ? (
+                  <></>
+                ) : (
+                  <option
+                    key={option.key}
+                    value={option.value}
+                    disabled={option.disabled}
+                  >
+                    {option.key}
+                  </option>
+                )}
+              </>
             ))}
           </>
         ) : null}

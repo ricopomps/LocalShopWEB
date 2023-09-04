@@ -7,7 +7,7 @@ import TextInputField from "../components/form/TextInputField";
 import styles from "../styles/ReportsPage.module.css";
 import * as ReportsApi from "../network/reportsApi";
 import { ChartData } from "../network/reportsApi";
-import Chart from "../components/Chart/Chart";
+import Chart, { ChartTypeEnum } from "../components/Chart/Chart";
 
 registerLocale("br", br);
 
@@ -18,9 +18,23 @@ export enum Charts {
 
 const ReportsPage = () => {
   const [selectedChart, setSelectedChart] = useState<Charts>(Charts.income);
+  const [selectedChartType, setSelectedChartType] = useState<ChartTypeEnum>(
+    ChartTypeEnum.Bar
+  );
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [data, setData] = useState<ChartData | null>(null);
+
+  const chartTypeLabels = {
+    bar: { label: "Barra", implemented: true },
+    line: { label: "Linha", implemented: true },
+    pie: { label: "Pizza", implemented: false },
+    bubble: { label: "Bolha", implemented: true },
+    doughnut: { label: "Rosquinha", implemented: false },
+    polarArea: { label: "Área Polar", implemented: false },
+    radar: { label: "Radar", implemented: false },
+    scatter: { label: "Dispersão", implemented: true },
+  };
 
   const getChart = async () => {
     try {
@@ -54,10 +68,10 @@ const ReportsPage = () => {
     if (!data) return <></>;
     switch (selectedChart) {
       case Charts.income: {
-        return <Chart data={data} currency chartType="bar" />;
+        return <Chart data={data} currency chartType={selectedChartType} />;
       }
       case Charts.sales: {
-        return <Chart data={data} chartType="line" />;
+        return <Chart data={data} chartType={selectedChartType} />;
       }
     }
   };
@@ -88,6 +102,24 @@ const ReportsPage = () => {
           register={register}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setSelectedChart(e.target.value as Charts);
+          }}
+        />
+        <TextInputField
+          name="chartType"
+          type="text"
+          as="select"
+          options={Object.values(ChartTypeEnum).map((c) => {
+            const label = chartTypeLabels[c].label || c;
+            return {
+              value: c,
+              key: label,
+              disabled: !chartTypeLabels[c].implemented,
+              show: !chartTypeLabels[c].implemented,
+            };
+          })}
+          register={register}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setSelectedChartType(e.target.value as ChartTypeEnum);
           }}
         />
         <div className={styles.endDatePickerContainer}>
