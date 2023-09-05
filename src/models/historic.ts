@@ -1,11 +1,11 @@
+import { ProductItem } from "../context/ShoppingListContext";
+import { Store } from "./store";
+
 export interface Historic {
   _id: string;
-  name: string;
-  description?: string;
-  image?: string;
-  price: number;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  totalValue?: number;
+  store: Store;
+  creatorId: string;
+  products: ProductItem[];
+  createdAt: Date;
+  totalValue: number;
 }

@@ -18,31 +18,25 @@ const Historic = ({
   onDeleteHistoricClicked,
   className,
 }: HistoricProps) => {
-  const { name, description, createdAt, updatedAt } = historic;
+  const {  totalValue, createdAt } = historic;
 
-  let createdUpdatedText: string;
-  if (updatedAt > createdAt) {
-    createdUpdatedText = "Atualizado: " + formatDate(updatedAt);
-  } else {
-    createdUpdatedText = "Criado: " + formatDate(createdAt);
-  }
-
+  const createdUpdatedText = createdAt;
   return (
     <Card
       onClick={() => onHistoricClicked(historic)}
       className={`${styles.historicCard} ${className}`}
     >
-      {historic.image && (
+      {historic.store.image && (
         <Card.Img
           variant="top"
-          src={historic.image}
+          src={historic.store.image}
           alt=""
           className={styles.historicImage}
         />
       )}
       <Card.Body className={styles.cardBody}>
         <Card.Title className={`${stylesUtils.flexCenter} ${styles.titleText}`}>
-          {name}
+          {historic.store.name}
           {onDeleteHistoricClicked && (
             <MdDelete
               className="text-muted ms-auto"
@@ -54,10 +48,10 @@ const Historic = ({
           )}
         </Card.Title>
         <Card.Text className={`${stylesUtils.flexCenter}${styles.historicText}`}>
-          {description}
+          {totalValue}
         </Card.Text>
       </Card.Body>
-      <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
+      <Card.Footer className="text-muted">{createdUpdatedText.toString()}</Card.Footer>
     </Card>
   );
 };

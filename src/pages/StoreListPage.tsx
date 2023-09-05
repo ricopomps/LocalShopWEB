@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Col, Spinner, Form, Button } from "react-bootstrap";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
+import * as HistoricApi from "../network/historicApi";
+import { Historic as HistoricModel } from "../models/historic";
 import styles from "../styles/StoresPage.module.css";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
@@ -19,13 +21,14 @@ interface StoreListPageProps {}
 
 const StoreListPage = ({}: StoreListPageProps) => {
   const navigate = useNavigate();
-  const [historic, setHistoric] = useState<StoreModel[]>([]);
+  const [historic, setHistoric] = useState<HistoricModel[]>([]);
   const [stores, setStores] = useState<StoreModel[]>([]);
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
   const [showStoresLoadingError, setshowStoresLoadingError] = useState(false);
   const [historicLoading, setHistoricLoading] = useState(true);
-  const [showHistoricLoadingError, setshowHistoricLoadingError] = useState(false);
+  const [showHistoricLoadingError, setshowHistoricLoadingError] =
+    useState(false);
 
   useEffect(() => {
     async function loadStores() {
@@ -34,7 +37,8 @@ const StoreListPage = ({}: StoreListPageProps) => {
         setStoresLoading(true);
         const stores = await StoresApi.fetchStores();
         setStores(stores);
-        setHistoric(stores);
+        const historics = await HistoricApi.getHistorics();
+        setHistoric(historics);
       } catch (error) {
         console.error(error);
         setshowStoresLoadingError(true);
@@ -64,14 +68,16 @@ const StoreListPage = ({}: StoreListPageProps) => {
       ))}
     </HorizontalScroll>
   );
-
+  const goToHistoric = (historic: HistoricModel) => {
+    navigate("/store/product?store=" + historic._id);
+  };
   const historicGrid = (
     <HorizontalScroll>
       {historic.map((historic) => (
         <Col key={historic._id}>
           <Historic
             historic={historic}
-            onHistoricClicked={goToStore}
+            onHistoricClicked={goToHistoric}
             className={styles.historic}
           ></Historic>
         </Col>
