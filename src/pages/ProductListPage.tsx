@@ -194,111 +194,113 @@ const ProductListPage = ({
 
   return (
     <>
-      <h1 className={styles.storeTitle}>{storeName}</h1>
-      <div className={styles.header}>
-        <Button className={styles.btnMapa} onClick={goToStoreMap}>
-          Ir para o mapa
-        </Button>
-        {storeId && loggedUser.favoriteStores?.includes(storeId) ? (
-          <IoStorefrontSharp
-            className={styles.favIcon}
-            onClick={removeStoreFavorite}
-          />
-        ) : (
-          <IoStorefrontOutline
-            className={styles.favIcon}
-            onClick={addStoreFavorite}
-          />
-        )}
-      </div>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.filterAlign}>
-          <TextInputField
-            name="productName"
-            label=""
-            type="text"
-            placeholder="Pesquisar Produto"
-            register={register}
-            className={styles.inputFilter}
-          ></TextInputField>
-          <TextInputField
-            name="sort"
-            type="text"
-            as="select"
-            options={sortOptions.map((c) => {
-              return { value: c, key: c };
-            })}
-            hasDefaultValue={true}
-            placeholder="Ordenar Por"
-            nullable={true}
-            register={register}
-            className={styles.selectFilter}
-          />
-          <div className={styles.bntAlign}>
-            {filterOpen ? (
-              <img
-                onClick={toggleFilter}
-                src={filterCheio}
-                alt="filter"
-                className={styles.bntFilter}
-              />
-            ) : (
-              <img
-                onClick={toggleFilter}
-                src={filter}
-                alt="filter"
-                className={styles.bntFilter}
-              />
-            )}
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={styles.bntFilterGlass}
-            >
-              <img src={magnifying_glass} alt="lupa" />
-            </Button>
-          </div>
-        </div>
-        <div className={styles.filterAlign}>
-          {filterOpen && (
-            <>
-              <TextInputField
-                name="category"
-                type="text"
-                as="select"
-                options={categories.map((c) => {
-                  return { value: c, key: c };
-                })}
-                hasDefaultValue={true}
-                placeholder="Categoria"
-                nullable={true}
-                register={register}
-                className={styles.selectFilter}
-              />
-              <TextInputField
-                name="priceFrom"
-                type="number"
-                placeholder="Valor Mínimo"
-                register={register}
-                className={styles.inputNumberFilter}
-              ></TextInputField>
-              <TextInputField
-                name="priceTo"
-                type="number"
-                placeholder="Valor Máximo"
-                register={register}
-                className={styles.inputNumberFilter}
-              ></TextInputField>
-              <CheckInputField
-                name="favorite"
-                label="Favoritos"
-                type="checkbox"
-                register={register}
-              />
-            </>
+      <div className={styles.conteiner}>
+        <h1 className={styles.storeTitle}>{storeName}</h1>
+        <div className={styles.header}>
+          <Button className={styles.btnMapa} onClick={goToStoreMap}>
+            Ir para o mapa
+          </Button>
+          {storeId && loggedUser.favoriteStores?.includes(storeId) ? (
+            <IoStorefrontSharp
+              className={styles.favIcon}
+              onClick={removeStoreFavorite}
+            />
+          ) : (
+            <IoStorefrontOutline
+              className={styles.favIcon}
+              onClick={addStoreFavorite}
+            />
           )}
         </div>
-      </Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.filterAlign}>
+            <TextInputField
+              name="productName"
+              label=""
+              type="text"
+              placeholder="Pesquisar Produto"
+              register={register}
+              className={styles.inputFilter}
+            ></TextInputField>
+            <TextInputField
+              name="sort"
+              type="text"
+              as="select"
+              options={sortOptions.map((c) => {
+                return { value: c, key: c };
+              })}
+              hasDefaultValue={true}
+              placeholder="Ordenar Por"
+              nullable={true}
+              register={register}
+              className={styles.selectFilter}
+            />
+            <div className={styles.bntAlign}>
+              {filterOpen ? (
+                <img
+                  onClick={toggleFilter}
+                  src={filterCheio}
+                  alt="filter"
+                  className={styles.bntFilter}
+                />
+              ) : (
+                <img
+                  onClick={toggleFilter}
+                  src={filter}
+                  alt="filter"
+                  className={styles.bntFilter}
+                />
+              )}
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={styles.bntFilterGlass}
+              >
+                <img src={magnifying_glass} alt="lupa" />
+              </Button>
+            </div>
+          </div>
+          <div className={styles.filterAlign}>
+            {filterOpen && (
+              <>
+                <TextInputField
+                  name="category"
+                  type="text"
+                  as="select"
+                  options={categories.map((c) => {
+                    return { value: c, key: c };
+                  })}
+                  hasDefaultValue={true}
+                  placeholder="Categoria"
+                  nullable={true}
+                  register={register}
+                  className={styles.selectFilter}
+                />
+                <TextInputField
+                  name="priceFrom"
+                  type="number"
+                  placeholder="Valor Mínimo"
+                  register={register}
+                  className={styles.inputNumberFilter}
+                ></TextInputField>
+                <TextInputField
+                  name="priceTo"
+                  type="number"
+                  placeholder="Valor Máximo"
+                  register={register}
+                  className={styles.inputNumberFilter}
+                ></TextInputField>
+                <CheckInputField
+                  name="favorite"
+                  label="Favoritos"
+                  type="checkbox"
+                  register={register}
+                />
+              </>
+            )}
+          </div>
+        </Form>
+      </div>
       {!showProductsLoadingError && (
         <>
           {products.length > 0 ? (
