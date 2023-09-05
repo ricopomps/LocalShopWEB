@@ -111,6 +111,19 @@ const ReportsPage = () => {
             maxDate={endDate}
           />
         </div>
+        <div className={styles.endDatePickerContainer}>
+          <DatePicker
+            className={styles.datePicker}
+            selected={endDate}
+            onChange={(date: Date) => {
+              setEndDate(date);
+            }}
+            locale="br"
+            showMonthYearPicker
+            dateFormat="yyyy - MMMM"
+            minDate={startDate}
+          />
+        </div>
         <TextInputField
           name="chart"
           type="text"
@@ -122,6 +135,7 @@ const ReportsPage = () => {
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setSelectedChart(e.target.value as Charts);
           }}
+          className={styles.selectType}
         />
         <TextInputField
           name="chartType"
@@ -140,20 +154,8 @@ const ReportsPage = () => {
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setSelectedChartType(e.target.value as ChartTypeEnum);
           }}
+          className={styles.selectType}
         />
-        <div className={styles.endDatePickerContainer}>
-          <DatePicker
-            className={styles.datePicker}
-            selected={endDate}
-            onChange={(date: Date) => {
-              setEndDate(date);
-            }}
-            locale="br"
-            showMonthYearPicker
-            dateFormat="yyyy - MMMM"
-            minDate={startDate}
-          />
-        </div>
       </div>
       <ChartComponent />
     </div>
