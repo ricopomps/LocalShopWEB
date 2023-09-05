@@ -1,5 +1,6 @@
 import { endOfMonth, startOfMonth } from "date-fns";
 import { getApi } from "./api";
+import { Charts } from "../pages/ReportsPage";
 
 interface SingularValue {
   label: string;
@@ -39,7 +40,13 @@ function isSingleReportData(data: ReportData): data is SingleReportData[] {
 function isMultipleReportData(data: ReportData): data is MultipleReportData[] {
   return "values" in data[0];
 }
-function transformDataForChart(backendData: ReportData): ChartData {
+
+function transformDataForChart(
+  backendData: ReportData,
+  reportType?: Charts
+): ChartData {
+  if (backendData?.length === 0)
+    throw Error("Não existem dados para o período informado");
   if (isMultipleReportData(backendData)) {
     const labels = backendData.map((entry) => entry.month);
     const datasets: Dataset[] = [];
@@ -76,7 +83,7 @@ function transformDataForChart(backendData: ReportData): ChartData {
       labels: backendData.map((entry) => entry.month),
       datasets: [
         {
-          label: "Relatório",
+          label: reportType ?? "Relatório",
           data: backendData.map((entry) => entry.value),
           backgroundColor: [`#f8ce41`],
           borderColor: "black",
@@ -117,5 +124,33 @@ export async function getReportProductsSold(
     },
   });
   var treatedData = transformDataForChart(response.data);
+  return treatedData;
+}
+
+export async function getIncomeReport(
+  startDate: Date,
+  endDate: Date
+): Promise<ChartData> {
+  const response = await getApi().get(`${baseUrl}/incomeReport`, {
+    params: {
+      startDate: startOfMonth(startDate),
+      endDate: endOfMonth(endDate),
+    },
+  });
+  var treatedData = transformDataForChart(response.data, Charts.income);
+  return treatedData;
+}
+
+export async function getIncomeByProductReport(
+  startDate: Date,
+  endDate: Date
+): Promise<ChartData> {
+  const response = await getApi().get(`${baseUrl}/incomeByProducts`, {
+    params: {
+      startDate: startOfMonth(startDate),
+      endDate: endOfMonth(endDate),
+    },
+  });
+  var treatedData = transformDataForChart(response.data, Charts.income);
   return treatedData;
 }

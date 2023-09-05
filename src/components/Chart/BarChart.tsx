@@ -8,11 +8,14 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { ChartData } from "../../network/reportsApi";
 
 interface BarChartProps {
   data: ChartData;
+  currency?: boolean;
+  showLabelInTitle?: boolean;
 }
 
 ChartJS.register(
@@ -24,8 +27,24 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = ({ data }: BarChartProps) => {
+const BarChart = ({ data, currency, showLabelInTitle }: BarChartProps) => {
   const options = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tooltipItem: TooltipItem<"bar">[]) => {
+            return showLabelInTitle
+              ? tooltipItem[0].dataset.label
+              : tooltipItem[0].label;
+          },
+          label: (tooltipItem: TooltipItem<"bar">) => {
+            return currency
+              ? "R$" + parseFloat(tooltipItem.formattedValue).toFixed(2)
+              : `${tooltipItem.formattedValue}`;
+          },
+        },
+      },
+    },
     scales: {
       x: {
         type: "category" as const,
