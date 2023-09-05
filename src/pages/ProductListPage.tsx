@@ -163,6 +163,17 @@ const ProductListPage = ({
     loadCategories();
   }, []);
 
+  const [sortOptions, setSortOptions] = useState<string[]>([""]);
+
+  const loadSortOptions = async () => {
+    const a: string[] = (await ProductsApi.getSortOptions()).sortOptions;
+    setSortOptions(a);
+  };
+
+  useEffect(() => {
+    loadSortOptions();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -183,8 +194,8 @@ const ProductListPage = ({
 
   return (
     <>
+      <h1 className={styles.storeTitle}>{storeName}</h1>
       <div className={styles.header}>
-        <h1 className={styles.storeTitle}>{storeName}</h1>
         <Button className={styles.btnMapa} onClick={goToStoreMap}>
           Ir para o mapa
         </Button>
@@ -210,6 +221,19 @@ const ProductListPage = ({
             register={register}
             className={styles.inputFilter}
           ></TextInputField>
+          <TextInputField
+            name="sort"
+            type="text"
+            as="select"
+            options={sortOptions.map((c) => {
+              return { value: c, key: c };
+            })}
+            hasDefaultValue={true}
+            placeholder="Ordenar Por"
+            nullable={true}
+            register={register}
+            className={styles.selectFilter}
+          />
           <div className={styles.bntAlign}>
             {filterOpen ? (
               <img
