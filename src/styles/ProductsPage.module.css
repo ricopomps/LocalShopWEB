@@ -195,3 +195,13 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+@media (max-width: 580px) {
+  .conteiner {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .inputFilter {
+    width: 100%;
+  }
+}
