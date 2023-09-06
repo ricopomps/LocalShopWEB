@@ -7,3 +7,9 @@ export const getHistorics = async () : Promise<Historic[]> => {
   const response = await getApi().get(baseUrl);
   return response.data;
 };
+
+export const getHistoric = async (historicId: string) : Promise<Historic> => {
+  const response = await getApi().get(`${baseUrl}/${historicId}`);
+  return response.data;
+};
+

@@ -69,7 +69,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
     </HorizontalScroll>
   );
   const goToHistoric = (historic: HistoricModel) => {
-    navigate("/store/product?store=" + historic._id);
+    navigate("/historic?historic=" + historic._id);
   };
   const historicGrid = (
     <HorizontalScroll>

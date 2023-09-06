@@ -21,7 +21,7 @@ const Historic = ({
   const {  totalValue, createdAt } = historic;
 
   const createdUpdatedText = createdAt;
-  return (
+    return (
     <Card
       onClick={() => onHistoricClicked(historic)}
       className={`${styles.historicCard} ${className}`}
