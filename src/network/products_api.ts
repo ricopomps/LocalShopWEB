@@ -73,6 +73,11 @@ export async function getCategories() {
   return response.data;
 }
 
+export async function getSortOptions() {
+  const response = await getApi().get(`${baseUrl}/sort`);
+  return response.data;
+}
+
 export async function getProductList(): Promise<
   { _id: string; name: string }[]
 > {
