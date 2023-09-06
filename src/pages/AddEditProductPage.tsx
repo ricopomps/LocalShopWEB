@@ -72,6 +72,7 @@ const AddEditProductPage = ({
           label="Nome do produto"
           type="text"
           placeholder="Nome do produto"
+          classNameLabel={styles.labelProduct}
           register={register}
           registerOptions={{ required: "Campo obrigatório" }}
           className={styles.inputProduct}

@@ -183,6 +183,8 @@
 }
 
 .filterAlign {
+  width: 100%;
+  height: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -194,4 +196,19 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.checkFilter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+.labelInput {
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  color: #dddddd;
 }

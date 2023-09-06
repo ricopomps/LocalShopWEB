@@ -38,7 +38,6 @@ const CheckInputField = ({
     <Form.Group className={className} controlId={name + "-input"}>
       {label && <Form.Label className={classNameLabel}>{label}</Form.Label>}
       <Form.Check
-        className={styles.checkFilter}
         {...register(name, registerOptions)}
         {...props}
         placeholder={placeholder}
