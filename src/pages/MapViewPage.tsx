@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Grid from "../components/Grid";
 import { Button } from "react-bootstrap";
 import ShoppingList from "../components/ShoppingList";
-import styles from "../styles/ProductPage.module.css";
+import styles from "../styles/MapPage.module.css";
 
 const MapViewPage = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const MapViewPage = () => {
   const queryParameters = new URLSearchParams(location.search);
   const store = queryParameters.get("store");
   return (
-    <div>
+    <div className={styles.page}>
       <Button className={styles.btnVoltar} onClick={() => navigate(-1)}>
         Voltar
       </Button>
