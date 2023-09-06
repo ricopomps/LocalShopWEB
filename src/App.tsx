@@ -35,6 +35,7 @@ import {
 import NotificationBar from "./components/NotificationBar";
 import ReportsPage from "./pages/ReportsPage";
 import "react-datepicker/dist/react-datepicker.css";
+import HistoricPage from "./pages/HistoricPage";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -202,7 +203,7 @@ function App() {
                     }
                   />
                 )}
-                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/historic" element={<HistoricPage />} />
                 <Route
                   path="/cadlojista"
                   element={

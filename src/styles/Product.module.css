@@ -21,6 +21,7 @@
 
 .productPrice {
   font-weight: bold;
+  font-size: 19px;
   margin: 0;
 }
 .oldPrice {
@@ -31,15 +32,16 @@
 
 .productName {
   margin: 5px 0;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .productCategory {
-  font-style: italic;
+  font-family: "Inter", sans-serif;
   margin: 0;
   background-color: #d9d9d9;
   padding: 5px 10px;
   border-radius: 8px;
+  margin-top: 10px;
   display: inline-block;
 }
 .addImage {
@@ -61,4 +63,15 @@
   margin-top: 10px;
   margin-right: 10px;
   color: red;
+}
+
+.trashIcon {
+  position: absolute;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: rgb(0, 0, 0);
 }

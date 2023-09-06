@@ -15,7 +15,6 @@
   font-weight: 300;
   background-color: #5c5c5c;
   color: #dddddd;
-  padding: 0.5em 0;
   border: none;
   border-radius: 5px;
   display: flex;
@@ -29,6 +28,7 @@
   background-color: #5c5c5c;
   color: #cecece;
 }
+
 .input::placeholder {
   background-color: #5c5c5c;
   color: #cecece;
@@ -37,4 +37,8 @@
 .input:disabled {
   background-color: #5c5c5c;
   color: #dddddd;
+}
+
+.label {
+  margin: 0;
 }

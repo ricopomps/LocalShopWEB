@@ -291,6 +291,8 @@ const ProductListPage = ({
                   className={styles.inputNumberFilter}
                 ></TextInputField>
                 <CheckInputField
+                  className={styles.checkFilter}
+                  classNameLabel={styles.labelInput}
                   name="favorite"
                   label="Favoritos"
                   type="checkbox"
@@ -310,7 +312,6 @@ const ProductListPage = ({
           )}
         </>
       )}
-
       {productsLoading && <Spinner animation="border" variant="primary" />}
       {showProductsLoadingError && (
         <p>Erro inesperado. Favor recarregar a página</p>

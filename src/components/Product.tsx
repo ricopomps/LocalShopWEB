@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 import styles from "../styles/Product.module.css";
 import { Product as ProductModel } from "../models/product";
-import { MdDelete } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 import add from "../assets/add.svg";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { User } from "../models/user";
@@ -49,8 +49,8 @@ const Product = ({
         <div className={styles.productDetails}>
           <p className={styles.productName}>{name}</p>
           {onDeleteProductClicked && (
-            <MdDelete
-              className="text-muted ms-auto"
+            <FaTrashAlt
+              className={styles.trashIcon}
               onClick={(e) => {
                 onDeleteProductClicked(product);
                 e.stopPropagation();

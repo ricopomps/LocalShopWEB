@@ -56,7 +56,14 @@ function transformDataForChart(
         backendData.flatMap((entry) => entry.values.map((value) => value.label))
       )
     );
-    const labelColors: string[] = ["#f8ce41", "#f87441", "#41f88b"];
+    const labelColors: string[] = [
+      "#ffbe0b",
+      "#fb5607",
+      "#ff006e",
+      "#8338ec",
+      "#3a86ff",
+      "#8bf08b",
+    ];
 
     uniqueLabels.forEach((label, index) => {
       const data = backendData.map(
