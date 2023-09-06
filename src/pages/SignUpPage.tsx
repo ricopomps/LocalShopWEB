@@ -8,6 +8,7 @@ import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
 import { toast } from "react-toastify";
+import { googleAuth } from "../network/authApi";
 
 interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
@@ -27,6 +28,18 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignUpCredentials>();
+
+  const googleAuthCall = async () => {
+    try {
+      const { url } = await googleAuth(userType);
+      console.log(url);
+      window.location.href = url;
+    } catch (error: any) {
+      console.log(error);
+
+      toast.error(error.message);
+    }
+  };
 
   const onSubmit = async (data: SignUpCredentials) => {
     try {
@@ -83,6 +96,9 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
+        <Button className={styles.btn} onClick={googleAuthCall}>
+          CADASTRAR com o google
+        </Button>
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           CADASTRAR
         </Button>

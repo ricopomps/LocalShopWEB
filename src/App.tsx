@@ -150,7 +150,16 @@ function App() {
 
             <Container className={styles.pageContainer}>
               <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route
+                  path="/"
+                  element={
+                    <HomePage
+                      onLoginSuccessful={(user) => {
+                        setLoggedInUser(user);
+                      }}
+                    />
+                  }
+                />
                 {loggedInUser?.store && (
                   <Route
                     path="/products"
@@ -194,7 +203,6 @@ function App() {
                   />
                 )}
                 <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/home" element={<HomePage />} />
                 <Route
                   path="/cadlojista"
                   element={
@@ -246,7 +254,6 @@ function App() {
                   }
                 />
                 <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/home" element={<HomePage />} />
                 <Route path="/shopper" element={<StoreListPage />} />
                 {loggedInUser?.userType === UserType.store && (
                   <Route path="/reports" element={<ReportsPage />} />
