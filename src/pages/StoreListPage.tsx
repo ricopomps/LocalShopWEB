@@ -29,7 +29,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const [historicLoading, setHistoricLoading] = useState(true);
   const [showHistoricLoadingError, setshowHistoricLoadingError] =
     useState(false);
-  
+
   useEffect(() => {
     async function loadStores() {
       try {
@@ -152,20 +152,25 @@ const StoreListPage = ({}: StoreListPageProps) => {
           <img src={magnifying_glass} alt="lupa" />
         </Button>
       </Form>
-      {storesLoading && <Spinner animation="border" variant="primary" />}
-      {showStoresLoadingError && (
-        <p>Erro inesperado. Favor recarregar a página</p>
-      )}
-      {!storesLoading && !showStoresLoadingError && (
-        <>
-          {stores.length > 0 ? (
-            storesGrid
-          ) : (
-            <p>Não existem lojas cadastradas</p>
-          )}
-        </>
-      )}
-
+      <div>
+        <h2 className={styles.title}>LOJAS</h2>
+        {storesLoading && <Spinner animation="border" variant="primary" />}
+        {showStoresLoadingError && (
+          <p>Erro inesperado. Favor recarregar a página</p>
+        )}
+        {!storesLoading && !showStoresLoadingError && (
+          <>
+            {stores.length > 0 ? (
+              storesGrid
+            ) : (
+              <p>Não existem lojas cadastradas</p>
+            )}
+          </>
+        )}
+      </div>
+      <div>
+        <h2 className={styles.title}>HISTÓRICO</h2>
+      </div>
       {!historicLoading && !showHistoricLoadingError && (
         <>
           {historic.length > 0 ? (

@@ -53,7 +53,7 @@
 .notificationItem:hover {
   background-color: #303030;
   border-radius: 10px;
-  scale: 1.1;
+  scale: 1.05;
   transition: ease 0.5s;
   padding: 0.5em;
 }
