@@ -34,3 +34,7 @@ export const getShoppingList = async (
 export const finishShoppingList = async (shoppingList: ShoppingList) => {
   await getApi().post(`${baseUrl}/finish`, shoppingList);
 };
+
+export const copyShoppingList = async (historicId: string) => {
+  await getApi().post(`${baseUrl}/copy/${historicId}`);
+};

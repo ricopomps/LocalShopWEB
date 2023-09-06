@@ -65,7 +65,7 @@ const AddEditProductPage = ({
     }
   }
   return (
-    <div>
+    <div className={styles.conteiner}>
       <Form id="addEditProductForm" onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
           name="name"

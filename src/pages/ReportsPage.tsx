@@ -156,6 +156,38 @@ const ReportsPage = () => {
             minDate={startDate}
           />
         </div>
+        <TextInputField
+          name="chart"
+          type="text"
+          as="select"
+          options={Object.values(Charts).map((c) => {
+            return { value: c, key: c };
+          })}
+          register={register}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setSelectedChart(e.target.value as Charts);
+          }}
+          className={styles.selectType}
+        />
+        <TextInputField
+          name="chartType"
+          type="text"
+          as="select"
+          options={Object.values(ChartTypeEnum).map((c) => {
+            const label = chartTypeLabels[c].label || c;
+            return {
+              value: c,
+              key: label,
+              disabled: !chartTypeLabels[c].implemented,
+              show: !chartTypeLabels[c].implemented,
+            };
+          })}
+          register={register}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setSelectedChartType(e.target.value as ChartTypeEnum);
+          }}
+          className={styles.selectType}
+        />
       </div>
       <ChartComponent />
     </div>

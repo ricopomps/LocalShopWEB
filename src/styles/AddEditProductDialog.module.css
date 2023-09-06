@@ -127,3 +127,10 @@
   height: 2em;
   margin: 1.5em 0 1.5em 0;
 }
+
+@media (max-width: 580px) {
+  .conteiner {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

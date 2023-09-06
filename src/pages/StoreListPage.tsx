@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Col, Spinner, Form, Button } from "react-bootstrap";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
+import * as HistoricApi from "../network/historicApi";
+import { Historic as HistoricModel } from "../models/historic";
 import styles from "../styles/StoresPage.module.css";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
@@ -13,15 +15,20 @@ import { useForm } from "react-hook-form";
 import { ListStores } from "../network/storeApi";
 import { toast } from "react-toastify";
 import CheckInputField from "../components/form/CheckInputField";
+import Historic from "../components/Historic";
 
 interface StoreListPageProps {}
 
 const StoreListPage = ({}: StoreListPageProps) => {
   const navigate = useNavigate();
+  const [historic, setHistoric] = useState<HistoricModel[]>([]);
   const [stores, setStores] = useState<StoreModel[]>([]);
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
   const [showStoresLoadingError, setshowStoresLoadingError] = useState(false);
+  const [historicLoading, setHistoricLoading] = useState(true);
+  const [showHistoricLoadingError, setshowHistoricLoadingError] =
+    useState(false);
 
   useEffect(() => {
     async function loadStores() {
@@ -30,11 +37,15 @@ const StoreListPage = ({}: StoreListPageProps) => {
         setStoresLoading(true);
         const stores = await StoresApi.fetchStores();
         setStores(stores);
+        const historics = await HistoricApi.getHistorics();
+        setHistoric(historics);
       } catch (error) {
         console.error(error);
         setshowStoresLoadingError(true);
+        setshowHistoricLoadingError(true);
       } finally {
         setStoresLoading(false);
+        setHistoricLoading(false);
       }
     }
     loadStores();
@@ -53,6 +64,22 @@ const StoreListPage = ({}: StoreListPageProps) => {
             onStoreClicked={goToStore}
             className={styles.store}
           ></Store>
+        </Col>
+      ))}
+    </HorizontalScroll>
+  );
+  const goToHistoric = (historic: HistoricModel) => {
+    navigate("/historic?historic=" + historic._id);
+  };
+  const historicGrid = (
+    <HorizontalScroll>
+      {historic.map((historic) => (
+        <Col key={historic._id}>
+          <Historic
+            historic={historic}
+            onHistoricClicked={goToHistoric}
+            className={styles.historic}
+          ></Historic>
         </Col>
       ))}
     </HorizontalScroll>
@@ -132,6 +159,16 @@ const StoreListPage = ({}: StoreListPageProps) => {
         <>
           {stores.length > 0 ? (
             storesGrid
+          ) : (
+            <p>Não existem lojas cadastradas</p>
+          )}
+        </>
+      )}
+
+      {!historicLoading && !showHistoricLoadingError && (
+        <>
+          {historic.length > 0 ? (
+            historicGrid
           ) : (
             <p>Não existem lojas cadastradas</p>
           )}

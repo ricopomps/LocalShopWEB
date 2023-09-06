@@ -74,6 +74,13 @@
   margin-top: 12px;
 }
 
+@media (max-width: 580px) {
+  .filterAlign {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
 .filterAlign::placeholder,
 .inputFilter::placeholder {
   color: #dddddd;
