@@ -3,31 +3,30 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as HistoricApi from "../network/historicApi";
 import { toast } from "react-toastify";
 import { Historic as HistoricModel } from "../models/historic";
-import Historic from "../components/Historic";
 import { Button, Card } from "react-bootstrap";
-import ShoppingList from "../components/ShoppingList";
 import * as ShoppingListApi from "../network/shoppingListApi";
 import styles from "../styles/HistoricPage.module.css";
-import * as UsersApi from "../network/notes_api";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { User } from "../models/user";
-import { copyShoppingList } from "../network/shoppingListApi";
-import { useShoppingList } from "../context/ShoppingListContext";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import stylesUtils from "../styles/utils.module.css";
+import { formatDate } from "../utils/formatDate";
+
+interface HistoricItemProps {
+  productItem: ProductItem;
+  index: number;
+  onClick: (index: number) => void;
+}
 
 interface HistoricPageProps {}
 
 const HistoricPage = ({}: HistoricPageProps) => {
-  const {
-    shoppingList,clearShoppingList
-    
-  } = useShoppingList();
+  const { shoppingList, clearShoppingList } = useShoppingList();
   const location = useLocation();
   const [selectedHistoric, setSelectedHistoric] =
     useState<HistoricModel | null>(null);
   const queryParameters = new URLSearchParams(location.search);
   const historic = queryParameters.get("historic");
   const navigate = useNavigate();
+  const [expandedCardIndex, setExpandedCardIndex] = useState(-1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,21 +46,20 @@ const HistoricPage = ({}: HistoricPageProps) => {
   const goBack = () => {
     navigate(-1);
   };
-  
+
   if (!selectedHistoric) return <></>;
 
   const copy = async () => {
     try {
       await ShoppingListApi.copyShoppingList(selectedHistoric._id);
-      if(shoppingList.storeId === selectedHistoric.store._id)
-      clearShoppingList();
-    toast.success("Lista de compras copiada!");
+      if (shoppingList.storeId === selectedHistoric.store._id)
+        clearShoppingList();
+      toast.success("Lista de compras copiada!");
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
-  const HistoricCard = (
-     ) => {
+  const HistoricCard = () => {
     return (
       <Card className={`${styles.historicCard}`}>
         {selectedHistoric.store.image && (
@@ -77,17 +75,62 @@ const HistoricPage = ({}: HistoricPageProps) => {
             className={`${stylesUtils.flexCenter} ${styles.titleText}`}
           >
             {selectedHistoric.store.name}
-  
           </Card.Title>
           <Card.Text
             className={`${stylesUtils.flexCenter}${styles.historicText}`}
           >
-            {selectedHistoric.totalValue}
+            {`R$${selectedHistoric.totalValue.toFixed(2)}`}
           </Card.Text>
         </Card.Body>
         <Card.Footer className="text-muted">
-          {selectedHistoric.createdAt.toString()}
+          {formatDate(selectedHistoric.createdAt.toString())}
         </Card.Footer>
+      </Card>
+    );
+  };
+  const handleCardClick = (index: number) => {
+    console.log("CLICKED", index);
+    if (expandedCardIndex === index) setExpandedCardIndex(-1);
+    else setExpandedCardIndex(index);
+  };
+  const HistoricItem = ({
+    productItem: { product, quantity },
+    onClick,
+    index,
+  }: HistoricItemProps) => {
+    return (
+      <Card
+        onClick={() => onClick(index)}
+        className={`${styles.historicItemCard}`}
+      >
+        <div className={stylesUtils.flexCenter}>
+          {product.image && (
+            <Card.Img
+              variant="top"
+              src={product.image}
+              alt=""
+              className={styles.historicItemImage}
+            />
+          )}
+          <div className={styles.cardItemBody}>
+            <div className={`${styles.titleText}`}>{product.name}</div>
+            <div className={`${styles.historicText}`}>
+              Quantidade: {quantity}
+            </div>
+            <div className={`${styles.historicText}`}>
+              Valor unitário: {product.price && `R$${product.price.toFixed(2)}`}
+            </div>
+            <div className={`${styles.historicText}`}>
+              Valor total:{" "}
+              {product.price && `R$${(product.price * quantity).toFixed(2)}`}
+            </div>
+          </div>
+        </div>
+        {index === expandedCardIndex && (
+          <Card.Footer className="text-muted">
+            {product.description}
+          </Card.Footer>
+        )}
       </Card>
     );
   };
@@ -97,11 +140,21 @@ const HistoricPage = ({}: HistoricPageProps) => {
         <Button onClick={goBack}>Voltar</Button>
       </div>
       <div className={styles.main}>
-        <Card className={styles.card}>{selectedHistoric.totalValue}</Card>
+        <Card className={styles.itemCard}>
+          {selectedHistoric.products.map((productItem, index) => (
+            <>
+              <HistoricItem
+                onClick={handleCardClick}
+                index={index}
+                productItem={productItem}
+              />
+            </>
+          ))}
+        </Card>
         <div className={styles.lateral}>
-        <HistoricCard />
-      <Button onClick={copy}> Copiar </Button>
-      </div>
+          <HistoricCard />
+          <Button onClick={copy}> Copiar </Button>
+        </div>
       </div>
     </div>
   );

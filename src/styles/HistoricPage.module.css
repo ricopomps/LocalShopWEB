@@ -58,20 +58,66 @@
 .addRemoveButton {
   width: 8em;
 }
-.lateral{
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 10px; 
+.lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   padding-top: 4.25em;
 }
-.historicCard{
- white-space: pre-line;
-  width:25em;
+.historicCard {
+  white-space: pre-line;
+  width: 25em;
   height: 40em;
   box-shadow: 4px 8px 4px 1px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   margin-bottom: 0.5em;
   border: none;
 }
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  width: 50em;
+  height: 40em;
+  gap: 1em;
+  padding: 1em;
+  border-radius: 1em;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: scroll;
+}
 
+.historicItemCard {
+  white-space: pre-line;
+  width: 25em;
+  height: auto;
+  box-shadow: 4px 8px 4px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-bottom: 0.5em;
+  border: none;
+  display: flex;
+  cursor: pointer;
+}
+
+.historicItemImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 1em;
+}
+
+.cardItemBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleText {
+  font-size: 16px;
+}
+
+.historicText {
+  font-size: 14px;
+  color: #333;
+}

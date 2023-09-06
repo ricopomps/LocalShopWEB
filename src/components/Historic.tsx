@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 import styles from "../styles/Historic.module.css";
 import stylesUtils from "../styles/utils.module.css";
-import { Historic as HistoricModel } from "../models/historic"
+import { Historic as HistoricModel } from "../models/historic";
 import { formatDate } from "../utils/formatDate";
 import { MdDelete } from "react-icons/md";
 
@@ -18,10 +18,10 @@ const Historic = ({
   onDeleteHistoricClicked,
   className,
 }: HistoricProps) => {
-  const {  totalValue, createdAt } = historic;
+  const { totalValue, createdAt } = historic;
 
   const createdUpdatedText = createdAt;
-    return (
+  return (
     <Card
       onClick={() => onHistoricClicked(historic)}
       className={`${styles.historicCard} ${className}`}
@@ -47,11 +47,15 @@ const Historic = ({
             />
           )}
         </Card.Title>
-        <Card.Text className={`${stylesUtils.flexCenter}${styles.historicText}`}>
-          {totalValue}
+        <Card.Text
+          className={`${stylesUtils.flexCenter}${styles.historicText}`}
+        >
+          {`R$${totalValue.toFixed(2)}`}
         </Card.Text>
       </Card.Body>
-      <Card.Footer className="text-muted">{createdUpdatedText.toString()}</Card.Footer>
+      <Card.Footer className="text-muted">
+        {formatDate(createdUpdatedText.toString())}
+      </Card.Footer>
     </Card>
   );
 };
