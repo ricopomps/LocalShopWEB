@@ -54,7 +54,7 @@ const HistoricPage = ({}: HistoricPageProps) => {
       await ShoppingListApi.copyShoppingList(selectedHistoric._id);
       if(shoppingList.storeId === selectedHistoric.store._id)
       clearShoppingList();
-
+    toast.success("Lista de compras copiada!");
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
@@ -69,7 +69,7 @@ const HistoricPage = ({}: HistoricPageProps) => {
         <Historic historic={selectedHistoric} onHistoricClicked={() => {}} />
         <h3 className={styles.descricao}>Descrição</h3>
         <Card className={styles.card}>{selectedHistoric.totalValue}</Card>
-        <Button onClick={copy}> </Button>
+        <Button onClick={copy}> Copiar </Button>
       </div>
     </div>
   );
