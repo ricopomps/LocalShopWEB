@@ -13,6 +13,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { User } from "../models/user";
 import { copyShoppingList } from "../network/shoppingListApi";
 import { useShoppingList } from "../context/ShoppingListContext";
+import stylesUtils from "../styles/utils.module.css";
 
 interface HistoricPageProps {}
 
@@ -59,17 +60,48 @@ const HistoricPage = ({}: HistoricPageProps) => {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
   };
-
+  const HistoricCard = (
+     ) => {
+    return (
+      <Card className={`${styles.historicCard}`}>
+        {selectedHistoric.store.image && (
+          <Card.Img
+            variant="top"
+            src={selectedHistoric.store.image}
+            alt=""
+            className={styles.historicImage}
+          />
+        )}
+        <Card.Body className={styles.cardBody}>
+          <Card.Title
+            className={`${stylesUtils.flexCenter} ${styles.titleText}`}
+          >
+            {selectedHistoric.store.name}
+  
+          </Card.Title>
+          <Card.Text
+            className={`${stylesUtils.flexCenter}${styles.historicText}`}
+          >
+            {selectedHistoric.totalValue}
+          </Card.Text>
+        </Card.Body>
+        <Card.Footer className="text-muted">
+          {selectedHistoric.createdAt.toString()}
+        </Card.Footer>
+      </Card>
+    );
+  };
   return (
     <div>
       <div>
         <Button onClick={goBack}>Voltar</Button>
       </div>
       <div className={styles.main}>
-        <Historic historic={selectedHistoric} onHistoricClicked={() => {}} />
-        <h3 className={styles.descricao}>Descrição</h3>
         <Card className={styles.card}>{selectedHistoric.totalValue}</Card>
-        <Button onClick={copy}> Copiar </Button>
+        <div className={styles.lateral}>
+        <HistoricCard />
+      <Button onClick={copy}> Copiar </Button>
+      </div>
       </div>
     </div>
   );
