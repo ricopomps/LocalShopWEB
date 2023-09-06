@@ -53,7 +53,6 @@
   border: none;
   border-radius: 5px;
   gap: 0.5em;
-  margin: 0.25em 0 0.25em 0;
 }
 
 .inputTextareaProduct:focus {
@@ -115,18 +114,18 @@
   color: #5c5c5c;
 }
 
-.inputCheck{
-  font-family: "Inter", sans-serif;
-  font-size: 26px;
+.inputCheck {
+  display: flex;
+  font-family: "Gotham", sans-serif;
+  font-size: 16px;
   font-weight: 300;
-  background-color: #5c5c5c;
+  background-color: #3a3a3a;
   color: #dddddd;
-  padding: 0.5em;
   border: none;
   border-radius: 5px;
   gap: 0.5em;
   height: 2em;
-  margin: 0.25em 0 0.25em;
+  margin: 1.5em 0 1.5em 0;
 }
 
 @media (max-width: 580px) {

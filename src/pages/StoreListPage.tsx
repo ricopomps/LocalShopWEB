@@ -136,6 +136,8 @@ const StoreListPage = ({}: StoreListPageProps) => {
           className={styles.selectFilter}
         />
         <CheckInputField
+          className={styles.checkFilter}
+          classNameLabel={styles.labelInput}
           name="favorite"
           label="Favoritos"
           type="checkbox"

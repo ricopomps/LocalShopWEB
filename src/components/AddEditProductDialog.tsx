@@ -132,8 +132,9 @@ const AddEditProductDialog = ({
             className={styles.inputProduct}
           />
           <CheckInputField
+            className={styles.inputCheck}
             name="sale"
-            label="Deseja colocar o produto em pormoção:"
+            label="Deseja colocar o produto em promoção:"
             type="checkbox"
             register={register}
             onChange={() => {
