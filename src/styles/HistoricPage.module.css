@@ -1,8 +1,9 @@
 .main {
   font-family: "Gotham", sans-serif;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100vh;
+  width: 150vh;
   justify-content: center;
   align-items: center;
   gap: 1em;
@@ -21,8 +22,8 @@
   flex-direction: column;
   justify-content: space-between;
   font-family: "Inter", sans-serif;
-  width: 22em;
-  height: 6em;
+  width: 50em;
+  height: 40em;
   gap: 1em;
   padding: 1em;
   border-radius: 1em;
@@ -57,3 +58,20 @@
 .addRemoveButton {
   width: 8em;
 }
+.lateral{
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px; 
+  padding-top: 4.25em;
+}
+.historicCard{
+ white-space: pre-line;
+  width:25em;
+  height: 40em;
+  box-shadow: 4px 8px 4px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-bottom: 0.5em;
+  border: none;
+}
+
