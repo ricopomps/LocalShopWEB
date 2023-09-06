@@ -55,6 +55,10 @@ code {
   cursor: pointer;
 }
 
+.btn:disabled {
+  background-color: #5c5c5c;
+}
+
 .btn_login {
   padding: 0.5em 1em;
   font-weight: 700;

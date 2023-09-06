@@ -8,6 +8,8 @@ export interface User {
   cpf: string;
   favoriteStores?: string[];
   favoriteProducts?: string[];
+  image?: string;
+  googleUser?: boolean;
 }
 
 export enum UserType {

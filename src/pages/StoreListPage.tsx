@@ -172,13 +172,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
         <h2 className={styles.title}>HISTÓRICO</h2>
       </div>
       {!historicLoading && !showHistoricLoadingError && (
-        <>
-          {historic.length > 0 ? (
-            historicGrid
-          ) : (
-            <p>Não existem lojas cadastradas</p>
-          )}
-        </>
+        <>{historic.length > 0 ? historicGrid : <></>}</>
       )}
 
       {storeToEdit && (

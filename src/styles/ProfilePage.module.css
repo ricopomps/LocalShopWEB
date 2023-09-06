@@ -48,3 +48,8 @@
   width: 16em;
   cursor: pointer;
 }
+.imageLogin {
+  width: 80px;
+  height: 80px;
+  border-radius: 50px;
+}
