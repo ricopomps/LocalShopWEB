@@ -39,7 +39,7 @@ const TextInputField = ({
       className={margin ? "mb-3" : undefined}
       controlId={name + "-input"}
     >
-      {label && <Form.Label>{label}</Form.Label>}
+      {label && <Form.Label className={styles.label}>{label}</Form.Label>}
       <Form.Control
         className={styles.input}
         {...register(name, registerOptions)}

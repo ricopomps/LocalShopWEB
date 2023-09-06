@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../../styles/Chart.module.css";
 import {
   Bar,
   Line,
@@ -105,7 +106,7 @@ const Chart = ({
   };
 
   if (chartType === "bar") {
-    return <Bar data={data} options={options} />;
+    return <Bar className={styles.bar} data={data} options={options} />;
   } else if (chartType === "line") {
     return <Line data={data} options={options} />;
   } else if (chartType === "pie") {

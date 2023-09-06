@@ -113,3 +113,23 @@
   background-color: #d3ae3e;
   color: #5c5c5c;
 }
+
+.checkFilter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+.labelInput {
+  font-family: "Inter", sans-serif;
+  font-size: 26px;
+  color: #dddddd;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
