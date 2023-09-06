@@ -91,3 +91,9 @@
   border-color: black;
   transition: 0.5s;
 }
+
+.googleButton {
+  margin-bottom: 1em;
+  margin-right: auto;
+  margin-left: auto;
+}

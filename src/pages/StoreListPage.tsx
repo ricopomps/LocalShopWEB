@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { Col, Spinner, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
 import * as HistoricApi from "../network/historicApi";
@@ -7,13 +10,10 @@ import { Historic as HistoricModel } from "../models/historic";
 import styles from "../styles/StoresPage.module.css";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
-import { useNavigate } from "react-router-dom";
 import Store from "../components/Store";
 import TextInputField from "../components/form/TextInputField";
 import magnifying_glass from "../assets/magnifying_glass.svg";
-import { useForm } from "react-hook-form";
 import { ListStores } from "../network/storeApi";
-import { toast } from "react-toastify";
 import CheckInputField from "../components/form/CheckInputField";
 import Historic from "../components/Historic";
 
@@ -29,7 +29,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const [historicLoading, setHistoricLoading] = useState(true);
   const [showHistoricLoadingError, setshowHistoricLoadingError] =
     useState(false);
-
+  
   useEffect(() => {
     async function loadStores() {
       try {
@@ -48,6 +48,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
         setHistoricLoading(false);
       }
     }
+
     loadStores();
   }, []);
 

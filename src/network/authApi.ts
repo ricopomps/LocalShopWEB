@@ -1,3 +1,4 @@
+import { UserType } from "../models/user";
 import { getApi } from "./api";
 
 export interface SendRecoverPasswordEmailForm {
@@ -23,5 +24,17 @@ export async function changePassword(
   credentials: RecoverPasswordForm
 ): Promise<void> {
   const { data } = await getApi().post(`${baseUrl}/change`, credentials);
+  return data;
+}
+
+export async function googleAuth(userType?: UserType) {
+  const { data } = await getApi().post(`${baseUrl}/oauth`, { userType });
+  return data;
+}
+
+export async function getGoogleAuthUser(code: string, userType?: string) {
+  const { data } = await getApi().get(`${baseUrl}/oauth`, {
+    params: { code, userType },
+  });
   return data;
 }

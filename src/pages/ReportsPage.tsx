@@ -60,7 +60,6 @@ const ReportsPage = () => {
       }
       setData(chartData);
     } catch (error: any) {
-      console.log(error);
       setData(null);
       toast.error(error?.response?.data?.error ?? error?.message);
     }
