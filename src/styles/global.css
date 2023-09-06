@@ -59,6 +59,16 @@ code {
   background-color: #5c5c5c;
 }
 
+.Toastify__toast--success {
+  background-color: var(--cinza-bg);
+  color: var(--amarelo);
+}
+
+.Toastify__toast--error {
+  background-color: var(--cinza-bg);
+  color: var(--amarelo);
+}
+
 .btn_login {
   padding: 0.5em 1em;
   font-weight: 700;
