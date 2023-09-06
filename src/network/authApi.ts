@@ -29,7 +29,6 @@ export async function changePassword(
 
 export async function googleAuth(userType?: UserType) {
   const { data } = await getApi().post(`${baseUrl}/oauth`, { userType });
-  console.log(data);
   return data;
 }
 
@@ -37,6 +36,5 @@ export async function getGoogleAuthUser(code: string, userType?: string) {
   const { data } = await getApi().get(`${baseUrl}/oauth`, {
     params: { code, userType },
   });
-  console.log(data);
   return data;
 }

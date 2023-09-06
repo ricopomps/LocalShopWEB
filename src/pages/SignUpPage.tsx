@@ -1,18 +1,26 @@
+import { ReactNode } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
+import { toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import styles from "../styles/SignUpPage.module.css";
-import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../network/notes_api";
-import { Button, Form } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
-import { toast } from "react-toastify";
 import { googleAuth } from "../network/authApi";
+import google from "../assets/google.svg";
 
 interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
   userType: UserType;
+}
+interface ButtonLoginProps {
+  imagem?: string;
+  children: ReactNode;
+  path: string;
+  onClick?: () => void;
 }
 
 const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
@@ -32,13 +40,27 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   const googleAuthCall = async () => {
     try {
       const { url } = await googleAuth(userType);
-      console.log(url);
       window.location.href = url;
     } catch (error: any) {
-      console.log(error);
-
       toast.error(error.message);
     }
+  };
+
+  const ButtonLogin = ({
+    imagem,
+    children,
+    path,
+    onClick,
+  }: ButtonLoginProps) => {
+    return (
+      <button
+        onClick={() => (onClick ? onClick() : navigate(path))}
+        className={`btn ${styles.googleButton}`}
+      >
+        {imagem && <img src={imagem} alt="button logo" />}
+        {children}{" "}
+      </button>
+    );
   };
 
   const onSubmit = async (data: SignUpCredentials) => {
@@ -96,9 +118,13 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.confirmedPassword}
         />
-        <Button className={styles.btn} onClick={googleAuthCall}>
-          CADASTRAR com o google
-        </Button>
+        <ButtonLogin
+          imagem={google}
+          onClick={() => googleAuthCall()}
+          path="/logindesktop"
+        >
+          Cadastrar com o Google
+        </ButtonLogin>
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           CADASTRAR
         </Button>

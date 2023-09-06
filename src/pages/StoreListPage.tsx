@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { Col, Spinner, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { Store as StoreModel } from "../models/store";
 import * as StoresApi from "../network/storeApi";
 import styles from "../styles/StoresPage.module.css";
 import AddEditProductDialog from "../components/AddEditProductDialog";
 import HorizontalScroll from "../components/HorizontalScroll";
-import { useLocation, useNavigate } from "react-router-dom";
 import Store from "../components/Store";
 import TextInputField from "../components/form/TextInputField";
 import magnifying_glass from "../assets/magnifying_glass.svg";
-import { useForm } from "react-hook-form";
 import { ListStores } from "../network/storeApi";
-import { toast } from "react-toastify";
 import CheckInputField from "../components/form/CheckInputField";
 
 interface StoreListPageProps {}
@@ -22,7 +22,6 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const [storeToEdit, setStoreToEdit] = useState<StoreModel | null>(null);
   const [storesLoading, setStoresLoading] = useState(true);
   const [showStoresLoadingError, setshowStoresLoadingError] = useState(false);
-  const location = useLocation();
   useEffect(() => {
     async function loadStores() {
       try {
@@ -37,29 +36,9 @@ const StoreListPage = ({}: StoreListPageProps) => {
         setStoresLoading(false);
       }
     }
-    const params = new URLSearchParams(location.search);
-    const accessToken = params.get("access_token");
 
-    if (accessToken) {
-      // Call the function to fetch user information
-      fetchUserData(accessToken);
-    }
     loadStores();
   }, []);
-
-  const fetchUserData = async (accessToken: any) => {
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`
-      );
-      const userData = await response.json();
-      console.log(userData);
-
-      // Now you have the user information (userData), you can use or store it as needed
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
 
   const goToStore = (store: StoreModel) => {
     navigate("/store/product?store=" + store._id);

@@ -61,16 +61,18 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.email}
         />
-        <TextInputField
-          className={styles.input}
-          name="cpf"
-          label="cpf:"
-          type="text"
-          register={register}
-          registerOptions={{ required: "Campo Obrigatório" }}
-          error={errors.cpf}
-          disabled
-        />
+        {user?.cpf && (
+          <TextInputField
+            className={styles.input}
+            name="cpf"
+            label="cpf:"
+            type="text"
+            register={register}
+            registerOptions={{ required: "Campo Obrigatório" }}
+            error={errors.cpf}
+            disabled
+          />
+        )}
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>
           ALTERAR
         </Button>
