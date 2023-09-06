@@ -29,7 +29,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   const [historicLoading, setHistoricLoading] = useState(true);
   const [showHistoricLoadingError, setshowHistoricLoadingError] =
     useState(false);
-  
+
   useEffect(() => {
     async function loadStores() {
       try {
@@ -167,13 +167,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
       )}
 
       {!historicLoading && !showHistoricLoadingError && (
-        <>
-          {historic.length > 0 ? (
-            historicGrid
-          ) : (
-            <p>Não existem lojas cadastradas</p>
-          )}
-        </>
+        <>{historic.length > 0 ? historicGrid : <></>}</>
       )}
 
       {storeToEdit && (

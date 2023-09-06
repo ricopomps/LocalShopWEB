@@ -262,7 +262,12 @@ function App() {
                 {loggedInUser && (
                   <Route
                     path="/profile"
-                    element={<ProfilePage user={loggedInUser} />}
+                    element={
+                      <ProfilePage
+                        user={loggedInUser}
+                        updateUser={setLoggedInUser}
+                      />
+                    }
                   />
                 )}
                 <Route
