@@ -77,7 +77,7 @@ const HistoricPage = ({}: HistoricPageProps) => {
             {selectedHistoric.store.name}
           </Card.Title>
           <Card.Text
-            className={`${stylesUtils.flexCenter}${styles.historicText}`}
+            className={`${stylesUtils.flexCenter} ${styles.priceText}`}
           >
             {`R$${selectedHistoric.totalValue.toFixed(2)}`}
           </Card.Text>
@@ -103,7 +103,7 @@ const HistoricPage = ({}: HistoricPageProps) => {
         onClick={() => onClick(index)}
         className={`${styles.historicItemCard}`}
       >
-        <div className={stylesUtils.flexCenter}>
+        <div className={`${stylesUtils.flexCenter} ${styles.item}`}>
           {product.image && (
             <Card.Img
               variant="top"
@@ -113,16 +113,21 @@ const HistoricPage = ({}: HistoricPageProps) => {
             />
           )}
           <div className={styles.cardItemBody}>
-            <div className={`${styles.titleText}`}>{product.name}</div>
-            <div className={`${styles.historicText}`}>
-              Quantidade: {quantity}
+            <div className={styles.esquerda}>
+              <div className={`${styles.titleProduct}`}>{product.name}</div>
+              <div className={`${styles.historicText}`}>
+                Quantidade: {quantity}
+              </div>
             </div>
-            <div className={`${styles.historicText}`}>
-              Valor unitário: {product.price && `R$${product.price.toFixed(2)}`}
-            </div>
-            <div className={`${styles.historicText}`}>
-              Valor total:{" "}
-              {product.price && `R$${(product.price * quantity).toFixed(2)}`}
+            <div className={styles.direita}>
+              <div className={`${styles.historicText}`}>
+                Valor unitário:{" "}
+                {product.price && `R$${product.price.toFixed(2)}`}
+              </div>
+              <div className={`${styles.historicText}`}>
+                Valor total:{" "}
+                {product.price && `R$${(product.price * quantity).toFixed(2)}`}
+              </div>
             </div>
           </div>
         </div>

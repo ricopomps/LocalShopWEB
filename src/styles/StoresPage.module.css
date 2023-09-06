@@ -133,3 +133,12 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
 }
+
+.title {
+  font-family: "Gotham", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--amarelo);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
