@@ -8,6 +8,11 @@
   transition: right 0.3s ease-in-out;
   box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.2);
   z-index: 1025;
+  overflow: scroll;
+}
+
+.cartSidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .open {

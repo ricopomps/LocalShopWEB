@@ -86,7 +86,10 @@ const Chart = ({
               : "";
 
             const labelValue = currency
-              ? "R$" + parseFloat(tooltipItem.formattedValue).toFixed(2)
+              ? "R$" +
+                parseFloat(
+                  tooltipItem.formattedValue.replaceAll(",", "")
+                ).toFixed(2)
               : `${tooltipItem.formattedValue}`;
 
             return datasetLabel + labelValue;
