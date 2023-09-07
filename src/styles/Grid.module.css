@@ -30,6 +30,10 @@
   background-color: purple;
 }
 
+.path {
+  background-color: var(--amarelo);
+}
+
 .selected {
   border: 5px solid var(--amarelo);
 }

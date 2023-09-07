@@ -5,6 +5,7 @@ import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
 import AlocateProductModal from "./Modal/AlocateProductModal";
 import { useLocation } from "react-router-dom";
+import pathfinding, { DiagonalMovement } from "pathfinding";
 
 interface GridProps {
   rows: number;
@@ -25,6 +26,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
   const locationX = queryParameters.get("x");
   const locationY = queryParameters.get("y");
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
+  const [selectedPath, setSelectedPath] = useState<CellCoordinates[][]>([]);
   const [selectedCell, setSelectedCell] = useState<CellCoordinates | undefined>(
     undefined
   );
@@ -46,6 +48,41 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
 
     fetchMap();
   }, []);
+
+  const calculatePath = () => {
+    const grid = new pathfinding.Grid(cols, rows);
+
+    selectedCells.forEach((cell) => {
+      grid.setWalkableAt(cell.x, cell.y, false);
+    });
+    console.log(selectedCells);
+    console.log(grid);
+    const finder = new pathfinding.AStarFinder({
+      diagonalMovement: DiagonalMovement.OnlyWhenNoObstacles,
+      //   dontCrossCorners: true,
+    });
+    const entranceNode = { x: 0, y: 0 }; // Replace with actual entrance coordinates
+    const shelfNodes = [
+      { x: 3, y: 3 },
+      //   { x: 7, y: 7 },
+    ]; // Replace with shelf coordinates
+
+    const shortestPaths = shelfNodes.map((shelfNode) => {
+      const path = finder.findPath(
+        entranceNode.x,
+        entranceNode.y,
+        shelfNode.x,
+        shelfNode.y,
+        grid
+      );
+      return path;
+    });
+    const formattedPaths = shortestPaths.map((path) => {
+      return path.map((node) => ({ x: node[0], y: node[1] }));
+    });
+    setSelectedPath(formattedPaths);
+    console.log(shortestPaths);
+  };
 
   const supportColumn = [
     { style: styles.green, text: "Prateleira" },
@@ -130,14 +167,16 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
           {Array.from({ length: rows * cols }, (_, index) => {
             const x = index % cols;
             const y = Math.floor(index / cols);
-
+            const isPathCell = selectedPath.some((path) =>
+              path.some((coord) => coord.x === x && coord.y === y)
+            );
             return (
               <div
                 key={generateCellKey(x, y)}
                 onClick={() => handleClick(x, y, selectedStyle)}
                 className={`${styles.gridCell} ${
                   isCellSelected(x, y) && getCellSyle(x, y)
-                } ${productSelected(x, y)}`}
+                } ${productSelected(x, y)} ${isPathCell ? styles.path : ""}`}
               ></div>
             );
           })}
@@ -146,6 +185,12 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       <Col>
         {edit && (
           <>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => calculatePath()}
+            >
+              Calcular
+            </Button>
             <Button
               className={styles.buttonMap}
               onClick={() => setSelectedCells([])}
