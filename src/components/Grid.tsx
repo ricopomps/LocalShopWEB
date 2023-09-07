@@ -62,12 +62,21 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       //   dontCrossCorners: true,
     });
     const entranceNode = { x: 0, y: 0 }; // Replace with actual entrance coordinates
+    const nearestPoint = findNearestAccessiblePoint(grid, 0, 0, 2, 5);
+    console.log("nearestPoint", nearestPoint);
     const shelfNodes = [
-      { x: 3, y: 3 },
+      { x: 6, y: 5 },
+      { x: 4, y: 8 },
       //   { x: 7, y: 7 },
     ]; // Replace with shelf coordinates
 
-    const shortestPaths = shelfNodes.map((shelfNode) => {
+    const shelfNodesWalkable = shelfNodes
+      .map((node) => findNearestAccessiblePoint(grid, 0, 0, node.x, node.y))
+      .filter((point) => point !== null);
+    console.log("shelfNodesWalkable", shelfNodesWalkable);
+
+    const shortestPaths = shelfNodesWalkable.map((shelfNode: any) => {
+      console.log("shelfNode", shelfNode);
       const path = finder.findPath(
         entranceNode.x,
         entranceNode.y,
@@ -77,11 +86,74 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       );
       return path;
     });
+
+    console.log("shortestPaths", shortestPaths);
     const formattedPaths = shortestPaths.map((path) => {
       return path.map((node) => ({ x: node[0], y: node[1] }));
     });
     setSelectedPath(formattedPaths);
+    console.log("formattedPaths", formattedPaths);
     console.log(shortestPaths);
+  };
+
+  const calculateDiagonalDistance = (
+    cell1: CellCoordinates,
+    cell2: CellCoordinates
+  ) => {
+    const dx = cell1.x - cell2.x;
+    const dy = cell1.y - cell2.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const findNearestAccessiblePoint = (
+    grid: pathfinding.Grid,
+    x: number,
+    y: number,
+    targetX: number,
+    targetY: number
+  ) => {
+    if (grid.isWalkableAt(targetX, targetY)) return { x: targetX, y: targetY };
+    const up = { x: targetX - 1, y: targetY };
+    const down = { x: targetX + 1, y: targetY };
+    const left = { x: targetX, y: targetY - 1 };
+    const right = { x: targetX, y: targetY + 1 };
+
+    let distance = -1;
+    let nearestPoint = null;
+
+    if (grid.isWalkableAt(up.x, up.y)) {
+      const dist = calculateDiagonalDistance({ x, y }, up);
+      if (distance === -1 || dist < distance) {
+        distance = dist;
+        nearestPoint = up;
+      }
+    }
+
+    if (grid.isWalkableAt(down.x, down.y)) {
+      const dist = calculateDiagonalDistance({ x, y }, down);
+      if (distance === -1 || dist < distance) {
+        distance = dist;
+        nearestPoint = down;
+      }
+    }
+
+    if (grid.isWalkableAt(left.x, left.y)) {
+      const dist = calculateDiagonalDistance({ x, y }, left);
+      if (distance === -1 || dist < distance) {
+        distance = dist;
+        nearestPoint = left;
+      }
+    }
+
+    if (grid.isWalkableAt(right.x, right.y)) {
+      const dist = calculateDiagonalDistance({ x, y }, right);
+      if (distance === -1 || dist < distance) {
+        distance = dist;
+        nearestPoint = right;
+      }
+    }
+
+    return nearestPoint;
   };
 
   const supportColumn = [
