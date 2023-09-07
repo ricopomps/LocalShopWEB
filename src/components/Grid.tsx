@@ -3,9 +3,11 @@ import { Button, Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import styles from "../styles/Grid.module.css";
 import * as MapApi from "../network/mapApi";
+import * as ShoppingList from "../network/shoppingListApi";
 import AlocateProductModal from "./Modal/AlocateProductModal";
 import { useLocation } from "react-router-dom";
 import pathfinding, { DiagonalMovement } from "pathfinding";
+import { useShoppingList } from "../context/ShoppingListContext";
 
 interface GridProps {
   rows: number;
@@ -21,6 +23,7 @@ export interface CellCoordinates {
 }
 
 const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
+  const { shoppingList } = useShoppingList();
   const location = useLocation();
   const queryParameters = new URLSearchParams(location.search);
   const locationX = queryParameters.get("x");
@@ -104,6 +107,20 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
     setSelectedPath(formattedPaths);
     console.log("formattedPaths", formattedPaths);
     console.log(shortestPaths);
+  };
+
+  const claudio = async () => {
+    const productsMapped = shoppingList.productsItems.map((item) => {
+      return {
+        product: item.product._id,
+        quantity: item.quantity,
+      };
+    });
+
+    if (!storeId) throw Error("Loja inválida");
+    const shoppingList2 = { storeId, products: productsMapped };
+    const path = await ShoppingList.getShoppingListPath(shoppingList2);
+    setSelectedPath(path);
   };
 
   const calculateDiagonalDistance = (
@@ -228,6 +245,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
   };
 
   const supportColumn = [
+    { style: styles.orange, text: "Entrada" },
     { style: styles.green, text: "Prateleira" },
     { style: styles.blue, text: "Frios" },
     { style: styles.purple, text: "Caixa" },
@@ -326,14 +344,11 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
         </div>
       </Col>
       <Col>
+        <Button className={styles.buttonMap} onClick={() => claudio()}>
+          Calcular
+        </Button>
         {edit && (
           <>
-            <Button
-              className={styles.buttonMap}
-              onClick={() => calculatePath()}
-            >
-              Calcular
-            </Button>
             <Button
               className={styles.buttonMap}
               onClick={() => setSelectedCells([])}

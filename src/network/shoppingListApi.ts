@@ -38,3 +38,8 @@ export const finishShoppingList = async (shoppingList: ShoppingList) => {
 export const copyShoppingList = async (historicId: string) => {
   await getApi().post(`${baseUrl}/copy/${historicId}`);
 };
+
+export const getShoppingListPath = async (shoppingList: ShoppingList) => {
+  const response = await getApi().post(`${baseUrl}/path`, shoppingList);
+  return response.data;
+};

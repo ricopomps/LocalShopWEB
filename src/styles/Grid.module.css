@@ -30,6 +30,10 @@
   background-color: purple;
 }
 
+.orange {
+  background-color: orange;
+}
+
 .path {
   background-color: var(--amarelo);
 }
