@@ -23,13 +23,18 @@ export interface CellCoordinates {
 }
 
 const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
-  const { shoppingList, setProductsItems } = useShoppingList();
+  const {
+    shoppingList,
+    selectedPath,
+    setProductsItems,
+    setSelectedPath,
+    setPath,
+  } = useShoppingList();
   const location = useLocation();
   const queryParameters = new URLSearchParams(location.search);
   const locationX = queryParameters.get("x");
   const locationY = queryParameters.get("y");
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
-  const [selectedPath, setSelectedPath] = useState<CellCoordinates[][]>([]);
   const [selectedCell, setSelectedCell] = useState<CellCoordinates | undefined>(
     undefined
   );
@@ -79,7 +84,8 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       });
 
       reorderShoppingList(productsOrder);
-      setSelectedPath(path);
+      setPath(path);
+      setSelectedPath(path[0]);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
@@ -181,8 +187,8 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
           {Array.from({ length: rows * cols }, (_, index) => {
             const x = index % cols;
             const y = Math.floor(index / cols);
-            const isPathCell = selectedPath.some((path) =>
-              path.some((coord) => coord.x === x && coord.y === y)
+            const isPathCell = selectedPath.some(
+              (coord) => coord.x === x && coord.y === y
             );
             return (
               <div
@@ -197,9 +203,11 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
         </div>
       </Col>
       <Col>
-        <Button className={styles.buttonMap} onClick={() => calculatePath()}>
-          Calcular
-        </Button>
+        {!edit && (
+          <Button className={styles.buttonMap} onClick={() => calculatePath()}>
+            Calcular
+          </Button>
+        )}
         {edit && (
           <>
             <Button

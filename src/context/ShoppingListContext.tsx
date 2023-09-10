@@ -6,6 +6,7 @@ import {
   useReducer,
 } from "react";
 import { Product } from "../models/product";
+import { CellCoordinates } from "../components/Grid";
 
 export interface ShoppingList {
   storeId?: string;
@@ -29,6 +30,8 @@ export enum REDUCER_ACTION_TYPE {
   ADD_PRODUCT,
   OPEN_SHOPPING_LIST,
   CLOSE_SHOPPING_LIST,
+  SET_SELECTED_PATH,
+  SET_PATH,
 }
 
 export type ReducerAction = {
@@ -39,11 +42,15 @@ export type ReducerAction = {
 type StateType = {
   shoppingList: ShoppingList;
   open: boolean;
+  selectedPath: CellCoordinates[];
+  path: CellCoordinates[][];
 };
 
 export const initialState: StateType = {
   shoppingList: { productsItems: [], selectedItemIds: [] },
   open: false,
+  selectedPath: [],
+  path: [[]],
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -194,6 +201,18 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         open: false,
       };
     }
+    case REDUCER_ACTION_TYPE.SET_SELECTED_PATH: {
+      return {
+        ...state,
+        selectedPath: action.payload,
+      };
+    }
+    case REDUCER_ACTION_TYPE.SET_PATH: {
+      return {
+        ...state,
+        path: action.payload,
+      };
+    }
     default: {
       return state;
     }
@@ -269,6 +288,20 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const setSelectedPath = useCallback((path: CellCoordinates[]) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_SELECTED_PATH,
+      payload: path,
+    });
+  }, []);
+
+  const setPath = useCallback((path: CellCoordinates[][]) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_PATH,
+      payload: path,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
@@ -281,6 +314,8 @@ const useShoppingListContext = (initialState: StateType) => {
     addProduct,
     openShoppingList,
     closeShoppingList,
+    setSelectedPath,
+    setPath,
   };
 };
 
@@ -298,6 +333,8 @@ const initialContextState: UseShoppingListContextType = {
   addProduct: (product: Product) => {},
   openShoppingList: () => {},
   closeShoppingList: () => {},
+  setSelectedPath: (path: CellCoordinates[]) => {},
+  setPath: (path: CellCoordinates[][]) => {},
 };
 
 export const ShoppingListContext =
@@ -321,6 +358,8 @@ export const ShoppingListProvider = ({
 type UseShoppingListHookType = {
   shoppingList: ShoppingList;
   open: boolean;
+  selectedPath: CellCoordinates[];
+  path: CellCoordinates[][];
   setShoppingList: (shoppingList: ShoppingList) => void;
   clearShoppingList: () => void;
   setSelectedItemIds: (selectedItemIds: string[]) => void;
@@ -331,11 +370,13 @@ type UseShoppingListHookType = {
   addProduct: (product: Product) => void;
   openShoppingList: () => void;
   closeShoppingList: () => void;
+  setSelectedPath: (path: CellCoordinates[]) => void;
+  setPath: (path: CellCoordinates[][]) => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
   const {
-    state: { shoppingList, open },
+    state: { shoppingList, open, selectedPath, path },
     setShoppingList,
     clearShoppingList,
     setSelectedItemIds,
@@ -346,10 +387,14 @@ export const useShoppingList = (): UseShoppingListHookType => {
     addProduct,
     openShoppingList,
     closeShoppingList,
+    setSelectedPath,
+    setPath,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
     open,
+    selectedPath,
+    path,
     setShoppingList,
     clearShoppingList,
     setSelectedItemIds,
@@ -360,5 +405,7 @@ export const useShoppingList = (): UseShoppingListHookType => {
     addProduct,
     openShoppingList,
     closeShoppingList,
+    setSelectedPath,
+    setPath,
   };
 };

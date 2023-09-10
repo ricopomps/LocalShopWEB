@@ -125,6 +125,8 @@ function App() {
       <ShoppingListProvider
         shoppingList={initialState.shoppingList}
         open={initialState.open}
+        selectedPath={initialState.selectedPath}
+        path={initialState.path}
       >
         <BrowserRouter>
           <div>

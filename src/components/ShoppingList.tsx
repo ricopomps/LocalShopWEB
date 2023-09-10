@@ -21,12 +21,14 @@ interface ShoppingListItemProps {
   onIncrease: (product: Product) => void;
   onDecrease: (id: string) => void;
   onDelete: (id: string) => void;
+  handlePath: () => void;
 }
 
 const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
   const {
     shoppingList: { productsItems, selectedItemIds, storeId: storeIdContext },
     open: cartOpen,
+    path,
     setSelectedItemIds,
     clearShoppingList,
     setProductsItems,
@@ -35,6 +37,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
     handleItemCountDecrease,
     openShoppingList,
     closeShoppingList,
+    setSelectedPath,
   } = useShoppingList();
   const navigate = useNavigate();
 
@@ -73,6 +76,17 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
     setSelectedItemIds(selectedItems);
   };
 
+  const handlePathChange = (itemId: string, index: number) => {
+    const prevSelectedItems = selectedItemIds;
+    let currentPath;
+    if (prevSelectedItems.includes(itemId)) {
+      currentPath = path[index];
+    } else {
+      currentPath = path[index + 1];
+    }
+    currentPath && setSelectedPath(currentPath);
+  };
+
   const handleItemDelete = (itemId: string) => {
     setSelectedItemIds(selectedItemIds.filter((id) => id !== itemId));
     const updatedProductsItems = productsItems.filter(
@@ -104,9 +118,11 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
     onIncrease,
     onDecrease,
     onDelete,
+    handlePath,
   }: ShoppingListItemProps) => {
     const handleCheckboxChange = () => {
       onSelect(productItem.product._id);
+      handlePath();
     };
 
     return (
@@ -203,7 +219,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
         className={`${styles.cartSidebar} ${cartOpen ? styles.open : ""}`}
       >
         <h1 className={styles.cartText}> Carrinho </h1>
-        {productsItems.map((item) => (
+        {productsItems.map((item, index) => (
           <ShoppingItem
             className={styles.textoCarrinho}
             key={item.product._id}
@@ -227,6 +243,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
             }}
             onDecrease={handleItemCountDecrease}
             onDelete={handleItemDelete}
+            handlePath={() => handlePathChange(item.product._id, index)}
           />
         ))}
         <div className={styles.totalPrice}>
