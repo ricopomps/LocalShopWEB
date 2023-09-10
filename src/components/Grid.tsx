@@ -6,8 +6,7 @@ import * as MapApi from "../network/mapApi";
 import * as ShoppingList from "../network/shoppingListApi";
 import AlocateProductModal from "./Modal/AlocateProductModal";
 import { useLocation } from "react-router-dom";
-import pathfinding, { DiagonalMovement } from "pathfinding";
-import { useShoppingList } from "../context/ShoppingListContext";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 
 interface GridProps {
   rows: number;
@@ -20,10 +19,11 @@ export interface CellCoordinates {
   x: number;
   y: number;
   type?: string;
+  productId?: string;
 }
 
 const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
-  const { shoppingList } = useShoppingList();
+  const { shoppingList, setProductsItems } = useShoppingList();
   const location = useLocation();
   const queryParameters = new URLSearchParams(location.search);
   const locationX = queryParameters.get("x");
@@ -52,196 +52,49 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
     fetchMap();
   }, []);
 
-  const calculatePath = () => {
-    const grid = new pathfinding.Grid(cols, rows);
+  const calculatePath = async () => {
+    try {
+      const productsMapped = shoppingList.productsItems.map((item) => {
+        return {
+          product: item.product._id,
+          quantity: item.quantity,
+        };
+      });
 
-    selectedCells.forEach((cell) => {
-      grid.setWalkableAt(cell.x, cell.y, false);
-    });
-    console.log(selectedCells);
-    console.log(grid);
-    const finder = new pathfinding.AStarFinder({
-      diagonalMovement: DiagonalMovement.OnlyWhenNoObstacles,
-      //   dontCrossCorners: true,
-    });
-    const entranceNode = { x: 0, y: 0 }; // Replace with actual entrance coordinates
-    const nearestPoint = findNearestAccessiblePoint(grid, 0, 0, 2, 5);
-    console.log("nearestPoint", nearestPoint);
-    const shelfNodes = [
-      { x: 6, y: 5 },
-      { x: 4, y: 8 },
-      { x: 9, y: 6 },
-    ];
+      if (!storeId) throw Error("Loja inválida");
+      const path = await ShoppingList.getShoppingListPath({
+        storeId,
+        products: productsMapped,
+      });
+      const productsOrder = new Map<string, number>();
+      path.forEach((path, index) => {
+        const productId = path[0].productId;
+        if (productId) {
+          if (productsOrder.has(productId)) {
+            productsOrder.set(productId, index);
+          } else {
+            productsOrder.set(productId, index);
+          }
+        }
+      });
 
-    const shelfNodesWalkable = shelfNodes
-      .map((node) => findNearestAccessiblePoint(grid, 0, 0, node.x, node.y))
-      .filter((point) => point !== null);
-    console.log("shelfNodesWalkable", shelfNodesWalkable);
-    let start = entranceNode;
-    const result = calculateShortestPath(
-      grid,
-      finder,
-      entranceNode,
-      shelfNodesWalkable
-    );
+      reorderShoppingList(productsOrder);
+      setSelectedPath(path);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
 
-    const shortestPaths = result.map((shelfNode: any) => {
-      console.log("shelfNode", shelfNode);
-      const gridBackup = grid.clone();
-      const path = finder.findPath(
-        start.x,
-        start.y,
-        shelfNode.x,
-        shelfNode.y,
-        gridBackup
+  const reorderShoppingList = (productsOrder: Map<string, number>) => {
+    const productsItems = shoppingList.productsItems;
+    let productsItemsOrdered: ProductItem[] = [];
+    productsOrder.forEach((index, value) => {
+      const productItem = productsItems.find(
+        (item) => item.product._id === value
       );
-      start = shelfNode;
-      return path;
+      productItem && productsItemsOrdered.push(productItem);
     });
-
-    console.log("shortestPaths", shortestPaths);
-    const formattedPaths = shortestPaths.map((path) => {
-      return path.map((node) => ({ x: node[0], y: node[1] }));
-    });
-
-    setSelectedPath(formattedPaths);
-    console.log("formattedPaths", formattedPaths);
-    console.log(shortestPaths);
-  };
-
-  const claudio = async () => {
-    const productsMapped = shoppingList.productsItems.map((item) => {
-      return {
-        product: item.product._id,
-        quantity: item.quantity,
-      };
-    });
-
-    if (!storeId) throw Error("Loja inválida");
-    const shoppingList2 = { storeId, products: productsMapped };
-    const path = await ShoppingList.getShoppingListPath(shoppingList2);
-    setSelectedPath(path);
-  };
-
-  const calculateDiagonalDistance = (
-    cell1: CellCoordinates,
-    cell2: CellCoordinates
-  ) => {
-    const dx = cell1.x - cell2.x;
-    const dy = cell1.y - cell2.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  const calculateShortestPath = (
-    grid: pathfinding.Grid,
-    finder: pathfinding.Finder,
-    entranceNode: CellCoordinates,
-    shelfNodes: CellCoordinates[]
-  ): CellCoordinates[] => {
-    let shortestPath = null;
-    let shortestLength = Infinity;
-
-    const permutations = generatePermutations(shelfNodes);
-
-    for (const permutation of permutations) {
-      let totalLength = 0;
-      let startNode = entranceNode;
-
-      for (const shelfNode of permutation) {
-        const path = finder.findPath(
-          startNode.x,
-          startNode.y,
-          shelfNode.x,
-          shelfNode.y,
-          grid.clone()
-        );
-
-        if (path.length > 0) {
-          totalLength += path.length;
-          startNode = shelfNode;
-        } else {
-          totalLength = Infinity;
-          break;
-        }
-      }
-
-      if (totalLength < shortestLength) {
-        shortestLength = totalLength;
-        shortestPath = permutation;
-      }
-    }
-
-    return shortestPath;
-  };
-
-  const generatePermutations = (arr: any) => {
-    const permutations: any[] = [];
-
-    const permute = (arr: any, m = []) => {
-      if (arr.length === 0) {
-        permutations.push(m);
-      } else {
-        for (let i = 0; i < arr.length; i++) {
-          const curr = arr.slice();
-          const next = curr.splice(i, 1);
-          permute(curr.slice(), m.concat(next));
-        }
-      }
-    };
-
-    permute(arr);
-    return permutations;
-  };
-
-  const findNearestAccessiblePoint = (
-    grid: pathfinding.Grid,
-    x: number,
-    y: number,
-    targetX: number,
-    targetY: number
-  ) => {
-    if (grid.isWalkableAt(targetX, targetY)) return { x: targetX, y: targetY };
-    const up = { x: targetX - 1, y: targetY };
-    const down = { x: targetX + 1, y: targetY };
-    const left = { x: targetX, y: targetY - 1 };
-    const right = { x: targetX, y: targetY + 1 };
-
-    let distance = -1;
-    let nearestPoint = null;
-
-    if (grid.isWalkableAt(up.x, up.y)) {
-      const dist = calculateDiagonalDistance({ x, y }, up);
-      if (distance === -1 || dist < distance) {
-        distance = dist;
-        nearestPoint = up;
-      }
-    }
-
-    if (grid.isWalkableAt(down.x, down.y)) {
-      const dist = calculateDiagonalDistance({ x, y }, down);
-      if (distance === -1 || dist < distance) {
-        distance = dist;
-        nearestPoint = down;
-      }
-    }
-
-    if (grid.isWalkableAt(left.x, left.y)) {
-      const dist = calculateDiagonalDistance({ x, y }, left);
-      if (distance === -1 || dist < distance) {
-        distance = dist;
-        nearestPoint = left;
-      }
-    }
-
-    if (grid.isWalkableAt(right.x, right.y)) {
-      const dist = calculateDiagonalDistance({ x, y }, right);
-      if (distance === -1 || dist < distance) {
-        distance = dist;
-        nearestPoint = right;
-      }
-    }
-    if (!nearestPoint) throw new Error("invalid locations");
-    return nearestPoint;
+    setProductsItems(productsItemsOrdered);
   };
 
   const supportColumn = [
@@ -344,7 +197,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
         </div>
       </Col>
       <Col>
-        <Button className={styles.buttonMap} onClick={() => claudio()}>
+        <Button className={styles.buttonMap} onClick={() => calculatePath()}>
           Calcular
         </Button>
         {edit && (

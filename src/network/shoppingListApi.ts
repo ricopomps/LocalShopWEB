@@ -1,3 +1,4 @@
+import { CellCoordinates } from "../components/Grid";
 import { ProductItem } from "../context/ShoppingListContext";
 import { getApi } from "./api";
 
@@ -39,7 +40,9 @@ export const copyShoppingList = async (historicId: string) => {
   await getApi().post(`${baseUrl}/copy/${historicId}`);
 };
 
-export const getShoppingListPath = async (shoppingList: ShoppingList) => {
+export const getShoppingListPath = async (
+  shoppingList: ShoppingList
+): Promise<CellCoordinates[][]> => {
   const response = await getApi().post(`${baseUrl}/path`, shoppingList);
   return response.data;
 };
