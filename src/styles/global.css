@@ -21,6 +21,21 @@ body {
     "cv04", "cv05", "cv06", "cv09", "cv10";
 }
 
+input[type="checkbox"] {
+  border-color: var(--amarelo);
+}
+
+input[type="checkbox"]:checked {
+  border-color: var(--amarelo);
+  background-color:#5c5c5c; 
+}
+
+input[type="checkbox"]:focus {
+  border-color: var(--amarelo);
+  box-shadow: none; 
+  outline: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
