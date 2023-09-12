@@ -88,11 +88,12 @@ const HistoricPage = ({}: HistoricPageProps) => {
       </Card>
     );
   };
+
   const handleCardClick = (index: number) => {
-    console.log("CLICKED", index);
     if (expandedCardIndex === index) setExpandedCardIndex(-1);
     else setExpandedCardIndex(index);
   };
+
   const HistoricItem = ({
     productItem: { product, quantity },
     onClick,

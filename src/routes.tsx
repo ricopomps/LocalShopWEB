@@ -28,6 +28,8 @@ import StorePage from "./pages/StorePage";
 import { useUser } from "./context/UserContext";
 import { useEffect, useState } from "react";
 import * as UsersApi from "./network/notes_api";
+import * as StoresApi from "./network/storeApi";
+import RequireAuth from "./components/RequireAuth";
 
 const AppRoutes = () => {
   const { user, setUser } = useUser();
@@ -39,7 +41,8 @@ const AppRoutes = () => {
     async function fetchLoggedInUser() {
       try {
         const user = await UsersApi.getLoggedInUser();
-        setUser(user);
+        const store = await StoresApi.getStoreByLoggedUser();
+        setUser({ ...user, store });
       } catch (error) {
         console.error(error);
       }
@@ -66,36 +69,7 @@ const AppRoutes = () => {
         <Container className={styles.pageContainer}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {user.store && (
-              <>
-                <Route
-                  path="/products" //PRIVATE ROUTE
-                  element={<ProductsPageLoggedInView store={user.store} />}
-                />
-                <Route
-                  path="/products" //PRIVATE ROUTE
-                  element={<ProductsPageLoggedInView store={user.store} />}
-                />
-                <Route
-                  path="/map" //PRIVATE ROUTE
-                  element={<MapPage storeId={user?.store._id} />}
-                />
-                <Route
-                  path="/addeditproduct" //PRIVATE ROUTE
-                  element={<AddEditProductPage storeId={user.store._id} />}
-                />
-              </>
-            )}
-            <Route
-              path="/store/product" //PRIVATE ROUTE
-              element={<ProductListPage />}
-            />
-            <Route
-              path="/product" //PRIVATE ROUTE
-              element={<ProductPage />}
-            />
-
-            <Route path="/historic" element={<HistoricPage />} />
+            <Route path="/logindesktop" element={<LoginDesktopPage />} />
             <Route
               path="/cadlojista"
               element={
@@ -114,47 +88,79 @@ const AppRoutes = () => {
                 />
               }
             />
+            <Route element={<RequireAuth />}>
+              <Route
+                path="/store/product" //PRIVATE ROUTE
+                element={<ProductListPage />}
+              />
+              <Route
+                path="/product" //PRIVATE ROUTE
+                element={<ProductPage />}
+              />
 
-            <Route path="/map" element={<MapViewPage />} />
-            <Route path="/shopper" element={<StoreListPage />} />
-            <Route
-              path="/forgotpassword"
-              element={<SendRecoverPasswordEmailPage />}
-            />
+              <Route path="/historic" element={<HistoricPage />} />
 
-            <Route path="/recover" element={<RecoverPasswordPage />} />
-            <Route
-              path="/store"
-              element={
-                <StorePage
-                  onCreateStoreSuccessful={(store: Store) =>
-                    setUser({ ...user!, store: store })
-                  }
-                  store={user?.store}
-                />
-              }
-            />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/shopper" element={<StoreListPage />} />
-            {user?.userType === UserType.store && (
-              <Route path="/reports" element={<ReportsPage />} />
-            )}
-            <Route
-              path="/profile" //PRIVATE ROUTE
-              element={<ProfilePage user={user} updateUser={setUser} />}
-            />
-            <Route
-              path="/store"
-              element={
-                <StorePage
-                  onCreateStoreSuccessful={(store: Store) =>
-                    setUser({ ...user!, store: store })
-                  }
-                  store={user?.store}
-                />
-              }
-            />
-            <Route path="/logindesktop" element={<LoginDesktopPage />} />
+              <Route path="/shopper" element={<StoreListPage />} />
+              <Route
+                path="/forgotpassword"
+                element={<SendRecoverPasswordEmailPage />}
+              />
+
+              <Route path="/recover" element={<RecoverPasswordPage />} />
+              <Route
+                path="/store"
+                element={
+                  <StorePage
+                    onCreateStoreSuccessful={(store: Store) =>
+                      setUser({ ...user!, store: store })
+                    }
+                    store={user?.store}
+                  />
+                }
+              />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/shopper" element={<StoreListPage />} />
+              {user?.userType === UserType.store && (
+                <Route path="/reports" element={<ReportsPage />} />
+              )}
+              <Route
+                path="/profile" //PRIVATE ROUTE
+                element={<ProfilePage user={user} updateUser={setUser} />}
+              />
+              <Route
+                path="/store"
+                element={
+                  <StorePage
+                    onCreateStoreSuccessful={(store: Store) =>
+                      setUser({ ...user!, store: store })
+                    }
+                    store={user?.store}
+                  />
+                }
+              />
+              {user.store && (
+                <>
+                  <Route
+                    path="/products" //PRIVATE ROUTE
+                    element={<ProductsPageLoggedInView store={user.store} />}
+                  />
+                  <Route
+                    path="/products" //PRIVATE ROUTE
+                    element={<ProductsPageLoggedInView store={user.store} />}
+                  />
+                  <Route
+                    path="/map" //PRIVATE ROUTE
+                    element={<MapPage storeId={user?.store._id} />}
+                  />
+                  <Route
+                    path="/addeditproduct" //PRIVATE ROUTE
+                    element={<AddEditProductPage storeId={user.store._id} />}
+                  />
+                </>
+              )}
+              <Route path="/map" element={<MapViewPage />} />
+            </Route>
+
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </Container>
