@@ -8,6 +8,7 @@ import * as StoresApi from "../network/storeApi";
 import styles from "../styles/HomePage.module.css";
 import { getGoogleAuthUser, googleAuth } from "../network/authApi";
 import { User, UserType } from "../models/user";
+import { useUser } from "../context/UserContext";
 
 interface ButtonLoginProps {
   imagem?: string;
@@ -16,11 +17,10 @@ interface ButtonLoginProps {
   onClick?: () => void;
 }
 
-interface HomePageProps {
-  onLoginSuccessful: (user: User) => void;
-}
+interface HomePageProps {}
 
-const HomePage = ({ onLoginSuccessful }: HomePageProps) => {
+const HomePage = ({}: HomePageProps) => {
+  const { setUser } = useUser();
   const navigate = useNavigate();
 
   const ButtonLogin = ({
@@ -81,7 +81,7 @@ const HomePage = ({ onLoginSuccessful }: HomePageProps) => {
     sessionStorage.removeItem("token");
     sessionStorage.setItem("token", accessToken);
     const store = await StoresApi.getStoreByLoggedUser();
-    onLoginSuccessful({ ...user, store });
+    setUser({ ...user, store });
     if (user.userType === UserType.shopper) {
       navigate("/shopper");
     } else {

@@ -6,8 +6,8 @@ export interface User {
   userType: UserType;
   store?: Store;
   cpf: string;
-  favoriteStores?: string[];
-  favoriteProducts?: string[];
+  favoriteStores: string[];
+  favoriteProducts: string[];
   image?: string;
   googleUser?: boolean;
 }

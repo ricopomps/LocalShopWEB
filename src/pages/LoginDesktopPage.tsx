@@ -6,14 +6,14 @@ import { Form, Button } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
 import * as StoresApi from "../network/storeApi";
-import { User, UserType } from "../models/user";
+import { UserType } from "../models/user";
 import styles from "../styles/LoginDesktop.module.css";
 import { toast } from "react-toastify";
+import { useUser } from "../context/UserContext";
 
-interface LoginDesktopPageProps {
-  onLoginSuccessful: (user: User) => void;
-}
-const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
+interface LoginDesktopPageProps {}
+const LoginDesktopPage = ({}: LoginDesktopPageProps) => {
+  const { setUser } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -24,8 +24,7 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
     try {
       const user = await NotesApi.login(data);
       const store = await StoresApi.getStoreByLoggedUser();
-
-      onLoginSuccessful({ ...user, store });
+      setUser({ ...user, store });
       if (user.userType === UserType.shopper) {
         navigate("/shopper");
       } else {
