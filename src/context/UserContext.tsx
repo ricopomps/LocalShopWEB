@@ -23,6 +23,7 @@ enum REDUCER_ACTION_TYPE {
   REMOVE_FAVORITE_PRODUCT,
   ADD_FAVORITE_STORE,
   REMOVE_FAVORITE_STORE,
+  SET_ACCESS_TOKEN,
 }
 
 export type ReducerAction = {
@@ -32,6 +33,7 @@ export type ReducerAction = {
 
 type StateType = {
   user: User;
+  accessToken: string;
 };
 
 export const initialState: StateType = {
@@ -43,13 +45,12 @@ export const initialState: StateType = {
     favoriteProducts: [],
     favoriteStores: [],
   },
+  accessToken: "",
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
   switch (action.type) {
     case REDUCER_ACTION_TYPE.SET_USER: {
-      console.log("SET_USER", action.payload);
-
       return {
         ...state,
         user: action.payload,
@@ -103,7 +104,12 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         },
       };
     }
-
+    case REDUCER_ACTION_TYPE.SET_ACCESS_TOKEN: {
+      return {
+        ...state,
+        accessToken: action.payload,
+      };
+    }
     default: {
       return state;
     }
@@ -113,7 +119,6 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 const useUserContext = (initialState: StateType) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const setUser = useCallback((user: User) => {
-    console.log("setUser", user);
     dispatch({
       type: REDUCER_ACTION_TYPE.SET_USER,
       payload: user,
@@ -181,11 +186,15 @@ const useUserContext = (initialState: StateType) => {
   const fetchLoggedInUser = useCallback(async () => {
     try {
       const user = await UsersApi.getLoggedInUser();
-      console.log("userNOCONTEXTO", user);
       setUser(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
+  }, []);
+
+  const setAccessToken = useCallback((accessToken: string) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.SET_ACCESS_TOKEN,
+      payload: accessToken,
+    });
   }, []);
 
   return {
@@ -197,6 +206,7 @@ const useUserContext = (initialState: StateType) => {
     addFavoriteStore,
     removeFavoriteStore,
     fetchLoggedInUser,
+    setAccessToken,
   };
 };
 
@@ -211,6 +221,7 @@ const initialContextState: UseUserContextType = {
   addFavoriteStore: async (productId: string) => {},
   removeFavoriteStore: async (productId: string) => {},
   fetchLoggedInUser: async () => {},
+  setAccessToken: (accessToken: string) => {},
 };
 
 export const UserContext =
@@ -239,31 +250,36 @@ export const UserProvider = ({
 
 type UseUserHookType = {
   user: User;
+  accessToken: string;
   setUser: (user: User) => void;
   clearUser: () => void;
   addFavoriteProduct: (productId: string) => void;
   removeFavoriteProduct: (productId: string) => void;
   addFavoriteStore: (productId: string) => void;
   removeFavoriteStore: (productId: string) => void;
+  setAccessToken: (accessToken: string) => void;
 };
 
 export const useUser = (): UseUserHookType => {
   const {
-    state: { user },
+    state: { user, accessToken },
     setUser,
     clearUser,
     addFavoriteProduct,
     removeFavoriteProduct,
     addFavoriteStore,
     removeFavoriteStore,
+    setAccessToken,
   } = useContext(UserContext);
   return {
     user,
+    accessToken,
     setUser,
     clearUser,
     addFavoriteProduct,
     removeFavoriteProduct,
     addFavoriteStore,
     removeFavoriteStore,
+    setAccessToken,
   };
 };

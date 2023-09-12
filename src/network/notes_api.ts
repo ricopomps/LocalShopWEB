@@ -18,9 +18,13 @@ export interface SignUpCredentials {
   confirmedPassword: string;
 }
 
-export async function signUp(credentials: SignUpCredentials): Promise<User> {
+export async function signUp(
+  credentials: SignUpCredentials,
+  setAccessToken: (accessToken: string) => void
+): Promise<User> {
   const { data } = await getApi().post("/api/users/signup", credentials);
   sessionStorage.setItem("token", data.accessToken);
+  setAccessToken(data.accessToken);
   return data.user;
 }
 
@@ -29,12 +33,16 @@ export interface LoginCredentials {
   password: string;
 }
 
-export async function login(credentials: LoginCredentials): Promise<User> {
+export async function login(
+  credentials: LoginCredentials,
+  setAccessToken: (accessToken: string) => void
+): Promise<User> {
   const {
     data: { user, accessToken },
   } = await getApi().post("/api/auth", credentials);
   sessionStorage.removeItem("token");
   sessionStorage.setItem("token", accessToken);
+  setAccessToken(accessToken);
   return user;
 }
 

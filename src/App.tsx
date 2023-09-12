@@ -21,7 +21,10 @@ function App() {
         selectedPath={initialState.selectedPath}
         path={initialState.path}
       >
-        <UserProvider user={userInitialState.user}>
+        <UserProvider
+          user={userInitialState.user}
+          accessToken={userInitialState.accessToken}
+        >
           <AppRoutes />
         </UserProvider>
       </ShoppingListProvider>

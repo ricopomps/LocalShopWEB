@@ -19,5 +19,3 @@ export function getApi() {
 
   return api;
 }
-
-export const API = getApi();

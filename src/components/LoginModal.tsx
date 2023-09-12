@@ -8,6 +8,7 @@ import stylesUtils from "../styles/utils.module.css";
 import { useState } from "react";
 import { UnathorizedError } from "../errors/http_errors";
 import { getStoreByLoggedUser } from "../network/storeApi";
+import { useUser } from "../context/UserContext";
 
 interface LoginModalProps {
   onDismiss: () => void;
@@ -20,10 +21,10 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginCredentials>();
-
+  const { setAccessToken } = useUser();
   async function onSubmit(credentials: LoginCredentials) {
     try {
-      const user = await NotesApi.login(credentials);
+      const user = await NotesApi.login(credentials, setAccessToken);
       const store = await getStoreByLoggedUser();
 
       onLoginSuccessful({ ...user, store });

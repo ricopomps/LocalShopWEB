@@ -13,7 +13,7 @@ import { useUser } from "../context/UserContext";
 
 interface LoginDesktopPageProps {}
 const LoginDesktopPage = ({}: LoginDesktopPageProps) => {
-  const { setUser } = useUser();
+  const { setUser, setAccessToken } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -22,7 +22,7 @@ const LoginDesktopPage = ({}: LoginDesktopPageProps) => {
   } = useForm<LoginCredentials>();
   const onSubmit = async (data: LoginCredentials) => {
     try {
-      const user = await NotesApi.login(data);
+      const user = await NotesApi.login(data, setAccessToken);
       const store = await StoresApi.getStoreByLoggedUser();
       setUser({ ...user, store });
       if (user.userType === UserType.shopper) {

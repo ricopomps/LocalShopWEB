@@ -38,3 +38,8 @@ export async function getGoogleAuthUser(code: string, userType?: string) {
   });
   return data;
 }
+
+export async function refresh() {
+  const { data } = await getApi().get(`${baseUrl}/refresh`);
+  return data;
+}

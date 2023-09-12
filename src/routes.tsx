@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import * as UsersApi from "./network/notes_api";
 import * as StoresApi from "./network/storeApi";
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 
 const AppRoutes = () => {
   const { user, setUser } = useUser();
@@ -88,77 +89,79 @@ const AppRoutes = () => {
                 />
               }
             />
-            <Route element={<RequireAuth />}>
-              <Route
-                path="/store/product" //PRIVATE ROUTE
-                element={<ProductListPage />}
-              />
-              <Route
-                path="/product" //PRIVATE ROUTE
-                element={<ProductPage />}
-              />
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth />}>
+                <Route
+                  path="/store/product" //PRIVATE ROUTE
+                  element={<ProductListPage />}
+                />
+                <Route
+                  path="/product" //PRIVATE ROUTE
+                  element={<ProductPage />}
+                />
 
-              <Route path="/historic" element={<HistoricPage />} />
+                <Route path="/historic" element={<HistoricPage />} />
 
-              <Route path="/shopper" element={<StoreListPage />} />
-              <Route
-                path="/forgotpassword"
-                element={<SendRecoverPasswordEmailPage />}
-              />
+                <Route path="/shopper" element={<StoreListPage />} />
+                <Route
+                  path="/forgotpassword"
+                  element={<SendRecoverPasswordEmailPage />}
+                />
 
-              <Route path="/recover" element={<RecoverPasswordPage />} />
-              <Route
-                path="/store"
-                element={
-                  <StorePage
-                    onCreateStoreSuccessful={(store: Store) =>
-                      setUser({ ...user!, store: store })
-                    }
-                    store={user?.store}
-                  />
-                }
-              />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/shopper" element={<StoreListPage />} />
-              {user?.userType === UserType.store && (
-                <Route path="/reports" element={<ReportsPage />} />
-              )}
-              <Route
-                path="/profile" //PRIVATE ROUTE
-                element={<ProfilePage user={user} updateUser={setUser} />}
-              />
-              <Route
-                path="/store"
-                element={
-                  <StorePage
-                    onCreateStoreSuccessful={(store: Store) =>
-                      setUser({ ...user!, store: store })
-                    }
-                    store={user?.store}
-                  />
-                }
-              />
-              {user.store && (
-                <>
-                  <Route
-                    path="/products" //PRIVATE ROUTE
-                    element={<ProductsPageLoggedInView store={user.store} />}
-                  />
-                  <Route
-                    path="/products" //PRIVATE ROUTE
-                    element={<ProductsPageLoggedInView store={user.store} />}
-                  />
-                  <Route
-                    path="/map" //PRIVATE ROUTE
-                    element={<MapPage storeId={user?.store._id} />}
-                  />
-                  <Route
-                    path="/addeditproduct" //PRIVATE ROUTE
-                    element={<AddEditProductPage storeId={user.store._id} />}
-                  />
-                </>
-              )}
-              <Route path="/map" element={<MapViewPage />} />
+                <Route path="/recover" element={<RecoverPasswordPage />} />
+                <Route
+                  path="/store"
+                  element={
+                    <StorePage
+                      onCreateStoreSuccessful={(store: Store) =>
+                        setUser({ ...user!, store: store })
+                      }
+                      store={user?.store}
+                    />
+                  }
+                />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/shopper" element={<StoreListPage />} />
+                {user?.userType === UserType.store && (
+                  <Route path="/reports" element={<ReportsPage />} />
+                )}
+                <Route
+                  path="/profile" //PRIVATE ROUTE
+                  element={<ProfilePage user={user} updateUser={setUser} />}
+                />
+                <Route
+                  path="/store"
+                  element={
+                    <StorePage
+                      onCreateStoreSuccessful={(store: Store) =>
+                        setUser({ ...user!, store: store })
+                      }
+                      store={user?.store}
+                    />
+                  }
+                />
+                {user.store && (
+                  <>
+                    <Route
+                      path="/products" //PRIVATE ROUTE
+                      element={<ProductsPageLoggedInView store={user.store} />}
+                    />
+                    <Route
+                      path="/products" //PRIVATE ROUTE
+                      element={<ProductsPageLoggedInView store={user.store} />}
+                    />
+                    <Route
+                      path="/map" //PRIVATE ROUTE
+                      element={<MapPage storeId={user?.store._id} />}
+                    />
+                    <Route
+                      path="/addeditproduct" //PRIVATE ROUTE
+                      element={<AddEditProductPage storeId={user.store._id} />}
+                    />
+                  </>
+                )}
+                <Route path="/map" element={<MapViewPage />} />
+              </Route>
             </Route>
 
             <Route path="/*" element={<NotFoundPage />} />
