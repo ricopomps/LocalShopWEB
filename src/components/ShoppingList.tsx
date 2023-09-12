@@ -38,6 +38,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
     openShoppingList,
     closeShoppingList,
     setSelectedPath,
+    clearPaths,
   } = useShoppingList();
   const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
   };
 
   useEffect(() => {
+    clearPaths();
     const getPreviousShoppingList = async () => {
       try {
         if (!storeId) throw Error("Loja não encontrada");

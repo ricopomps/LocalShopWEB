@@ -32,6 +32,7 @@ export enum REDUCER_ACTION_TYPE {
   CLOSE_SHOPPING_LIST,
   SET_SELECTED_PATH,
   SET_PATH,
+  CLEAR_PATHS,
 }
 
 export type ReducerAction = {
@@ -213,6 +214,13 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         path: action.payload,
       };
     }
+    case REDUCER_ACTION_TYPE.CLEAR_PATHS: {
+      return {
+        ...state,
+        selectedPath: [],
+        path: [[]],
+      };
+    }
     default: {
       return state;
     }
@@ -302,6 +310,12 @@ const useShoppingListContext = (initialState: StateType) => {
     });
   }, []);
 
+  const clearPaths = useCallback(() => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.CLEAR_PATHS,
+    });
+  }, []);
+
   return {
     state,
     setShoppingList,
@@ -316,6 +330,7 @@ const useShoppingListContext = (initialState: StateType) => {
     closeShoppingList,
     setSelectedPath,
     setPath,
+    clearPaths,
   };
 };
 
@@ -335,6 +350,7 @@ const initialContextState: UseShoppingListContextType = {
   closeShoppingList: () => {},
   setSelectedPath: (path: CellCoordinates[]) => {},
   setPath: (path: CellCoordinates[][]) => {},
+  clearPaths: () => {},
 };
 
 export const ShoppingListContext =
@@ -372,6 +388,7 @@ type UseShoppingListHookType = {
   closeShoppingList: () => void;
   setSelectedPath: (path: CellCoordinates[]) => void;
   setPath: (path: CellCoordinates[][]) => void;
+  clearPaths: () => void;
 };
 
 export const useShoppingList = (): UseShoppingListHookType => {
@@ -389,6 +406,7 @@ export const useShoppingList = (): UseShoppingListHookType => {
     closeShoppingList,
     setSelectedPath,
     setPath,
+    clearPaths,
   } = useContext(ShoppingListContext);
   return {
     shoppingList,
@@ -407,5 +425,6 @@ export const useShoppingList = (): UseShoppingListHookType => {
     closeShoppingList,
     setSelectedPath,
     setPath,
+    clearPaths,
   };
 };

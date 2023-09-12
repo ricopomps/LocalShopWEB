@@ -25,11 +25,7 @@ const NavBarLoggedInView = ({
       <Navbar.Text className={styles.textLogged}>
         <div className={styles.centeredContent}>
           {user.image ? (
-            <img
-              className={styles.navbarIcon}
-              src={user.image}
-              alt="foto de perfil"
-            ></img>
+            <img className={styles.navbarIcon} src={user.image} alt=""></img>
           ) : (
             <FaUserCircle />
           )}
