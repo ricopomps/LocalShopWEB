@@ -1,6 +1,6 @@
 import { endOfMonth, startOfMonth } from "date-fns";
-import { getApi } from "./api";
 import { Charts } from "../pages/ReportsPage";
+import ApiService from "./api";
 
 interface SingularValue {
   label: string;
@@ -32,6 +32,7 @@ export interface ChartData {
   labels: string[];
   datasets: Dataset[];
 }
+const apiService = ApiService.getInstance();
 
 function isSingleReportData(data: ReportData): data is SingleReportData[] {
   return "value" in data[0];
@@ -110,7 +111,7 @@ export async function getReport(
   startDate: Date,
   endDate: Date
 ): Promise<ChartData> {
-  const response = await getApi().get(baseUrl, {
+  const response = await apiService.getApi().get(baseUrl, {
     params: {
       startDate: startOfMonth(startDate),
       endDate: endOfMonth(endDate),
@@ -124,7 +125,7 @@ export async function getReportProductsSold(
   startDate: Date,
   endDate: Date
 ): Promise<ChartData> {
-  const response = await getApi().get(`${baseUrl}/productssold`, {
+  const response = await apiService.getApi().get(`${baseUrl}/productssold`, {
     params: {
       startDate: startOfMonth(startDate),
       endDate: endOfMonth(endDate),
@@ -138,7 +139,7 @@ export async function getIncomeReport(
   startDate: Date,
   endDate: Date
 ): Promise<ChartData> {
-  const response = await getApi().get(`${baseUrl}/incomeReport`, {
+  const response = await apiService.getApi().get(`${baseUrl}/incomeReport`, {
     params: {
       startDate: startOfMonth(startDate),
       endDate: endOfMonth(endDate),
@@ -152,12 +153,14 @@ export async function getIncomeByProductReport(
   startDate: Date,
   endDate: Date
 ): Promise<ChartData> {
-  const response = await getApi().get(`${baseUrl}/incomeByProducts`, {
-    params: {
-      startDate: startOfMonth(startDate),
-      endDate: endOfMonth(endDate),
-    },
-  });
+  const response = await apiService
+    .getApi()
+    .get(`${baseUrl}/incomeByProducts`, {
+      params: {
+        startDate: startOfMonth(startDate),
+        endDate: endOfMonth(endDate),
+      },
+    });
   var treatedData = transformDataForChart(response.data, Charts.income);
   return treatedData;
 }

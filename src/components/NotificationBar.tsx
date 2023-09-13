@@ -31,7 +31,7 @@ const NotificationBar = ({ open, close }: NotificationBarProps) => {
         toast.error(error?.response?.data?.error ?? error?.message);
       }
     };
-    fetchNotifications();
+    if (open) fetchNotifications();
   }, [open]);
 
   const onDelete = async (notificationId: string) => {

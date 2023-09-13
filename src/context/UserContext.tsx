@@ -3,13 +3,13 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useReducer,
 } from "react";
 import { toast } from "react-toastify";
 import { Product } from "../models/product";
 import { User, UserType } from "../models/user";
 import * as UsersApi from "../network/notes_api";
+import ApiService from "../network/api";
 
 export interface ProductItem {
   product: Product;
@@ -183,14 +183,9 @@ const useUserContext = (initialState: StateType) => {
     }
   }, []);
 
-  const fetchLoggedInUser = useCallback(async () => {
-    try {
-      const user = await UsersApi.getLoggedInUser();
-      setUser(user);
-    } catch (error) {}
-  }, []);
-
   const setAccessToken = useCallback((accessToken: string) => {
+    const apiService = ApiService.getInstance();
+    apiService.setAccessToken(accessToken, setAccessToken);
     dispatch({
       type: REDUCER_ACTION_TYPE.SET_ACCESS_TOKEN,
       payload: accessToken,
@@ -205,7 +200,6 @@ const useUserContext = (initialState: StateType) => {
     removeFavoriteProduct,
     addFavoriteStore,
     removeFavoriteStore,
-    fetchLoggedInUser,
     setAccessToken,
   };
 };
@@ -220,7 +214,6 @@ const initialContextState: UseUserContextType = {
   removeFavoriteProduct: async (productId: string) => {},
   addFavoriteStore: async (productId: string) => {},
   removeFavoriteStore: async (productId: string) => {},
-  fetchLoggedInUser: async () => {},
   setAccessToken: (accessToken: string) => {},
 };
 
@@ -235,12 +228,6 @@ export const UserProvider = ({
   children,
   ...initialState
 }: ChildrenType & StateType): ReactElement => {
-  const { fetchLoggedInUser } = useUserContext(initialState);
-
-  useEffect(() => {
-    // fetchLoggedInUser();
-  }, []);
-
   return (
     <UserContext.Provider value={useUserContext(initialState)}>
       {children}

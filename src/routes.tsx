@@ -29,6 +29,7 @@ import { useUser } from "./context/UserContext";
 import { useEffect, useState } from "react";
 import * as UsersApi from "./network/notes_api";
 import * as StoresApi from "./network/storeApi";
+import * as AuthApi from "./network/authApi";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 
@@ -41,9 +42,8 @@ const AppRoutes = () => {
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
-        const user = await UsersApi.getLoggedInUser();
-        const store = await StoresApi.getStoreByLoggedUser();
-        setUser({ ...user, store });
+        const { user } = await AuthApi.refresh();
+        setUser(user);
       } catch (error) {
         console.error(error);
       }
@@ -89,6 +89,7 @@ const AppRoutes = () => {
                 />
               }
             />
+
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
                 <Route

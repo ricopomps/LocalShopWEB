@@ -78,8 +78,6 @@ const HomePage = ({}: HomePageProps) => {
   };
 
   const login = async (user: User, accessToken: string) => {
-    sessionStorage.removeItem("token");
-    sessionStorage.setItem("token", accessToken);
     const store = await StoresApi.getStoreByLoggedUser();
     setUser({ ...user, store });
     if (user.userType === UserType.shopper) {

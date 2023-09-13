@@ -1,11 +1,12 @@
 import { Note } from "../models/note";
 import { User, UserType } from "../models/user";
 import { ProfileForm } from "../pages/ProfilePage";
-import { getApi } from "./api";
+import ApiService from "./api";
 //USER ROUTES
+const apiService = ApiService.getInstance();
 
 export async function getLoggedInUser(): Promise<User> {
-  const response = await getApi().get("/api/users");
+  const response = await apiService.getApi().get("/api/users");
   return response.data;
 }
 
@@ -22,8 +23,9 @@ export async function signUp(
   credentials: SignUpCredentials,
   setAccessToken: (accessToken: string) => void
 ): Promise<User> {
-  const { data } = await getApi().post("/api/users/signup", credentials);
-  sessionStorage.setItem("token", data.accessToken);
+  const { data } = await apiService
+    .getApi()
+    .post("/api/users/signup", credentials);
   setAccessToken(data.accessToken);
   return data.user;
 }
@@ -39,54 +41,59 @@ export async function login(
 ): Promise<User> {
   const {
     data: { user, accessToken },
-  } = await getApi().post("/api/auth", credentials);
-  sessionStorage.removeItem("token");
-  sessionStorage.setItem("token", accessToken);
+  } = await apiService.getApi().post("/api/auth", credentials);
   setAccessToken(accessToken);
   return user;
 }
 
 export async function logout() {
-  await getApi().post("/api/auth/logout");
-  sessionStorage.removeItem("token");
+  await apiService.getApi().post("/api/auth/logout");
 }
 
 export async function updateUser(user: ProfileForm) {
-  const response = await getApi().patch("/api/users", user);
+  const response = await apiService.getApi().patch("/api/users", user);
   return response.data;
 }
 
 export async function favoriteStore(storeId: string) {
-  const response = await getApi().post("/api/users/favoriteStores", {
+  const response = await apiService.getApi().post("/api/users/favoriteStores", {
     storeId,
   });
   return response.data;
 }
 
 export async function favoriteProduct(productId: string) {
-  const response = await getApi().post("/api/users/favoriteProduct", {
-    productId,
-  });
+  const response = await apiService
+    .getApi()
+    .post("/api/users/favoriteProduct", {
+      productId,
+    });
   return response.data;
 }
 
 export async function unfavoriteProduct(productId: string) {
-  const response = await getApi().post("/api/users/unFavoriteProduct", {
-    productId,
-  });
+  const response = await apiService
+    .getApi()
+    .post("/api/users/unFavoriteProduct", {
+      productId,
+    });
   return response.data;
 }
 
 export async function unfavoriteStore(storeId: string) {
-  const response = await getApi().post("/api/users/unFavoriteStores", {
-    storeId,
-  });
+  const response = await apiService
+    .getApi()
+    .post("/api/users/unFavoriteStores", {
+      storeId,
+    });
   return response.data;
 }
 
 //NOTES ROUTES
 export async function fetchNotes(): Promise<Note[]> {
-  const response = await getApi().get("/api/notes", { withCredentials: true });
+  const response = await apiService
+    .getApi()
+    .get("/api/notes", { withCredentials: true });
   return response.data;
 }
 
@@ -96,7 +103,7 @@ export interface NoteInput {
 }
 
 export async function createNote(note: NoteInput): Promise<Note> {
-  const response = await getApi().post("/api/notes", note);
+  const response = await apiService.getApi().post("/api/notes", note);
   return response.data;
 }
 
@@ -104,10 +111,12 @@ export async function updateNote(
   noteId: string,
   note: NoteInput
 ): Promise<Note> {
-  const response = await getApi().patch(`/api/notes/${noteId}`, note);
+  const response = await apiService
+    .getApi()
+    .patch(`/api/notes/${noteId}`, note);
   return response.data;
 }
 
 export async function deleteNote(noteId: string) {
-  await getApi().delete(`/api/notes/${noteId}`);
+  await apiService.getApi().delete(`/api/notes/${noteId}`);
 }
