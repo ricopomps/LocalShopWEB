@@ -9,6 +9,7 @@ import * as StoreApi from "../network/storeApi";
 import { Store } from "../models/store";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import RoutesEnum from "../utils/routesEnum";
 
 interface StorePageProps {
   store?: Store;
@@ -34,7 +35,7 @@ const StorePage = ({ store, onCreateStoreSuccessful }: StorePageProps) => {
       } else {
         onCreateStoreSuccessful(await StoreApi.createStore(credentials));
         toast.success("Loja criada com sucesso!");
-        navigate("/products");
+        navigate(RoutesEnum.PRODUCTS);
       }
     } catch (error) {
       if (error instanceof UnathorizedError) setErrorText(error.message);

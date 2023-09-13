@@ -8,6 +8,7 @@ import TextInputField from "../components/form/TextInputField";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/AddEditProductDialog.module.css";
 import { toast } from "react-toastify";
+import RoutesEnum from "../utils/routesEnum";
 
 interface AddEditProductPageProps {
   //productToEdit?: Product;
@@ -59,7 +60,7 @@ const AddEditProductPage = ({
         });
       }
       toast.success("Produto cadastrado com sucesso!");
-      navigate("/products");
+      navigate(RoutesEnum.PRODUCTS);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }

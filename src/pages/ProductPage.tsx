@@ -10,6 +10,7 @@ import ShoppingList from "../components/ShoppingList";
 import { useShoppingList } from "../context/ShoppingListContext";
 import styles from "../styles/ProductPage.module.css";
 import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
 interface ProductPageProps {}
 
@@ -47,12 +48,12 @@ const ProductPage = ({}: ProductPageProps) => {
   const goToStoreMap = () => {
     if (selectedProduct)
       navigate(
-        `/map?store=${store}&x=${selectedProduct.location?.x}&y=${selectedProduct.location?.y}`
+        `${RoutesEnum.MAP}?store=${store}&x=${selectedProduct.location?.x}&y=${selectedProduct.location?.y}`
       );
   };
 
   const goBackToStore = () => {
-    navigate("/store/product?store=" + store);
+    navigate(`${RoutesEnum.PRODUCT_LIST_PAGE}?store=${store}`);
   };
 
   if (!selectedProduct) return <></>;

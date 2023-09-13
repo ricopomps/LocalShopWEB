@@ -4,11 +4,11 @@ import { toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import google from "../assets/google.svg";
 import email from "../assets/email.svg";
-import * as StoresApi from "../network/storeApi";
 import styles from "../styles/HomePage.module.css";
 import { getGoogleAuthUser, googleAuth } from "../network/authApi";
 import { User, UserType } from "../models/user";
 import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
 interface ButtonLoginProps {
   imagem?: string;
@@ -68,9 +68,8 @@ const HomePage = ({}: HomePageProps) => {
 
   const fetchUserData = async (code: any, userType?: string) => {
     try {
-      const response = await getGoogleAuthUser(code, userType);
-
-      login(response.user, response.accessToken);
+      const { user, accessToken } = await getGoogleAuthUser(code, userType);
+      login(user, accessToken);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
       console.error("Error fetching user data:", error);
@@ -78,12 +77,11 @@ const HomePage = ({}: HomePageProps) => {
   };
 
   const login = async (user: User, accessToken: string) => {
-    const store = await StoresApi.getStoreByLoggedUser();
-    setUser({ ...user, store });
+    setUser(user);
     if (user.userType === UserType.shopper) {
-      navigate("/shopper");
+      navigate(RoutesEnum.SHOPPER);
     } else {
-      navigate(store ? "/products" : "/store");
+      navigate(user.store ? RoutesEnum.PRODUCTS : RoutesEnum.STORE);
     }
   };
   return (
@@ -94,17 +92,19 @@ const HomePage = ({}: HomePageProps) => {
       <ButtonLogin
         imagem={google}
         onClick={() => googleAuthCall()}
-        path="/logindesktop"
+        path={RoutesEnum.LOGIN}
       >
         Continue com Google
       </ButtonLogin>
-      <ButtonLogin imagem={email} path="/logindesktop">
+      <ButtonLogin imagem={email} path={RoutesEnum.LOGIN}>
         Continue com E-Mail
       </ButtonLogin>
-      <Link to="/cadshopper" className={styles.cadastreLink}>
+      <Link to={RoutesEnum.SIGN_UP_SHOPPER} className={styles.cadastreLink}>
         Não tem login? Cadastre-se
       </Link>
-      <ButtonLogin path="/cadlojista">Deseja cadastrar sua loja?</ButtonLogin>
+      <ButtonLogin path={RoutesEnum.SIGN_UP_STORE}>
+        Deseja cadastrar sua loja?
+      </ButtonLogin>
     </div>
   );
 };

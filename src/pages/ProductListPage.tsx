@@ -19,6 +19,7 @@ import filter from "../assets/filter.svg";
 import filterCheio from "../assets/filtercheio.svg";
 import CheckInputField from "../components/form/CheckInputField";
 import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
 interface ProductListPageProps {}
 
@@ -89,11 +90,13 @@ const ProductListPage = ({}: ProductListPageProps) => {
   };
 
   const goToStoreMap = () => {
-    navigate(`/map?store=${storeId}`);
+    navigate(`${RoutesEnum.MAP}?store=${storeId}`);
   };
 
   const goToProductPageMap = (productId: string) => {
-    navigate(`/product?store=${storeId}&product=${productId}`);
+    navigate(
+      `${RoutesEnum.PRODUCT_PAGE}?store=${storeId}&product=${productId}`
+    );
   };
 
   const productsGrid = (

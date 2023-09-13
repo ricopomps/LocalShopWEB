@@ -27,11 +27,10 @@ import StoreListPage from "./pages/StoreListPage";
 import StorePage from "./pages/StorePage";
 import { useUser } from "./context/UserContext";
 import { useEffect, useState } from "react";
-import * as UsersApi from "./network/notes_api";
-import * as StoresApi from "./network/storeApi";
 import * as AuthApi from "./network/authApi";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
+import RoutesEnum from "./utils/routesEnum";
 
 const AppRoutes = () => {
   const { user, setUser } = useUser();
@@ -48,6 +47,7 @@ const AppRoutes = () => {
         console.error(error);
       }
     }
+
     fetchLoggedInUser();
   }, []);
 
@@ -69,10 +69,10 @@ const AppRoutes = () => {
         )}
         <Container className={styles.pageContainer}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/logindesktop" element={<LoginDesktopPage />} />
+            <Route path={RoutesEnum.HOME} element={<HomePage />} />
+            <Route path={RoutesEnum.LOGIN} element={<LoginDesktopPage />} />
             <Route
-              path="/cadlojista"
+              path={RoutesEnum.SIGN_UP_STORE}
               element={
                 <SignUpPage
                   onSignUpSuccessful={(user) => setUser(user)}
@@ -81,7 +81,7 @@ const AppRoutes = () => {
               }
             />
             <Route
-              path="/cadshopper"
+              path={RoutesEnum.SIGN_UP_SHOPPER}
               element={
                 <SignUpPage
                   onSignUpSuccessful={(user) => setUser(user)}
@@ -89,83 +89,70 @@ const AppRoutes = () => {
                 />
               }
             />
+            <Route
+              path={RoutesEnum.FORGOT_PASSWORD}
+              element={<SendRecoverPasswordEmailPage />}
+            />
+            <Route
+              path={RoutesEnum.RECOVER_PASSWORD}
+              element={<RecoverPasswordPage />}
+            />
 
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
                 <Route
-                  path="/store/product" //PRIVATE ROUTE
+                  path={RoutesEnum.PRODUCT_LIST_PAGE}
                   element={<ProductListPage />}
                 />
                 <Route
-                  path="/product" //PRIVATE ROUTE
+                  path={RoutesEnum.PRODUCT_PAGE}
                   element={<ProductPage />}
                 />
 
-                <Route path="/historic" element={<HistoricPage />} />
+                <Route path={RoutesEnum.HISTORIC} element={<HistoricPage />} />
 
-                <Route path="/shopper" element={<StoreListPage />} />
-                <Route
-                  path="/forgotpassword"
-                  element={<SendRecoverPasswordEmailPage />}
-                />
+                <Route path={RoutesEnum.SHOPPER} element={<StoreListPage />} />
 
-                <Route path="/recover" element={<RecoverPasswordPage />} />
                 <Route
-                  path="/store"
+                  path={RoutesEnum.STORE}
                   element={
                     <StorePage
                       onCreateStoreSuccessful={(store: Store) =>
-                        setUser({ ...user!, store: store })
+                        setUser({ ...user, store: store })
                       }
                       store={user?.store}
                     />
                   }
                 />
-                <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/shopper" element={<StoreListPage />} />
+                <Route path={RoutesEnum.PRIVACY} element={<PrivacyPage />} />
                 {user?.userType === UserType.store && (
-                  <Route path="/reports" element={<ReportsPage />} />
+                  <Route path={RoutesEnum.REPORTS} element={<ReportsPage />} />
                 )}
                 <Route
-                  path="/profile" //PRIVATE ROUTE
+                  path={RoutesEnum.PROFILE}
                   element={<ProfilePage user={user} updateUser={setUser} />}
-                />
-                <Route
-                  path="/store"
-                  element={
-                    <StorePage
-                      onCreateStoreSuccessful={(store: Store) =>
-                        setUser({ ...user!, store: store })
-                      }
-                      store={user?.store}
-                    />
-                  }
                 />
                 {user.store && (
                   <>
                     <Route
-                      path="/products" //PRIVATE ROUTE
+                      path={RoutesEnum.PRODUCTS}
                       element={<ProductsPageLoggedInView store={user.store} />}
                     />
                     <Route
-                      path="/products" //PRIVATE ROUTE
-                      element={<ProductsPageLoggedInView store={user.store} />}
-                    />
-                    <Route
-                      path="/map" //PRIVATE ROUTE
+                      path={RoutesEnum.MAP}
                       element={<MapPage storeId={user?.store._id} />}
                     />
                     <Route
-                      path="/addeditproduct" //PRIVATE ROUTE
+                      path={RoutesEnum.ADICIONAR_EDITAR_PRODUTO}
                       element={<AddEditProductPage storeId={user.store._id} />}
                     />
                   </>
                 )}
-                <Route path="/map" element={<MapViewPage />} />
+                <Route path={RoutesEnum.MAP} element={<MapViewPage />} />
               </Route>
             </Route>
 
-            <Route path="/*" element={<NotFoundPage />} />
+            <Route path={RoutesEnum.NOT_FOUND} element={<NotFoundPage />} />
           </Routes>
         </Container>
         {showSignUpModal && (

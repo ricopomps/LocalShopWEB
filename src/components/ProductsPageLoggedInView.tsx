@@ -12,6 +12,7 @@ import { setSessionStoreId } from "../network/storeApi";
 import InfiniteScroll from "./InfiniteScroll";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import RoutesEnum from "../utils/routesEnum";
 
 interface ProductsPageLoggedInViewProps {
   store: Store;
@@ -89,7 +90,7 @@ const ProductsPageLoggedInView = ({ store }: ProductsPageLoggedInViewProps) => {
     <>
       <Button
         className={`mb-4 ${stylesUtils.blockCenter} ${stylesUtils.flexCenter}`}
-        onClick={() => navigate("/addeditproduct")}
+        onClick={() => navigate(RoutesEnum.ADICIONAR_EDITAR_PRODUTO)}
       >
         <FaPlus />
         Adicionar novo produto

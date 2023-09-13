@@ -7,7 +7,6 @@ import TextInputField from "./form/TextInputField";
 import stylesUtils from "../styles/utils.module.css";
 import { useState } from "react";
 import { UnathorizedError } from "../errors/http_errors";
-import { getStoreByLoggedUser } from "../network/storeApi";
 import { useUser } from "../context/UserContext";
 
 interface LoginModalProps {
@@ -25,9 +24,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   async function onSubmit(credentials: LoginCredentials) {
     try {
       const user = await NotesApi.login(credentials, setAccessToken);
-      const store = await getStoreByLoggedUser();
-
-      onLoginSuccessful({ ...user, store });
+      onLoginSuccessful(user);
     } catch (error) {
       if (error instanceof UnathorizedError) setErrorText(error.message);
       else alert(error);

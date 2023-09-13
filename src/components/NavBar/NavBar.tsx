@@ -5,6 +5,7 @@ import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/navbar.module.css";
 import { useUser } from "../../context/UserContext";
+import RoutesEnum from "../../utils/routesEnum";
 
 interface NavBarProps {
   onSignUpClicked: () => void;
@@ -28,18 +29,30 @@ const NavBar = ({
     >
       <Container className={styles.navbar}>
         {user?.userType === UserType.shopper ? (
-          <Navbar.Brand className={styles.textNavbar} as={Link} to="/shopper">
+          <Navbar.Brand
+            className={styles.textNavbar}
+            as={Link}
+            to={RoutesEnum.SHOPPER}
+          >
             Lojas
           </Navbar.Brand>
         ) : (
-          <Navbar.Brand className={styles.textNavbar} as={Link} to="/products">
+          <Navbar.Brand
+            className={styles.textNavbar}
+            as={Link}
+            to={RoutesEnum.PRODUCTS}
+          >
             Produtos
           </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            <Nav.Link className={styles.textNavbar} as={Link} to="/profile">
+            <Nav.Link
+              className={styles.textNavbar}
+              as={Link}
+              to={RoutesEnum.PROFILE}
+            >
               Perfil
             </Nav.Link>
           </Nav>
@@ -53,7 +66,11 @@ const NavBar = ({
           </Nav>
           {user?.userType === UserType.store && (
             <Nav>
-              <Nav.Link className={styles.textNavbar} as={Link} to="/reports">
+              <Nav.Link
+                className={styles.textNavbar}
+                as={Link}
+                to={RoutesEnum.REPORTS}
+              >
                 Relatórios
               </Nav.Link>
             </Nav>
@@ -61,12 +78,20 @@ const NavBar = ({
           {user?.store && (
             <>
               <Nav>
-                <Nav.Link className={styles.textNavbar} as={Link} to="/map">
+                <Nav.Link
+                  className={styles.textNavbar}
+                  as={Link}
+                  to={RoutesEnum.MAP}
+                >
                   Mapa
                 </Nav.Link>
               </Nav>
               <Nav>
-                <Nav.Link className={styles.textNavbar} as={Link} to="/store">
+                <Nav.Link
+                  className={styles.textNavbar}
+                  as={Link}
+                  to={RoutesEnum.STORE}
+                >
                   Loja
                 </Nav.Link>
               </Nav>
@@ -78,7 +103,7 @@ const NavBar = ({
                 user={user}
                 onLogoutSuccessful={() => {
                   clearUser();
-                  navigate("/");
+                  navigate(RoutesEnum.HOME);
                 }}
               />
             ) : (
