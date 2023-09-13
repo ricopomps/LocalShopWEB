@@ -53,7 +53,7 @@
 
 .logout {
   color: white;
-  background-color: var(--vermelho) ;
+  background-color: var(--vermelho);
 }
 
 .logout:hover {
@@ -62,7 +62,7 @@
 }
 
 .dropdownItem:hover {
-  color:var(--vermelho);
+  color: var(--vermelho);
   background-color: transparent;
   box-shadow: var(--amarelo) 0px 0px 2px 0px;
 }

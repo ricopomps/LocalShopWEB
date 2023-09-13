@@ -15,7 +15,7 @@ const NavBarLoggedInView = ({
   user,
   onLogoutSuccessful,
 }: NavBarLoggedInViewProps) => {
-  const [openDropdown, setOpenDropdown] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   async function logout() {
     try {
@@ -26,42 +26,55 @@ const NavBarLoggedInView = ({
       alert(error);
     }
   }
-  const CustomDropdownToggle = React.forwardRef(({},ref) => (
-    <div className={styles.centeredContent} onClick={()=> setOpenDropdown(!openDropdown)}>
-        {user.image ? (
-          <img className={styles.navbarIcon} src={user.image} alt=""></img>
-        ) : (
-          <FaUserCircle />
-        )}
-        {user.username}
-      </div>
+  const CustomDropdownToggle = React.forwardRef(({}, ref) => (
+    <div
+      className={styles.centeredContent}
+      onClick={() => setOpenDropdown(!openDropdown)}
+    >
+      {user.image ? (
+        <img className={styles.navbarIcon} src={user.image} alt=""></img>
+      ) : (
+        <FaUserCircle />
+      )}
+      {user.username}
+    </div>
   ));
-  
+
   return (
     <>
       <Navbar.Text className={styles.textLogged}>
-      <Dropdown show={openDropdown} onToggle={(openDropdown) => setOpenDropdown(openDropdown)}>
-      <Dropdown.Toggle as={CustomDropdownToggle} id="dropdown-custom-toggle" />
+        <Dropdown
+          show={openDropdown}
+          onToggle={(openDropdown) => setOpenDropdown(openDropdown)}
+        >
+          <Dropdown.Toggle
+            as={CustomDropdownToggle}
+            id="dropdown-custom-toggle"
+          />
 
-          {openDropdown && <Dropdown.Menu show className={styles.dropdown}>
-          <Dropdown.Item className={styles.dropdownItem}>
-            <Nav>
-            <Nav.Link
-              className={styles.textNavbar}
-              as={Link}
-              to={RoutesEnum.PROFILE}
-            >
-              Perfil
-            </Nav.Link>
-          </Nav>
-          </Dropdown.Item >
-            <Dropdown.Divider />
-            <Dropdown.Item className={styles.dropdownItem}><Button onClick={logout} className={styles.logout}>Sair</Button></Dropdown.Item>
-          </Dropdown.Menu>}
+          {openDropdown && (
+            <Dropdown.Menu show className={styles.dropdown}>
+              <Dropdown.Item className={styles.dropdownItem}>
+                <Nav>
+                  <Nav.Link
+                    className={styles.textNavbar}
+                    as={Link}
+                    to={RoutesEnum.PROFILE}
+                  >
+                    Perfil
+                  </Nav.Link>
+                </Nav>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item className={styles.dropdownItem}>
+                <Button onClick={logout} className={styles.logout}>
+                  Sair
+                </Button>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          )}
         </Dropdown>
-        
       </Navbar.Text>
-      
     </>
   );
 };
