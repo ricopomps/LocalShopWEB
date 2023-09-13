@@ -114,6 +114,7 @@ const HomePage = ({}: HomePageProps) => {
       navigate(user.store ? RoutesEnum.PRODUCTS : RoutesEnum.STORE);
     }
   };
+
   return (
     <div className={styles.main}>
       <img src={logo} alt="logo" className="image" />

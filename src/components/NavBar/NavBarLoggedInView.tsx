@@ -1,31 +1,19 @@
 import { Button, Dropdown, Nav, Navbar } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { User } from "../../models/user";
-import * as NotesApi from "../../network/notes_api";
 import styles from "../../styles/navbar.module.css";
 import { useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import RoutesEnum from "../../utils/routesEnum";
+import { useUser } from "../../context/UserContext";
 interface NavBarLoggedInViewProps {
   user: User;
-  onLogoutSuccessful: () => void;
 }
-const NavBarLoggedInView = ({
-  user,
-  onLogoutSuccessful,
-}: NavBarLoggedInViewProps) => {
+const NavBarLoggedInView = ({ user }: NavBarLoggedInViewProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const { logout } = useUser();
 
-  async function logout() {
-    try {
-      await NotesApi.logout();
-      onLogoutSuccessful();
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
   const CustomDropdownToggle = React.forwardRef(({}, ref) => (
     <div
       className={styles.centeredContent}

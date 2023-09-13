@@ -10,6 +10,8 @@ import { Product } from "../models/product";
 import { User, UserType } from "../models/user";
 import * as UsersApi from "../network/notes_api";
 import ApiService from "../network/api";
+import { useNavigate } from "react-router-dom";
+import RoutesEnum from "../utils/routesEnum";
 
 export interface ProductItem {
   product: Product;
@@ -18,7 +20,7 @@ export interface ProductItem {
 
 enum REDUCER_ACTION_TYPE {
   SET_USER,
-  CLEAR_USER,
+  LOGOUT,
   ADD_FAVORITE_PRODUCT,
   REMOVE_FAVORITE_PRODUCT,
   ADD_FAVORITE_STORE,
@@ -56,10 +58,11 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         user: action.payload,
       };
     }
-    case REDUCER_ACTION_TYPE.CLEAR_USER: {
+    case REDUCER_ACTION_TYPE.LOGOUT: {
       return {
         ...state,
         user: initialState.user,
+        accessToken: initialState.accessToken,
       };
     }
     case REDUCER_ACTION_TYPE.ADD_FAVORITE_PRODUCT: {
@@ -118,6 +121,7 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 
 const useUserContext = (initialState: StateType) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
   const setUser = useCallback((user: User) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.SET_USER,
@@ -125,10 +129,16 @@ const useUserContext = (initialState: StateType) => {
     });
   }, []);
 
-  const clearUser = useCallback(() => {
-    dispatch({
-      type: REDUCER_ACTION_TYPE.CLEAR_USER,
-    });
+  const logout = useCallback(async () => {
+    try {
+      await UsersApi.logout();
+    } catch (error) {
+    } finally {
+      navigate(RoutesEnum.HOME);
+      dispatch({
+        type: REDUCER_ACTION_TYPE.LOGOUT,
+      });
+    }
   }, []);
 
   const addFavoriteProduct = useCallback(async (productId: string) => {
@@ -195,7 +205,7 @@ const useUserContext = (initialState: StateType) => {
   return {
     state,
     setUser,
-    clearUser,
+    logout,
     addFavoriteProduct,
     removeFavoriteProduct,
     addFavoriteStore,
@@ -209,7 +219,7 @@ type UseUserContextType = ReturnType<typeof useUserContext>;
 const initialContextState: UseUserContextType = {
   state: initialState,
   setUser: (user: User) => {},
-  clearUser: () => {},
+  logout: async () => {},
   addFavoriteProduct: async (productId: string) => {},
   removeFavoriteProduct: async (productId: string) => {},
   addFavoriteStore: async (productId: string) => {},
@@ -239,7 +249,7 @@ type UseUserHookType = {
   user: User;
   accessToken: string;
   setUser: (user: User) => void;
-  clearUser: () => void;
+  logout: () => void;
   addFavoriteProduct: (productId: string) => void;
   removeFavoriteProduct: (productId: string) => void;
   addFavoriteStore: (productId: string) => void;
@@ -251,7 +261,7 @@ export const useUser = (): UseUserHookType => {
   const {
     state: { user, accessToken },
     setUser,
-    clearUser,
+    logout,
     addFavoriteProduct,
     removeFavoriteProduct,
     addFavoriteStore,
@@ -262,7 +272,7 @@ export const useUser = (): UseUserHookType => {
     user,
     accessToken,
     setUser,
-    clearUser,
+    logout,
     addFavoriteProduct,
     removeFavoriteProduct,
     addFavoriteStore,

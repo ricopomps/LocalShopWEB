@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { UserType } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "../../styles/navbar.module.css";
 import { useUser } from "../../context/UserContext";
 import RoutesEnum from "../../utils/routesEnum";
@@ -17,8 +17,7 @@ const NavBar = ({
   onSignUpClicked,
   toggleNotifications,
 }: NavBarProps) => {
-  const { user, clearUser } = useUser();
-  let navigate = useNavigate();
+  const { user } = useUser();
   return (
     <Navbar
       className={styles.navbar}
@@ -90,13 +89,7 @@ const NavBar = ({
           )}
           <Nav className="ms-auto">
             {user ? (
-              <NavBarLoggedInView
-                user={user}
-                onLogoutSuccessful={() => {
-                  clearUser();
-                  navigate(RoutesEnum.HOME);
-                }}
-              />
+              <NavBarLoggedInView user={user} />
             ) : (
               <NavBarLoggedOutView
                 onLoginClicked={onLoginClicked}
