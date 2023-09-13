@@ -1,26 +1,23 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { User, UserType } from "../../models/user";
+import { UserType } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/navbar.module.css";
-import NotificationBar from "../NotificationBar";
-import { useState } from "react";
+import { useUser } from "../../context/UserContext";
+import RoutesEnum from "../../utils/routesEnum";
 
 interface NavBarProps {
-  loggedInUser: User | null;
   onSignUpClicked: () => void;
   onLoginClicked: () => void;
-  onLogoutSuccessful: () => void;
   toggleNotifications: () => void;
 }
 const NavBar = ({
-  loggedInUser,
   onLoginClicked,
-  onLogoutSuccessful,
   onSignUpClicked,
   toggleNotifications,
 }: NavBarProps) => {
+  const { user, clearUser } = useUser();
   let navigate = useNavigate();
   return (
     <Navbar
@@ -31,19 +28,31 @@ const NavBar = ({
       sticky="top"
     >
       <Container className={styles.navbar}>
-        {loggedInUser?.userType === UserType.shopper ? (
-          <Navbar.Brand className={styles.textNavbar} as={Link} to="/shopper">
+        {user?.userType === UserType.shopper ? (
+          <Navbar.Brand
+            className={styles.textNavbar}
+            as={Link}
+            to={RoutesEnum.SHOPPER}
+          >
             Lojas
           </Navbar.Brand>
         ) : (
-          <Navbar.Brand className={styles.textNavbar} as={Link} to="/products">
+          <Navbar.Brand
+            className={styles.textNavbar}
+            as={Link}
+            to={RoutesEnum.PRODUCTS}
+          >
             Produtos
           </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
-            <Nav.Link className={styles.textNavbar} as={Link} to="/profile">
+            <Nav.Link
+              className={styles.textNavbar}
+              as={Link}
+              to={RoutesEnum.PROFILE}
+            >
               Perfil
             </Nav.Link>
           </Nav>
@@ -55,34 +64,46 @@ const NavBar = ({
               Notificações
             </Nav.Link>
           </Nav>
-          {loggedInUser?.userType === UserType.store && (
+          {user?.userType === UserType.store && (
             <Nav>
-              <Nav.Link className={styles.textNavbar} as={Link} to="/reports">
+              <Nav.Link
+                className={styles.textNavbar}
+                as={Link}
+                to={RoutesEnum.REPORTS}
+              >
                 Relatórios
               </Nav.Link>
             </Nav>
           )}
-          {loggedInUser?.store && (
+          {user?.store && (
             <>
               <Nav>
-                <Nav.Link className={styles.textNavbar} as={Link} to="/map">
+                <Nav.Link
+                  className={styles.textNavbar}
+                  as={Link}
+                  to={RoutesEnum.MAP}
+                >
                   Mapa
                 </Nav.Link>
               </Nav>
               <Nav>
-                <Nav.Link className={styles.textNavbar} as={Link} to="/store">
+                <Nav.Link
+                  className={styles.textNavbar}
+                  as={Link}
+                  to={RoutesEnum.STORE}
+                >
                   Loja
                 </Nav.Link>
               </Nav>
             </>
           )}
           <Nav className="ms-auto">
-            {loggedInUser ? (
+            {user ? (
               <NavBarLoggedInView
-                user={loggedInUser}
+                user={user}
                 onLogoutSuccessful={() => {
-                  onLogoutSuccessful();
-                  navigate("/");
+                  clearUser();
+                  navigate(RoutesEnum.HOME);
                 }}
               />
             ) : (

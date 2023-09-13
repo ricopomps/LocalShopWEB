@@ -1,6 +1,6 @@
 import { CellCoordinates } from "../components/Grid";
 import { ProductItem } from "../context/ShoppingListContext";
-import { getApi } from "./api";
+import ApiService from "./api";
 
 export interface ShoppingList {
   storeId: string;
@@ -19,30 +19,33 @@ export interface ShoppingListReturn {
 }
 
 const baseUrl = "/api/shoppinglist";
+const apiService = ApiService.getInstance();
 
 export const createShoppingList = async (shoppingList: ShoppingList) => {
-  const response = await getApi().post(baseUrl, shoppingList);
+  const response = await apiService.getApi().post(baseUrl, shoppingList);
   return response.data;
 };
 
 export const getShoppingList = async (
   storeId: string
 ): Promise<ShoppingListReturn> => {
-  const response = await getApi().get(`${baseUrl}/${storeId}`);
+  const response = await apiService.getApi().get(`${baseUrl}/${storeId}`);
   return response.data;
 };
 
 export const finishShoppingList = async (shoppingList: ShoppingList) => {
-  await getApi().post(`${baseUrl}/finish`, shoppingList);
+  await apiService.getApi().post(`${baseUrl}/finish`, shoppingList);
 };
 
 export const copyShoppingList = async (historicId: string) => {
-  await getApi().post(`${baseUrl}/copy/${historicId}`);
+  await apiService.getApi().post(`${baseUrl}/copy/${historicId}`);
 };
 
 export const getShoppingListPath = async (
   shoppingList: ShoppingList
 ): Promise<CellCoordinates[][]> => {
-  const response = await getApi().post(`${baseUrl}/path`, shoppingList);
+  const response = await apiService
+    .getApi()
+    .post(`${baseUrl}/path`, shoppingList);
   return response.data;
 };

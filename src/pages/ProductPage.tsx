@@ -1,30 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as ProductApi from "../network/products_api";
 import { toast } from "react-toastify";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { Button, Card } from "react-bootstrap";
+import * as ProductApi from "../network/products_api";
 import { Product as ProductModel } from "../models/product";
 import Product from "../components/Product";
-import { Button, Card } from "react-bootstrap";
 import ShoppingList from "../components/ShoppingList";
 import { useShoppingList } from "../context/ShoppingListContext";
 import styles from "../styles/ProductPage.module.css";
-import * as UsersApi from "../network/notes_api";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { User } from "../models/user";
+import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
-interface ProductPageProps {
-  loggedUser: User;
-  refreshFavProduct: (productId: string) => void;
-  addProductFavorite: (productId: string) => void;
-  removeProductFavorite: (productId: string) => void;
-}
+interface ProductPageProps {}
 
-const ProductPage = ({
-  refreshFavProduct,
-  loggedUser,
-  addProductFavorite,
-  removeProductFavorite,
-}: ProductPageProps) => {
+const ProductPage = ({}: ProductPageProps) => {
+  const { user, addFavoriteProduct, removeFavoriteProduct } = useUser();
   const {
     shoppingList: { productsItems },
     handleItemCountIncrease,
@@ -57,12 +48,12 @@ const ProductPage = ({
   const goToStoreMap = () => {
     if (selectedProduct)
       navigate(
-        `/map?store=${store}&x=${selectedProduct.location?.x}&y=${selectedProduct.location?.y}`
+        `${RoutesEnum.MAP}?store=${store}&x=${selectedProduct.location?.x}&y=${selectedProduct.location?.y}`
       );
   };
 
   const goBackToStore = () => {
-    navigate("/store/product?store=" + store);
+    navigate(`${RoutesEnum.PRODUCT_LIST_PAGE}?store=${store}`);
   };
 
   if (!selectedProduct) return <></>;
@@ -73,15 +64,15 @@ const ProductPage = ({
         <Button onClick={goBackToStore}>Voltar para loja</Button>
       </div>
       <div className={styles.main}>
-        {productId && loggedUser.favoriteProducts?.includes(productId) ? (
+        {productId && user.favoriteProducts.includes(productId) ? (
           <AiFillHeart
             className={styles.favIcon}
-            onClick={() => removeProductFavorite(productId)}
+            onClick={() => removeFavoriteProduct(productId)}
           />
         ) : (
           <AiOutlineHeart
             className={styles.favIcon}
-            onClick={() => productId && addProductFavorite(productId)}
+            onClick={() => productId && addFavoriteProduct(productId)}
           />
         )}
         <Button className={styles.btnProduct} onClick={goToStoreMap}>

@@ -19,7 +19,7 @@ export interface ProductItem {
   quantity: number;
 }
 
-export enum REDUCER_ACTION_TYPE {
+enum REDUCER_ACTION_TYPE {
   SET_SHOPPING_LIST,
   CLEAR_SHOPPING_LIST,
   SET_SELECTED_ITEMS,

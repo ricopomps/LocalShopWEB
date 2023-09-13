@@ -16,6 +16,7 @@ import magnifying_glass from "../assets/magnifying_glass.svg";
 import { ListStores } from "../network/storeApi";
 import CheckInputField from "../components/form/CheckInputField";
 import Historic from "../components/Historic";
+import RoutesEnum from "../utils/routesEnum";
 
 interface StoreListPageProps {}
 
@@ -53,7 +54,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
   }, []);
 
   const goToStore = (store: StoreModel) => {
-    navigate("/store/product?store=" + store._id);
+    navigate(`${RoutesEnum.PRODUCT_LIST_PAGE}?store=${store._id}`);
   };
 
   const storesGrid = (
@@ -70,7 +71,7 @@ const StoreListPage = ({}: StoreListPageProps) => {
     </HorizontalScroll>
   );
   const goToHistoric = (historic: HistoricModel) => {
-    navigate("/historic?historic=" + historic._id);
+    navigate(`${RoutesEnum.HISTORIC}?historic=${historic._id}`);
   };
   const historicGrid = (
     <HorizontalScroll>

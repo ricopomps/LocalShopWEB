@@ -15,6 +15,7 @@ import {
 import TextInputField from "./form/TextInputField";
 import stylesUtils from "../styles/utils.module.css";
 import { ConflictError } from "../errors/http_errors";
+import { useUser } from "../context/UserContext";
 
 interface SignUpModalProps {
   onDismiss: () => void;
@@ -23,7 +24,7 @@ interface SignUpModalProps {
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);
   const [userType, setUserType] = useState<UserType>(UserType.shopper);
-
+  const { setAccessToken } = useUser();
   const {
     register,
     handleSubmit,
@@ -55,7 +56,10 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
 
   async function onSubmit(credentials: SignUpCredentials) {
     try {
-      const newUser = await NotesApi.signUp({ ...credentials, userType });
+      const newUser = await NotesApi.signUp(
+        { ...credentials, userType },
+        setAccessToken
+      );
       onSignUpSuccessful(newUser);
     } catch (error) {
       if (error instanceof ConflictError) setErrorText(error.message);

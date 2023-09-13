@@ -6,6 +6,7 @@ import TextInputField from "../components/form/TextInputField";
 import * as AuthApi from "../network/authApi";
 import { RecoverPasswordForm } from "../network/authApi";
 import styles from "../styles/LoginDesktop.module.css";
+import RoutesEnum from "../utils/routesEnum";
 
 const RecoverPasswordPage = () => {
   const location = useLocation();
@@ -24,7 +25,7 @@ const RecoverPasswordPage = () => {
       if (!token) throw Error("Token inválido");
       await AuthApi.changePassword({ ...data, token });
       toast.success("Senha trocada com sucesso");
-      navigate("/logindesktop");
+      navigate(RoutesEnum.LOGIN);
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }

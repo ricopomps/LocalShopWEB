@@ -11,6 +11,8 @@ import * as NotesApi from "../network/notes_api";
 import { User, UserType } from "../models/user";
 import { googleAuth } from "../network/authApi";
 import google from "../assets/google.svg";
+import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
 interface SignUpPageProps {
   onSignUpSuccessful: (user: User) => void;
@@ -29,7 +31,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   const placeholderSenha = "Senha";
   const placeholderCPF = "CPF";
   const placeholderSenhaConfirma = "Confirmação de senha";
-
+  const { setAccessToken } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -66,10 +68,12 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
   const onSubmit = async (data: SignUpCredentials) => {
     try {
       data.userType = userType;
-      const user = await NotesApi.signUp(data);
+      const user = await NotesApi.signUp(data, setAccessToken);
       toast.success("Cadastro realizado com sucesso!");
       onSignUpSuccessful(user);
-      navigate(userType === UserType.shopper ? "/shopper" : "/store");
+      navigate(
+        userType === UserType.shopper ? RoutesEnum.SHOPPER : RoutesEnum.STORE
+      );
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
     }
@@ -121,7 +125,7 @@ const SignUpPage = ({ onSignUpSuccessful, userType }: SignUpPageProps) => {
         <ButtonLogin
           imagem={google}
           onClick={() => googleAuthCall()}
-          path="/logindesktop"
+          path={RoutesEnum.LOGIN}
         >
           Cadastrar com o Google
         </ButtonLogin>

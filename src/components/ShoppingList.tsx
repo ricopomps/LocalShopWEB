@@ -7,6 +7,7 @@ import cart from "../assets/cart.svg";
 import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../models/product";
+import RoutesEnum from "../utils/routesEnum";
 
 interface ShoppingListProps {
   storeId: string | null;
@@ -108,7 +109,7 @@ const ShoppingList = ({ storeId, onDelete }: ShoppingListProps) => {
 
   const goToStoreMap = (product: Product) => {
     navigate(
-      `/map?store=${storeId}&x=${product.location?.x}&y=${product.location?.y}`
+      `${RoutesEnum.MAP}?store=${storeId}&x=${product.location?.x}&y=${product.location?.y}`
     );
   };
 

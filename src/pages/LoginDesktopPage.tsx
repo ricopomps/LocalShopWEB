@@ -5,15 +5,15 @@ import { LoginCredentials } from "../network/notes_api";
 import { Form, Button } from "react-bootstrap";
 import TextInputField from "../components/form/TextInputField";
 import * as NotesApi from "../network/notes_api";
-import * as StoresApi from "../network/storeApi";
-import { User, UserType } from "../models/user";
+import { UserType } from "../models/user";
 import styles from "../styles/LoginDesktop.module.css";
 import { toast } from "react-toastify";
+import { useUser } from "../context/UserContext";
+import RoutesEnum from "../utils/routesEnum";
 
-interface LoginDesktopPageProps {
-  onLoginSuccessful: (user: User) => void;
-}
-const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
+interface LoginDesktopPageProps {}
+const LoginDesktopPage = ({}: LoginDesktopPageProps) => {
+  const { setUser, setAccessToken } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -22,14 +22,12 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
   } = useForm<LoginCredentials>();
   const onSubmit = async (data: LoginCredentials) => {
     try {
-      const user = await NotesApi.login(data);
-      const store = await StoresApi.getStoreByLoggedUser();
-
-      onLoginSuccessful({ ...user, store });
+      const user = await NotesApi.login(data, setAccessToken);
+      setUser(user);
       if (user.userType === UserType.shopper) {
-        navigate("/shopper");
+        navigate(RoutesEnum.SHOPPER);
       } else {
-        navigate(store ? "/products" : "/store");
+        navigate(user.store ? RoutesEnum.PRODUCTS : RoutesEnum.STORE);
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.error ?? error?.message);
@@ -57,7 +55,7 @@ const LoginDesktopPage = ({ onLoginSuccessful }: LoginDesktopPageProps) => {
           registerOptions={{ required: "Campo Obrigatório" }}
           error={errors.password}
         />
-        <Link to="/forgotpassword" className={styles.cadastreLink}>
+        <Link to={RoutesEnum.FORGOT_PASSWORD} className={styles.cadastreLink}>
           Esqueceu a senha?
         </Link>
         <Button className={styles.btn} type="submit" disabled={isSubmitting}>

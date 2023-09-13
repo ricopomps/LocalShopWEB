@@ -1,4 +1,4 @@
-import { getApi } from "./api";
+import ApiService from "./api";
 
 export interface Notification {
   _id: string;
@@ -9,32 +9,35 @@ export interface Notification {
 }
 
 const baseUrl = "/api/notifications";
+const apiService = ApiService.getInstance();
 
 export async function createNotification(): Promise<void> {
-  const { data } = await getApi().post(baseUrl);
+  const { data } = await apiService.getApi().post(baseUrl);
   return data;
 }
 
 export async function getNotification(): Promise<Notification[]> {
-  const { data } = await getApi().get(`${baseUrl}`);
+  const { data } = await apiService.getApi().get(`${baseUrl}`);
   return data;
 }
 
 export async function deleteNotification(
   notificationId: string
 ): Promise<void> {
-  const { data } = await getApi().delete(`${baseUrl}/${notificationId}`);
+  const { data } = await apiService
+    .getApi()
+    .delete(`${baseUrl}/${notificationId}`);
   return data;
 }
 
 export async function readNotification(notificationId: string): Promise<void> {
-  await getApi().patch(`${baseUrl}/read/${notificationId}`);
+  await apiService.getApi().patch(`${baseUrl}/read/${notificationId}`);
 }
 
 export async function readAllNotifications(): Promise<void> {
-  await getApi().patch(baseUrl);
+  await apiService.getApi().patch(baseUrl);
 }
 
 export async function removeAllNotifications(): Promise<void> {
-  await getApi().delete(baseUrl);
+  await apiService.getApi().delete(baseUrl);
 }
