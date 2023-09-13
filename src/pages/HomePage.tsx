@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ReactNode } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import google from "../assets/google.svg";
@@ -22,7 +22,6 @@ interface HomePageProps {}
 const HomePage = ({}: HomePageProps) => {
   const { setUser } = useUser();
   const navigate = useNavigate();
-
   const ButtonLogin = ({
     imagem,
     children,
@@ -40,31 +39,62 @@ const HomePage = ({}: HomePageProps) => {
     );
   };
 
-  const googleAuthCall = async () => {
+  const openGoogleOAuthPopup = async () => {
     try {
       const { url } = await googleAuth();
-      window.location.href = url;
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
-  const location = useLocation();
-  const effectRan = useRef(false);
-  useEffect(() => {
-    if (effectRan.current === false) {
-      const params = new URLSearchParams(location.search);
-      const code = params.get("code");
-      const userType = params.get("state");
+      const popupWidth = 450;
+      const popupHeight = 600;
 
-      if (code) {
-        fetchUserData(code, userType ?? undefined);
+      const features = `
+        width=${popupWidth},
+        height=${popupHeight},
+        top=${(window.innerHeight - popupHeight) / 2},
+        left=${(window.innerWidth - popupWidth) / 2},
+        menubar=no,
+        toolbar=no,
+        location=no,
+        status=no,
+        resizable=yes,
+        scrollbars=yes
+        `;
+
+      const newWindow = window.open(url, "GoogleOAuthPopup", features);
+      if (newWindow) handleOAuthRedirect(newWindow);
+
+      const checkPopupClosed = setInterval(() => {
+        if (newWindow && newWindow.closed) {
+          clearInterval(checkPopupClosed);
+        }
+      }, 1000);
+
+      if (newWindow) {
+        newWindow.focus();
       }
+    } catch (error) {}
+  };
 
-      return () => {
-        effectRan.current = true;
-      };
-    }
-  }, []);
+  const handleOAuthRedirect = (newWindow: Window) => {
+    const checkPopupLocation = setInterval(() => {
+      try {
+        if (newWindow.location.href.includes("code")) {
+          clearInterval(checkPopupLocation);
+          const url = newWindow.location.href;
+
+          const params = new URLSearchParams(url.split("?")[1]);
+          const code = params.get("code");
+          const userType = params.get("state");
+
+          if (code) {
+            fetchUserData(code, userType ?? undefined);
+          }
+
+          newWindow.close();
+        }
+      } catch (error) {
+        if (!newWindow) clearInterval(checkPopupLocation);
+      }
+    }, 1000);
+  };
 
   const fetchUserData = async (code: any, userType?: string) => {
     try {
@@ -91,7 +121,7 @@ const HomePage = ({}: HomePageProps) => {
       <h2 className={styles.subtitle}>Como desejar continuar?</h2>
       <ButtonLogin
         imagem={google}
-        onClick={() => googleAuthCall()}
+        onClick={() => openGoogleOAuthPopup()}
         path={RoutesEnum.LOGIN}
       >
         Continue com Google
