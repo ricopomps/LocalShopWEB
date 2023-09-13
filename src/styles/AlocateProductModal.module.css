@@ -19,7 +19,7 @@
 }
 
 .danger {
-  background-color: #f44336;
+  background-color: var(--vermelho);
 }
 
 .form {

@@ -80,7 +80,7 @@
 }
 
 .itemDeleteButton {
-  background-color: #f44336;
+  background-color: var(--vermelho);
   border: none;
   color: white;
   padding: 5px 10px;
@@ -124,5 +124,5 @@
   font-size: 20px;
   color: white;
   width: 100%;
-  background-color: #f44336;
+  background-color: var(--vermelho);
 }

@@ -50,15 +50,6 @@ const NavBar = ({
           <Nav>
             <Nav.Link
               className={styles.textNavbar}
-              as={Link}
-              to={RoutesEnum.PROFILE}
-            >
-              Perfil
-            </Nav.Link>
-          </Nav>
-          <Nav>
-            <Nav.Link
-              className={styles.textNavbar}
               onClick={toggleNotifications}
             >
               Notificações
