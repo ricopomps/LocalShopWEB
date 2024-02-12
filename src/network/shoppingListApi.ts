@@ -49,3 +49,21 @@ export const getShoppingListPath = async (
     .post(`${baseUrl}/path`, shoppingList);
   return response.data;
 };
+
+export const getShoppingListPathLargura = async (
+  shoppingList: ShoppingList
+): Promise<CellCoordinates[][]> => {
+  const response = await apiService
+    .getApi()
+    .post(`${baseUrl}/path/largura`, shoppingList);
+  return response.data;
+};
+
+export const getShoppingListPathProfundidade = async (
+  shoppingList: ShoppingList
+): Promise<CellCoordinates[][]> => {
+  const response = await apiService
+    .getApi()
+    .post(`${baseUrl}/path/profundidade`, shoppingList);
+  return response.data;
+};

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import styles from "../styles/Grid.module.css";
+import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 import * as MapApi from "../network/mapApi";
 import * as ShoppingList from "../network/shoppingListApi";
+import styles from "../styles/Grid.module.css";
 import AlocateProductModal from "./Modal/AlocateProductModal";
-import { useLocation } from "react-router-dom";
-import { ProductItem, useShoppingList } from "../context/ShoppingListContext";
 
 interface GridProps {
   rows: number;
@@ -68,6 +68,74 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
 
       if (!storeId) throw Error("Loja inválida");
       const path = await ShoppingList.getShoppingListPath({
+        storeId,
+        products: productsMapped,
+      });
+      const productsOrder = new Map<string, number>();
+      path.forEach((path, index) => {
+        const productId = path[0].productId;
+        if (productId) {
+          if (productsOrder.has(productId)) {
+            productsOrder.set(productId, index);
+          } else {
+            productsOrder.set(productId, index);
+          }
+        }
+      });
+
+      reorderShoppingList(productsOrder);
+      setPath(path);
+      setSelectedPath(path[0]);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const calculatePathProfundidade = async () => {
+    try {
+      const productsMapped = shoppingList.productsItems.map((item) => {
+        return {
+          product: item.product._id,
+          quantity: item.quantity,
+        };
+      });
+
+      if (!storeId) throw Error("Loja inválida");
+      const path = await ShoppingList.getShoppingListPathProfundidade({
+        storeId,
+        products: productsMapped,
+      });
+      const productsOrder = new Map<string, number>();
+      path.forEach((path, index) => {
+        const productId = path[0].productId;
+        if (productId) {
+          if (productsOrder.has(productId)) {
+            productsOrder.set(productId, index);
+          } else {
+            productsOrder.set(productId, index);
+          }
+        }
+      });
+
+      reorderShoppingList(productsOrder);
+      setPath(path);
+      setSelectedPath(path[0]);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error ?? error?.message);
+    }
+  };
+
+  const calculatePathLargura = async () => {
+    try {
+      const productsMapped = shoppingList.productsItems.map((item) => {
+        return {
+          product: item.product._id,
+          quantity: item.quantity,
+        };
+      });
+
+      if (!storeId) throw Error("Loja inválida");
+      const path = await ShoppingList.getShoppingListPathLargura({
         storeId,
         products: productsMapped,
       });
@@ -204,9 +272,26 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       </Col>
       <Col>
         {!edit && (
-          <Button className={styles.buttonMap} onClick={() => calculatePath()}>
-            Calcular
-          </Button>
+          <>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => calculatePath()}
+            >
+              Calcular
+            </Button>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => calculatePathProfundidade()}
+            >
+              Calcular Profundidade
+            </Button>
+            <Button
+              className={styles.buttonMap}
+              onClick={() => calculatePathLargura()}
+            >
+              Calcular Largura
+            </Button>
+          </>
         )}
         {edit && (
           <>

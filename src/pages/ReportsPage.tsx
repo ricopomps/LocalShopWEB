@@ -1,13 +1,13 @@
+import br from "date-fns/locale/pt-BR";
 import React, { useEffect, useState } from "react";
+import DatePicker, { registerLocale } from "react-datepicker";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import DatePicker, { registerLocale } from "react-datepicker";
-import br from "date-fns/locale/pt-BR";
+import Chart, { ChartTypeEnum } from "../components/Chart/Chart";
 import TextInputField from "../components/form/TextInputField";
-import styles from "../styles/ReportsPage.module.css";
 import * as ReportsApi from "../network/reportsApi";
 import { ChartData } from "../network/reportsApi";
-import Chart, { ChartTypeEnum } from "../components/Chart/Chart";
+import styles from "../styles/ReportsPage.module.css";
 
 registerLocale("br", br);
 
