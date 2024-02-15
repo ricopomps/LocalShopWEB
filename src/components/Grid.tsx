@@ -7,7 +7,8 @@ import * as MapApi from "../network/mapApi";
 import * as ShoppingList from "../network/shoppingListApi";
 import styles from "../styles/Grid.module.css";
 import AlocateProductModal from "./Modal/AlocateProductModal";
-import Tree, { NodeTree } from "./Tree";
+import { NodeTree } from "./Tree";
+import TreeHigh from "./TreeHigh";
 
 interface GridProps {
   rows: number;
@@ -391,8 +392,9 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
           />
         )}
       </Row>
+      <div>{/* <Tree data={tree} /> */}</div>
       <div>
-        <Tree data={tree} />
+        <TreeHigh data={tree} />
       </div>
     </>
   );
