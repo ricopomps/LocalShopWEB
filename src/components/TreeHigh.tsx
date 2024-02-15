@@ -12,7 +12,7 @@ export interface TreeProps {
 }
 
 export default function TreeHigh({ data }: TreeProps) {
-  const rootNode = data.find((node) => node.parent === null);
+  const rootNode = data.find((node) => node.parent === null || !node.parent);
   const nodesWithHeight = data.map((node) => ({
     ...node,
     height: getHeight(node),
