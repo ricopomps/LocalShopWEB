@@ -49,7 +49,7 @@ const AppRoutes = () => {
     }
 
     fetchLoggedInUser();
-  }, []);
+  }, [setUser]);
 
   return (
     <div>

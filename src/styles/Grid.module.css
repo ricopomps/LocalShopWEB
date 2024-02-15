@@ -30,6 +30,25 @@
   background-color: purple;
 }
 
+.tree {
+  display: flex;
+  justify-content: center;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nodeLabel {
+  margin-bottom: 8px;
+}
+
+.children {
+  display: flex;
+}
+
 .orange {
   background-color: orange;
 }

@@ -7,6 +7,7 @@ import * as MapApi from "../network/mapApi";
 import * as ShoppingList from "../network/shoppingListApi";
 import styles from "../styles/Grid.module.css";
 import AlocateProductModal from "./Modal/AlocateProductModal";
+import Tree, { NodeTree } from "./Tree";
 
 interface GridProps {
   rows: number;
@@ -35,6 +36,7 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
   const locationX = queryParameters.get("x");
   const locationY = queryParameters.get("y");
   const [selectedCells, setSelectedCells] = useState<CellCoordinates[]>([]);
+  const [tree, setTree] = useState<NodeTree[]>([]);
   const [selectedCell, setSelectedCell] = useState<CellCoordinates | undefined>(
     undefined
   );
@@ -101,10 +103,12 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       });
 
       if (!storeId) throw Error("Loja inválida");
-      const path = await ShoppingList.getShoppingListPathProfundidade({
+      const result = await ShoppingList.getShoppingListPathProfundidade({
         storeId,
         products: productsMapped,
       });
+      const path = result.paths;
+      setTree(result.tree);
       const productsOrder = new Map<string, number>();
       path.forEach((path, index) => {
         const productId = path[0].productId;
@@ -248,118 +252,149 @@ const Grid: React.FC<GridProps> = ({ rows, cols, storeId, edit }) => {
       return styles.selected;
   };
 
+  const treeData: NodeTree[] = [
+    {
+      x: 0,
+      y: 0,
+      parent: null,
+    },
+    {
+      x: 0,
+      y: 1,
+      parent: {
+        x: 0,
+        y: 0,
+        parent: null,
+      },
+    },
+    {
+      x: 1,
+      y: 0,
+      parent: {
+        x: 0,
+        y: 0,
+        parent: null,
+      },
+    },
+  ];
+
   return (
-    <Row>
-      <Col>
-        <div className={styles.grid} style={gridStyle}>
-          {Array.from({ length: rows * cols }, (_, index) => {
-            const x = index % cols;
-            const y = Math.floor(index / cols);
-            const isPathCell = selectedPath.some(
-              (coord) => coord.x === x && coord.y === y
-            );
-            return (
-              <div
-                key={generateCellKey(x, y)}
-                onClick={() => handleClick(x, y, selectedStyle)}
-                className={`${styles.gridCell} ${
-                  isCellSelected(x, y) && getCellSyle(x, y)
-                } ${productSelected(x, y)} ${isPathCell ? styles.path : ""}`}
-              ></div>
-            );
-          })}
-        </div>
-      </Col>
-      <Col>
-        {!edit && (
-          <>
-            <Button
-              className={styles.buttonMap}
-              onClick={() => calculatePath()}
-            >
-              Calcular
-            </Button>
-            <Button
-              className={styles.buttonMap}
-              onClick={() => calculatePathProfundidade()}
-            >
-              Calcular Profundidade
-            </Button>
-            <Button
-              className={styles.buttonMap}
-              onClick={() => calculatePathLargura()}
-            >
-              Calcular Largura
-            </Button>
-          </>
-        )}
-        {edit && (
-          <>
-            <Button
-              className={styles.buttonMap}
-              onClick={() => setSelectedCells([])}
-            >
-              Limpar
-            </Button>
-            <Button className={styles.buttonMap} onClick={saveMap}>
-              Salvar
-            </Button>
-          </>
-        )}
-        <div className={styles.supportColumn} style={supportColumnStyle}>
-          {supportColumn.map((item, index) => (
-            <div
-              key={`support-cell-${index}`}
-              className={styles.supportCellContainer}
-              onClick={() => {
-                setSelectedStyle(item.text);
-                setAlocateProduct(false);
-              }}
-            >
-              <div
-                className={`${styles.gridCell} ${item.style} ${
-                  selectedStyle === item.text && styles.selected
-                }`}
+    <>
+      <Row>
+        <Col>
+          <div className={styles.grid} style={gridStyle}>
+            {Array.from({ length: rows * cols }, (_, index) => {
+              const x = index % cols;
+              const y = Math.floor(index / cols);
+              const isPathCell = selectedPath.some(
+                (coord) => coord.x === x && coord.y === y
+              );
+              return (
+                <div
+                  key={generateCellKey(x, y)}
+                  onClick={() => handleClick(x, y, selectedStyle)}
+                  className={`${styles.gridCell} ${
+                    isCellSelected(x, y) && getCellSyle(x, y)
+                  } ${productSelected(x, y)} ${isPathCell ? styles.path : ""}`}
+                ></div>
+              );
+            })}
+          </div>
+        </Col>
+        <Col>
+          {!edit && (
+            <>
+              <Button
+                className={styles.buttonMap}
+                onClick={() => calculatePath()}
               >
-                <div className={styles.supportSquare}></div>
-              </div>
-              <span className={styles.supportText}>{item.text}</span>
-            </div>
-          ))}
-          {edit && (
-            <div
-              className={styles.supportCellContainer}
-              onClick={() => {
-                setAlocateProduct(!alocateProduct);
-                setSelectedStyle("");
-              }}
-            >
-              <div
-                className={`${styles.gridCell} ${
-                  alocateProduct && styles.selected
-                }`}
+                Calcular
+              </Button>
+              <Button
+                className={styles.buttonMap}
+                onClick={() => calculatePathProfundidade()}
               >
-                <div className={styles.supportSquare}></div>
-              </div>
-              <span className={styles.supportText}>Alocar produtos</span>
-            </div>
+                Calcular Profundidade
+              </Button>
+              <Button
+                className={styles.buttonMap}
+                onClick={() => calculatePathLargura()}
+              >
+                Calcular Largura
+              </Button>
+            </>
           )}
-        </div>
-      </Col>
-      {selectedCell && (
-        <AlocateProductModal
-          acceptText="Alocar"
-          dismissText="Recusar"
-          location={selectedCell}
-          onAccepted={() => {
-            setSelectedCell(undefined);
-          }}
-          onDismiss={() => {
-            setSelectedCell(undefined);
-          }}
-        />
-      )}
-    </Row>
+          {edit && (
+            <>
+              <Button
+                className={styles.buttonMap}
+                onClick={() => setSelectedCells([])}
+              >
+                Limpar
+              </Button>
+              <Button className={styles.buttonMap} onClick={saveMap}>
+                Salvar
+              </Button>
+            </>
+          )}
+          <div className={styles.supportColumn} style={supportColumnStyle}>
+            {supportColumn.map((item, index) => (
+              <div
+                key={`support-cell-${index}`}
+                className={styles.supportCellContainer}
+                onClick={() => {
+                  setSelectedStyle(item.text);
+                  setAlocateProduct(false);
+                }}
+              >
+                <div
+                  className={`${styles.gridCell} ${item.style} ${
+                    selectedStyle === item.text && styles.selected
+                  }`}
+                >
+                  <div className={styles.supportSquare}></div>
+                </div>
+                <span className={styles.supportText}>{item.text}</span>
+              </div>
+            ))}
+            {edit && (
+              <div
+                className={styles.supportCellContainer}
+                onClick={() => {
+                  setAlocateProduct(!alocateProduct);
+                  setSelectedStyle("");
+                }}
+              >
+                <div
+                  className={`${styles.gridCell} ${
+                    alocateProduct && styles.selected
+                  }`}
+                >
+                  <div className={styles.supportSquare}></div>
+                </div>
+                <span className={styles.supportText}>Alocar produtos</span>
+              </div>
+            )}
+          </div>
+        </Col>
+        {selectedCell && (
+          <AlocateProductModal
+            acceptText="Alocar"
+            dismissText="Recusar"
+            location={selectedCell}
+            onAccepted={() => {
+              setSelectedCell(undefined);
+            }}
+            onDismiss={() => {
+              setSelectedCell(undefined);
+            }}
+          />
+        )}
+      </Row>
+      <div>
+        <Tree data={tree} />
+      </div>
+    </>
   );
 };
 

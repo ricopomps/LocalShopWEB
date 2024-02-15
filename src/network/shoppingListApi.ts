@@ -1,4 +1,5 @@
 import { CellCoordinates } from "../components/Grid";
+import { NodeTree } from "../components/Tree";
 import { ProductItem } from "../context/ShoppingListContext";
 import ApiService from "./api";
 
@@ -61,7 +62,7 @@ export const getShoppingListPathLargura = async (
 
 export const getShoppingListPathProfundidade = async (
   shoppingList: ShoppingList
-): Promise<CellCoordinates[][]> => {
+): Promise<{ paths: CellCoordinates[][]; tree: NodeTree[] }> => {
   const response = await apiService
     .getApi()
     .post(`${baseUrl}/path/profundidade`, shoppingList);
